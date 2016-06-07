@@ -1,0 +1,31 @@
+{
+    "baseurl": "",
+    "absoluteBaseurl": "https://atomproject.github.io/elements/",
+    "footerText": "atom-elements.io",
+    "elements": [{
+        "name": "t-button",
+        "category": "form",
+        "displayName": "Button",
+        "install": "atomelements/t-button",
+        "githubUrl": "https://github.com/atomelements/t-button"
+    },{
+        "name": "t-faredetails",
+        "category": "form",
+        "displayName": "This is faredetails",
+        "install": "travelnxtelements/t-faredetails",
+        "githubUrl": "https://github.com/travelnxtElements/t-faredetails"
+    },{
+        "name": "t-car-search",
+        "category": "form",
+        "displayName": "This is car search",
+        "install": "travelnxtelements/t-car-search",
+        "githubUrl": "https://github.com/travelnxtElements/t-car-search"
+    }],
+    "categories": [{
+        "name": "form",
+        "displayName": "Form Basic"
+    }, {
+        "name": "data",
+        "displayName": "Data"   
+    }]
+}

@@ -1,0 +1,68 @@
+{
+    "name": "This is car search",
+    "properties": [
+        {
+            "name": "Properties",
+            "fields": {
+                "autosuggestApi": {
+                    "name": "autosuggestApi",
+                    "type": "string",
+                    "value": ""
+                },
+                "autosuggestQueryString": {
+                    "name": "autosuggestQueryString",
+                    "type": "string",
+                    "value": ""
+                },
+                "dropoffDate": {
+                    "name": "dropoffDate",
+                    "type": "object"
+                },
+                "dropoffTime": {
+                    "name": "dropoffTime",
+                    "type": "string",
+                    "value": null
+                },
+                "isDropoffLocationSame": {
+                    "name": "isDropoffLocationSame",
+                    "type": "boolean",
+                    "value": true
+                },
+                "onSearchError": {
+                    "name": "onSearchError",
+                    "type": "object"
+                },
+                "onSearchSuccess": {
+                    "name": "onSearchSuccess",
+                    "type": "object"
+                },
+                "pickupDate": {
+                    "name": "pickupDate",
+                    "type": "object"
+                },
+                "pickupTime": {
+                    "name": "pickupTime",
+                    "type": "string",
+                    "value": null
+                },
+                "request": {
+                    "name": "request",
+                    "type": "object"
+                },
+                "searchCars": {
+                    "name": "searchCars",
+                    "type": "object"
+                },
+                "searchId": {
+                    "name": "searchId",
+                    "type": "string",
+                    "value": ""
+                },
+                "validate": {
+                    "name": "validate",
+                    "type": "object"
+                }
+            }
+        }
+    ]
+}

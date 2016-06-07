@@ -3,29 +3,206 @@
     "absoluteBaseurl": "https://atomproject.github.io/elements/",
     "footerText": "atom-elements.io",
     "elements": [{
-        "name": "t-button",
-        "category": "form",
-        "displayName": "Button",
-        "install": "atomelements/t-button",
-        "githubUrl": "https://github.com/atomelements/t-button"
-    },{
-        "name": "t-faredetails",
-        "category": "form",
-        "displayName": "This is faredetails",
-        "install": "travelnxtelements/t-faredetails",
-        "githubUrl": "https://github.com/travelnxtElements/t-faredetails"
-    },{
+        "name": "t-address",
+        "category": "general",
+        "displayName": "Address",
+        "install": "travelnxtelements/t-address",
+        "githubUrl": "https://github.com/travelnxtelements/t-address"
+    }, {
+        "name": "t-air-search",
+        "category": "flight",
+        "displayName": "Air Search",
+        "install": "travelnxtelements/t-air-search",
+        "githubUrl": "https://github.com/travelnxtelements/t-air-search"
+    }, {
+        "name": "t-app-footer",
+        "category": "general",
+        "displayName": "App Footer",
+        "install": "travelnxtelements/t-app-footer",
+        "githubUrl": "https://github.com/travelnxtelements/t-app-footer"
+    }, {
+        "name": "t-badge",
+        "category": "general",
+        "displayName": "Badge",
+        "install": "travelnxtelements/t-badge",
+        "githubUrl": "https://github.com/travelnxtelements/t-badge"
+    }, {
+        "name": "t-bestprice",
+        "category": "flight",
+        "displayName": "Best Price",
+        "install": "travelnxtelements/t-bestprice",
+        "githubUrl": "https://github.com/travelnxtelements/t-bestprice"
+    }, {
         "name": "t-car-search",
-        "category": "form",
-        "displayName": "This is car search",
+        "category": "car",
+        "displayName": "car Search",
         "install": "travelnxtelements/t-car-search",
-        "githubUrl": "https://github.com/travelnxtElements/t-car-search"
+        "githubUrl": "https://github.com/travelnxtelements/t-car-search"
+    }, {
+        "name": "t-creditcard",
+        "category": "general",
+        "displayName": "Credit card",
+        "install": "travelnxtelements/t-creditcard",
+        "githubUrl": "https://github.com/travelnxtelements/t-creditcard"
+    }, {
+        "name": "t-faredetails",
+        "category": "general",
+        "displayName": "Fare Details",
+        "install": "travelnxtelements/t-faredetails",
+        "githubUrl": "https://github.com/travelnxtelements/t-faredetails"
+    }, {
+        "name": "t-forgot-password",
+        "category": "account",
+        "displayName": "Forgot Password",
+        "install": "travelnxtelements/t-forgot-password",
+        "githubUrl": "https://github.com/travelnxtelements/t-forgot-password"
+    }, {
+        "name": "t-header",
+        "category": "general",
+        "displayName": "Header",
+        "install": "travelnxtelements/t-header",
+        "githubUrl": "https://github.com/travelnxtelements/t-header"
+    }, {
+        "name": "t-home-header",
+        "category": "general",
+        "displayName": "Home Header",
+        "install": "travelnxtelements/t-home-header",
+        "githubUrl": "https://github.com/travelnxtelements/t-home-header"
+    }, {
+        "name": "t-hotel-pages",
+        "category": "hotel",
+        "displayName": "hotel Pages",
+        "install": "travelnxtelements/t-hotel-pages",
+        "githubUrl": "https://github.com/travelnxtelements/t-hotel-pages"
+    }, {
+        "name": "t-hotel-result-item",
+        "category": "hotel",
+        "displayName": "hotel Result Item",
+        "install": "travelnxtelements/t-hotel-result-item",
+        "githubUrl": "https://github.com/travelnxtelements/t-hotel-result-item"
+    }, {
+        "name": "t-hotel-room-list",
+        "category": "hotel",
+        "displayName": "hotel Room List",
+        "install": "travelnxtelements/t-hotel-room-list",
+        "githubUrl": "https://github.com/travelnxtelements/t-hotel-room-list"
+    }, {
+        "name": "t-hotel-search",
+        "category": "hotel",
+        "displayName": "hotel Search",
+        "install": "travelnxtelements/t-hotel-search",
+        "githubUrl": "https://github.com/travelnxtelements/t-hotel-search"
+    }, {
+        "name": "t-insurance",
+        "category": "flight",
+        "displayName": "Insurance",
+        "install": "travelnxtelements/t-insurance",
+        "githubUrl": "https://github.com/travelnxtelements/t-insurance"
+    }, {
+        "name": "t-itinerary",
+        "category": "general",
+        "displayName": "Itinerary",
+        "install": "travelnxtelements/t-itinerary",
+        "githubUrl": "https://github.com/travelnxtelements/t-itinerary"
+    }, {
+        "name": "t-keepalive",
+        "category": "general",
+        "displayName": "Keep Alive",
+        "install": "travelnxtelements/t-keepalive",
+        "githubUrl": "https://github.com/travelnxtelements/t-keepalive"
+    }, {
+        "name": "t-map-nearby-search",
+        "category": "general",
+        "displayName": "Map Nearby Search",
+        "install": "travelnxtelements/t-map-nearby-search",
+        "githubUrl": "https://github.com/travelnxtelements/t-map-nearby-search"
+    }, {
+        "name": "t-mystique-auth",
+        "category": "general",
+        "displayName": "Mystique Auth",
+        "install": "travelnxtelements/t-mystique-auth",
+        "githubUrl": "https://github.com/travelnxtelements/t-mystique-auth"
+    }, {
+        "name": "t-passenger-info",
+        "category": "general",
+        "displayName": "Passenger Info",
+        "install": "travelnxtelements/t-passenger-info",
+        "githubUrl": "https://github.com/travelnxtelements/t-passenger-info"
+    }, {
+        "name": "t-points-payment",
+        "category": "general",
+        "displayName": "Points Payment",
+        "install": "travelnxtelements/t-points-payment",
+        "githubUrl": "https://github.com/travelnxtelements/t-points-payment"
+    }, {
+        "name": "t-result-item",
+        "category": "general",
+        "displayName": "Result Item",
+        "install": "travelnxtelements/t-result-item",
+        "githubUrl": "https://github.com/travelnxtelements/t-result-item"
+    }, {
+        "name": "t-search-overlay",
+        "category": "general",
+        "displayName": "Search Overlay",
+        "install": "travelnxtelements/t-search-overlay",
+        "githubUrl": "https://github.com/travelnxtelements/t-search-overlay"
+    }, {
+        "name": "t-sessionstorage",
+        "category": "general",
+        "displayName": "Session Storage",
+        "install": "travelnxtelements/t-sessionstorage",
+        "githubUrl": "https://github.com/travelnxtelements/t-sessionstorage"
+    }, {
+        "name": "t-shared-lib",
+        "category": "general",
+        "displayName": "Shared Lib",
+        "install": "travelnxtelements/t-shared-lib",
+        "githubUrl": "https://github.com/travelnxtelements/t-shared-lib"
+    }, {
+        "name": "t-sign-in",
+        "category": "account",
+        "displayName": "Sign In",
+        "install": "travelnxtelements/t-sign-in",
+        "githubUrl": "https://github.com/travelnxtelements/t-sign-in"
+    }, {
+        "name": "t-sign-up",
+        "category": "account",
+        "displayName": "Sign Up",
+        "install": "travelnxtelements/t-sign-up",
+        "githubUrl": "https://github.com/travelnxtelements/t-sign-up"
+    }, {
+        "name": "t-starrating",
+        "category": "general",
+        "displayName": "Star Rating",
+        "install": "travelnxtelements/t-starrating",
+        "githubUrl": "https://github.com/travelnxtelements/t-starrating"
+    }, {
+        "name": "t-text-container",
+        "category": "general",
+        "displayName": "Text Container",
+        "install": "travelnxtelements/t-text-container",
+        "githubUrl": "https://github.com/travelnxtelements/t-text-container"
+    }, {
+        "name": "t-trip-item",
+        "category": "general",
+        "displayName": "Trip Item",
+        "install": "travelnxtelements/t-trip-item",
+        "githubUrl": "https://github.com/travelnxtelements/t-trip-item"
     }],
     "categories": [{
-        "name": "form",
-        "displayName": "Form Basic"
+        "name": "general",
+        "category": "General"
     }, {
-        "name": "data",
-        "displayName": "Data"   
+        "name": "flight",
+        "category": "Flight"
+    }, {
+        "name": "hotel",
+        "category": "Hotel"
+    }, {
+        "name": "account",
+        "category": "Account"
+    }, {
+        "name": "car",
+        "category": "Car"
     }]
 }

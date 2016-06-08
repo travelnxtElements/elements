@@ -1,7 +1,7 @@
 {
     "baseurl": "",
-    "absoluteBaseurl": "https://atomproject.github.io/elements/",
-    "footerText": "atom-elements.io",
+    "absoluteBaseurl": "https://travelnxtelements.github.io/elements/",
+    "footerText": "travelnxt elements",
     "elements": [{
         "name": "t-address",
         "category": "general",

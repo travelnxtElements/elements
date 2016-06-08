@@ -1,21 +1,26 @@
 {
-    "name": "This is car search",
+    "name": "car Search",
     "properties": [
         {
             "name": "Properties",
             "fields": {
+                "authToken": {
+                    "name": "authToken",
+                    "type": "string",
+                    "value": ""
+                },
                 "autosuggestApi": {
                     "name": "autosuggestApi",
                     "type": "string",
                     "value": ""
                 },
-                "autosuggestQueryString": {
-                    "name": "autosuggestQueryString",
-                    "type": "string",
-                    "value": ""
-                },
                 "dropoffDate": {
                     "name": "dropoffDate",
+                    "type": "string",
+                    "value": null
+                },
+                "dropoffLocation": {
+                    "name": "dropoffLocation",
                     "type": "object"
                 },
                 "dropoffTime": {
@@ -28,39 +33,19 @@
                     "type": "boolean",
                     "value": true
                 },
-                "onSearchError": {
-                    "name": "onSearchError",
-                    "type": "object"
-                },
-                "onSearchSuccess": {
-                    "name": "onSearchSuccess",
-                    "type": "object"
-                },
                 "pickupDate": {
                     "name": "pickupDate",
+                    "type": "string",
+                    "value": null
+                },
+                "pickupLocation": {
+                    "name": "pickupLocation",
                     "type": "object"
                 },
                 "pickupTime": {
                     "name": "pickupTime",
                     "type": "string",
                     "value": null
-                },
-                "request": {
-                    "name": "request",
-                    "type": "object"
-                },
-                "searchCars": {
-                    "name": "searchCars",
-                    "type": "object"
-                },
-                "searchId": {
-                    "name": "searchId",
-                    "type": "string",
-                    "value": ""
-                },
-                "validate": {
-                    "name": "validate",
-                    "type": "object"
                 }
             }
         }

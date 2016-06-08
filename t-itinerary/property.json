@@ -1,0 +1,19 @@
+{
+    "name": "Itinerary",
+    "properties": [
+        {
+            "name": "Properties",
+            "fields": {
+                "flightData": {
+                    "name": "flightData",
+                    "type": "object"
+                },
+                "showTwelveHourClock": {
+                    "name": "showTwelveHourClock",
+                    "type": "boolean",
+                    "value": false
+                }
+            }
+        }
+    ]
+}

@@ -35,7 +35,7 @@
     }, {
         "name": "t-car-search",
         "category": "car",
-        "displayName": "car Search",
+        "displayName": "Car Search",
         "install": "travelnxtelements/t-car-search",
         "githubUrl": "https://github.com/travelnxtelements/t-car-search"
     }, {
@@ -71,7 +71,7 @@
     }, {
         "name": "t-hotel-room-list",
         "category": "hotel",
-        "displayName": "hotel Room List",
+        "displayName": "Hotel Room List",
         "install": "travelnxtelements/t-hotel-room-list",
         "githubUrl": "https://github.com/travelnxtelements/t-hotel-room-list"
     }, {
@@ -123,23 +123,11 @@
         "install": "travelnxtelements/t-sessionstorage",
         "githubUrl": "https://github.com/travelnxtelements/t-sessionstorage"
     }, {
-        "name": "t-shared-lib",
-        "category": "general",
-        "displayName": "Shared Lib",
-        "install": "travelnxtelements/t-shared-lib",
-        "githubUrl": "https://github.com/travelnxtelements/t-shared-lib"
-    }, {
         "name": "t-sign-in",
         "category": "account",
         "displayName": "Sign In",
         "install": "travelnxtelements/t-sign-in",
         "githubUrl": "https://github.com/travelnxtelements/t-sign-in"
-    }, {
-        "name": "t-sign-up",
-        "category": "account",
-        "displayName": "Sign Up",
-        "install": "travelnxtelements/t-sign-up",
-        "githubUrl": "https://github.com/travelnxtelements/t-sign-up"
     }, {
         "name": "t-starrating",
         "category": "general",
@@ -152,27 +140,21 @@
         "displayName": "Text Container",
         "install": "travelnxtelements/t-text-container",
         "githubUrl": "https://github.com/travelnxtelements/t-text-container"
-    }, {
-        "name": "t-trip-item",
-        "category": "general",
-        "displayName": "Trip Item",
-        "install": "travelnxtelements/t-trip-item",
-        "githubUrl": "https://github.com/travelnxtelements/t-trip-item"
     }],
     "categories": [{
         "name": "general",
-        "category": "General"
+        "displayName": "General"
     }, {
         "name": "flight",
-        "category": "Flight"
+        "displayName": "Flight"
     }, {
         "name": "hotel",
-        "category": "Hotel"
+        "displayName": "Hotel"
     }, {
         "name": "account",
-        "category": "Account"
+        "displayName": "Account"
     }, {
         "name": "car",
-        "category": "Car"
+        "displayName": "Car"
     }]
 }

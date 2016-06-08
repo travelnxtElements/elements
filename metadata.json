@@ -69,35 +69,11 @@
         "install": "travelnxtelements/t-home-header",
         "githubUrl": "https://github.com/travelnxtelements/t-home-header"
     }, {
-        "name": "t-hotel-pages",
-        "category": "hotel",
-        "displayName": "hotel Pages",
-        "install": "travelnxtelements/t-hotel-pages",
-        "githubUrl": "https://github.com/travelnxtelements/t-hotel-pages"
-    }, {
-        "name": "t-hotel-result-item",
-        "category": "hotel",
-        "displayName": "hotel Result Item",
-        "install": "travelnxtelements/t-hotel-result-item",
-        "githubUrl": "https://github.com/travelnxtelements/t-hotel-result-item"
-    }, {
         "name": "t-hotel-room-list",
         "category": "hotel",
         "displayName": "hotel Room List",
         "install": "travelnxtelements/t-hotel-room-list",
         "githubUrl": "https://github.com/travelnxtelements/t-hotel-room-list"
-    }, {
-        "name": "t-hotel-search",
-        "category": "hotel",
-        "displayName": "hotel Search",
-        "install": "travelnxtelements/t-hotel-search",
-        "githubUrl": "https://github.com/travelnxtelements/t-hotel-search"
-    }, {
-        "name": "t-insurance",
-        "category": "flight",
-        "displayName": "Insurance",
-        "install": "travelnxtelements/t-insurance",
-        "githubUrl": "https://github.com/travelnxtelements/t-insurance"
     }, {
         "name": "t-itinerary",
         "category": "general",
@@ -122,12 +98,6 @@
         "displayName": "Mystique Auth",
         "install": "travelnxtelements/t-mystique-auth",
         "githubUrl": "https://github.com/travelnxtelements/t-mystique-auth"
-    }, {
-        "name": "t-passenger-info",
-        "category": "general",
-        "displayName": "Passenger Info",
-        "install": "travelnxtelements/t-passenger-info",
-        "githubUrl": "https://github.com/travelnxtelements/t-passenger-info"
     }, {
         "name": "t-points-payment",
         "category": "general",

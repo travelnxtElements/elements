@@ -1,0 +1,83 @@
+{
+    "name": "Fare Details",
+    "properties": [
+        {
+            "name": "Properties",
+            "fields": {
+                "baseFare": {
+                    "name": "baseFare",
+                    "type": "string",
+                    "value": "0"
+                },
+                "baseFareLabel": {
+                    "name": "baseFareLabel",
+                    "type": "string",
+                    "value": "Base Fare"
+                },
+                "bestPrice": {
+                    "name": "bestPrice",
+                    "type": "string",
+                    "value": "0"
+                },
+                "collapseIcon": {
+                    "name": "collapseIcon",
+                    "type": "string",
+                    "value": "{\"opened\": icons:remove-circle-outline, \"closed\": icons:add-circle-outline}"
+                },
+                "data": {
+                    "name": "data",
+                    "type": "object"
+                },
+                "discount": {
+                    "name": "discount",
+                    "type": "string",
+                    "value": "0"
+                },
+                "error": {
+                    "name": "error",
+                    "type": "boolean",
+                    "value": false
+                },
+                "insurance": {
+                    "name": "insurance",
+                    "type": "string",
+                    "value": "0"
+                },
+                "isCollapsible": {
+                    "name": "isCollapsible",
+                    "type": "boolean",
+                    "value": false
+                },
+                "itineraryFareLabel": {
+                    "name": "itineraryFareLabel",
+                    "type": "string",
+                    "value": "Itinerary Fare"
+                },
+                "label": {
+                    "name": "label",
+                    "type": "string",
+                    "value": "Fare Details"
+                },
+                "passengerDetails": {
+                    "name": "passengerDetails",
+                    "type": "object"
+                },
+                "saving": {
+                    "name": "saving",
+                    "type": "string",
+                    "value": "0"
+                },
+                "taxesFees": {
+                    "name": "taxesFees",
+                    "type": "string",
+                    "value": "0"
+                },
+                "totalFare": {
+                    "name": "totalFare",
+                    "type": "string",
+                    "value": "0"
+                }
+            }
+        }
+    ]
+}

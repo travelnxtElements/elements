@@ -1,0 +1,22 @@
+{
+    "name": "Hotel Room List",
+    "properties": [
+        {
+            "name": "Properties",
+            "fields": {
+                "auto": {
+                    "name": "auto",
+                    "type": "boolean"
+                },
+                "itinerary": {
+                    "name": "itinerary",
+                    "type": "object"
+                },
+                "rooms": {
+                    "name": "rooms",
+                    "type": "object"
+                }
+            }
+        }
+    ]
+}

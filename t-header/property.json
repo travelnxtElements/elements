@@ -1,0 +1,35 @@
+{
+    "name": "Header",
+    "properties": [
+        {
+            "name": "Properties",
+            "fields": {
+                "icon": {
+                    "name": "icon",
+                    "type": "string",
+                    "value": "arrow-back"
+                },
+                "label": {
+                    "name": "label",
+                    "type": "string",
+                    "value": "Normal Heading"
+                },
+                "normalHeading": {
+                    "name": "normalHeading",
+                    "type": "boolean",
+                    "value": false
+                },
+                "rightIcon": {
+                    "name": "rightIcon",
+                    "type": "string",
+                    "value": ""
+                },
+                "url": {
+                    "name": "url",
+                    "type": "string",
+                    "value": ""
+                }
+            }
+        }
+    ]
+}

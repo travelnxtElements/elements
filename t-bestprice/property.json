@@ -1,0 +1,35 @@
+{
+    "name": "Best Price",
+    "properties": [
+        {
+            "name": "Properties",
+            "fields": {
+                "bestPrice": {
+                    "name": "bestPrice",
+                    "type": "boolean",
+                    "value": false
+                },
+                "currency": {
+                    "name": "currency",
+                    "type": "string",
+                    "value": "USD"
+                },
+                "expanded": {
+                    "name": "expanded",
+                    "type": "boolean",
+                    "value": false
+                },
+                "imgUrl": {
+                    "name": "imgUrl",
+                    "type": "string",
+                    "value": ""
+                },
+                "price": {
+                    "name": "price",
+                    "type": "string",
+                    "value": "14"
+                }
+            }
+        }
+    ]
+}

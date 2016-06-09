@@ -1,0 +1,77 @@
+{
+    "name": "Air Search",
+    "properties": [
+        {
+            "name": "Properties",
+            "fields": {
+                "adult": {
+                    "name": "adult",
+                    "type": "number",
+                    "value": 1
+                },
+                "ArrivalAirport": {
+                    "name": "ArrivalAirport",
+                    "type": "string"
+                },
+                "ArrivalDate": {
+                    "name": "ArrivalDate",
+                    "type": "string",
+                    "value": ""
+                },
+                "cabinType": {
+                    "name": "cabinType",
+                    "type": "string",
+                    "value": "Economy"
+                },
+                "child": {
+                    "name": "child",
+                    "type": "number",
+                    "value": 0
+                },
+                "deeplinkUrl": {
+                    "name": "deeplinkUrl",
+                    "type": "string",
+                    "value": ""
+                },
+                "DepartureAirport": {
+                    "name": "DepartureAirport",
+                    "type": "string"
+                },
+                "DepartureDate": {
+                    "name": "DepartureDate",
+                    "type": "string",
+                    "value": ""
+                },
+                "error": {
+                    "name": "error",
+                    "type": "string",
+                    "value": ""
+                },
+                "infant": {
+                    "name": "infant",
+                    "type": "number",
+                    "value": 0
+                },
+                "itineraryType": {
+                    "name": "itineraryType",
+                    "type": "string",
+                    "value": "RoundTrip"
+                },
+                "queryParams": {
+                    "name": "queryParams",
+                    "type": "string",
+                    "value": ""
+                },
+                "searchType": {
+                    "name": "searchType",
+                    "type": "string",
+                    "value": "event"
+                },
+                "suggestionUrl": {
+                    "name": "suggestionUrl",
+                    "type": "string"
+                }
+            }
+        }
+    ]
+}

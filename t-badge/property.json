@@ -1,0 +1,14 @@
+{
+    "name": "Badge",
+    "properties": [
+        {
+            "name": "Properties",
+            "fields": {
+                "label": {
+                    "name": "label",
+                    "type": "string"
+                }
+            }
+        }
+    ]
+}

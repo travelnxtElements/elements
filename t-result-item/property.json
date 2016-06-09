@@ -1,0 +1,33 @@
+{
+    "name": "Result Item",
+    "properties": [
+        {
+            "name": "Properties",
+            "fields": {
+                "defaultLogo": {
+                    "name": "defaultLogo",
+                    "type": "string"
+                },
+                "isHotelSelected": {
+                    "name": "isHotelSelected",
+                    "type": "boolean",
+                    "value": false
+                },
+                "itinerary": {
+                    "name": "itinerary",
+                    "type": "object"
+                },
+                "priceLeft": {
+                    "name": "priceLeft",
+                    "type": "boolean",
+                    "value": false
+                },
+                "showTwelveHourClock": {
+                    "name": "showTwelveHourClock",
+                    "type": "boolean",
+                    "value": false
+                }
+            }
+        }
+    ]
+}

@@ -1,5 +1,6 @@
 {
-    "baseurl": "",
+    "brandColor": "#0055CC",
+    "siteName": "travelnxt elements",
     "absoluteBaseurl": "https://travelnxtelements.github.io/elements/",
     "footerText": "travelnxt elements",
     "elements": [{
@@ -81,12 +82,6 @@
         "install": "travelnxtelements/t-itinerary",
         "githubUrl": "https://github.com/travelnxtelements/t-itinerary"
     }, {
-        "name": "t-keepalive",
-        "category": "general",
-        "displayName": "Keep Alive",
-        "install": "travelnxtelements/t-keepalive",
-        "githubUrl": "https://github.com/travelnxtelements/t-keepalive"
-    }, {
         "name": "t-map-nearby-search",
         "category": "general",
         "displayName": "Map Nearby Search",
@@ -116,12 +111,6 @@
         "displayName": "Search Overlay",
         "install": "travelnxtelements/t-search-overlay",
         "githubUrl": "https://github.com/travelnxtelements/t-search-overlay"
-    }, {
-        "name": "t-sessionstorage",
-        "category": "general",
-        "displayName": "Session Storage",
-        "install": "travelnxtelements/t-sessionstorage",
-        "githubUrl": "https://github.com/travelnxtelements/t-sessionstorage"
     }, {
         "name": "t-sign-in",
         "category": "account",

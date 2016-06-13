@@ -1,6 +1,7 @@
 {
     "brandColor": "#0055CC",
     "siteName": "travelnxt elements",
+    "showBuildStatus": false,
     "absoluteBaseurl": "https://travelnxtelements.github.io/elements/",
     "footerText": "travelnxt elements",
     "elements": [{

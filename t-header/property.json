@@ -6,7 +6,7 @@
             "fields": {
                 "icon": {
                     "name": "icon",
-                    "type": "string",
+                    "type": "iconset",
                     "value": "arrow-back"
                 },
                 "label": {
@@ -21,8 +21,8 @@
                 },
                 "rightIcon": {
                     "name": "rightIcon",
-                    "type": "string",
-                    "value": ""
+                    "type": "iconset",
+                    "value": "arrow-forward"
                 },
                 "url": {
                     "name": "url",

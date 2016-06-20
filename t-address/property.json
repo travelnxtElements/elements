@@ -7,20 +7,12 @@
                 "baseGeoApi": {
                     "name": "baseGeoApi",
                     "type": "string",
-                    "value": ""
-                },
-                "countries": {
-                    "name": "countries",
-                    "type": "object"
-                },
-                "country": {
-                    "name": "country",
-                    "type": "string"
+                    "value": "http://demo.travelnxt.com/api/Content"
                 },
                 "countryApi": {
                     "name": "countryApi",
                     "type": "string",
-                    "value": ""
+                    "value": "http://demo.travelnxt.com/api/Content/countries"
                 },
                 "hasStates": {
                     "name": "hasStates",
@@ -29,11 +21,8 @@
                 },
                 "queryParams": {
                     "name": "queryParams",
-                    "type": "string"
-                },
-                "states": {
-                    "name": "states",
-                    "type": "object"
+                    "type": "string",
+                    "value": "?cid=mystiquedemo&token=w1q3rbau2uswx4awygaf4ell"
                 }
             }
         }

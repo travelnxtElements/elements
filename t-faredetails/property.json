@@ -4,44 +4,10 @@
         {
             "name": "Properties",
             "fields": {
-                "baseFare": {
-                    "name": "baseFare",
-                    "type": "string",
-                    "value": "0"
-                },
                 "baseFareLabel": {
                     "name": "baseFareLabel",
                     "type": "string",
                     "value": "Base Fare"
-                },
-                "bestPrice": {
-                    "name": "bestPrice",
-                    "type": "string",
-                    "value": "0"
-                },
-                "collapseIcon": {
-                    "name": "collapseIcon",
-                    "type": "string",
-                    "value": "{\"opened\": icons:remove-circle-outline, \"closed\": icons:add-circle-outline}"
-                },
-                "data": {
-                    "name": "data",
-                    "type": "object"
-                },
-                "discount": {
-                    "name": "discount",
-                    "type": "string",
-                    "value": "0"
-                },
-                "error": {
-                    "name": "error",
-                    "type": "boolean",
-                    "value": false
-                },
-                "insurance": {
-                    "name": "insurance",
-                    "type": "string",
-                    "value": "0"
                 },
                 "isCollapsible": {
                     "name": "isCollapsible",
@@ -58,24 +24,146 @@
                     "type": "string",
                     "value": "Fare Details"
                 },
-                "passengerDetails": {
-                    "name": "passengerDetails",
-                    "type": "object"
-                },
-                "saving": {
-                    "name": "saving",
-                    "type": "string",
-                    "value": "0"
-                },
-                "taxesFees": {
-                    "name": "taxesFees",
-                    "type": "string",
-                    "value": "0"
-                },
-                "totalFare": {
-                    "name": "totalFare",
-                    "type": "string",
-                    "value": "0"
+                "data": {
+                    "name": "data",
+                    "type": "object",
+                    "value": [{
+                      "money": {
+                          "amount": 6.07,
+                          "currency": "USD",
+                          "displayAmount": "$6.07",
+                          "type": "USD"
+                      },
+                      "components": [],
+                      "type": "Tax",
+                      "properties": [{
+                          "key": "Type",
+                          "value": null
+                      }, {
+                          "key": "Code",
+                          "value": null
+                      }, {
+                          "key": "Description",
+                          "value": null
+                      }]
+                  }, {
+                      "money": {
+                          "amount": 11.2,
+                          "currency": "USD",
+                          "displayAmount": "$11.20",
+                          "type": "USD"
+                      },
+                      "components": [],
+                      "type": "Tax",
+                      "properties": [{
+                          "key": "Type",
+                          "value": null
+                      }, {
+                          "key": "Code",
+                          "value": null
+                      }, {
+                          "key": "Description",
+                          "value": null
+                      }]
+                  }, {
+                      "money": {
+                          "amount": 8,
+                          "currency": "USD",
+                          "displayAmount": "$8.00",
+                          "type": "USD"
+                      },
+                      "components": [],
+                      "type": "Tax",
+                      "properties": [{
+                          "key": "Type",
+                          "value": null
+                      }, {
+                          "key": "Code",
+                          "value": null
+                      }, {
+                          "key": "Description",
+                          "value": null
+                      }]
+                  }, {
+                      "money": {
+                          "amount": 9,
+                          "currency": "USD",
+                          "displayAmount": "$9.00",
+                          "type": "USD"
+                      },
+                      "components": [],
+                      "type": "Tax",
+                      "properties": [{
+                          "key": "Type",
+                          "value": null
+                      }, {
+                          "key": "Code",
+                          "value": null
+                      }, {
+                          "key": "Description",
+                          "value": null
+                      }]
+                  }, {
+                      "money": {
+                          "amount": 115.2,
+                          "currency": "USD",
+                          "displayAmount": "$115.20",
+                          "type": "USD"
+                      },
+                      "components": [{
+                          "amount": 115.2,
+                          "currency": "USD",
+                          "displayAmount": "$115.20",
+                          "type": "USD"
+                      }],
+                      "type": "TotalFare",
+                      "properties": []
+                  }, {
+                      "money": {
+                          "amount": 80.93,
+                          "currency": "USD",
+                          "displayAmount": "$80.93",
+                          "type": "USD"
+                      },
+                      "components": [{
+                          "amount": 115.2,
+                          "currency": "USD",
+                          "displayAmount": "$80.93",
+                          "type": "USD"
+                      }],
+                      "type": "BaseFare",
+                      "properties": []
+                  }, {
+                      "money": {
+                          "amount": 0,
+                          "currency": "USD",
+                          "displayAmount": "$0.00",
+                          "type": "USD"
+                      },
+                      "components": [],
+                      "type": "TotalFee",
+                      "properties": []
+                  }, {
+                      "money": {
+                          "amount": 34.27,
+                          "currency": "USD",
+                          "displayAmount": "$34.27",
+                          "type": "USD"
+                      },
+                      "components": [],
+                      "type": "TotalTax",
+                      "properties": []
+                  }, {
+                      "money": {
+                          "amount": 0,
+                          "currency": "USD",
+                          "displayAmount": "$0.00",
+                          "type": "USD"
+                      },
+                      "components": [],
+                      "type": "TotalDiscount",
+                      "properties": []
+                  }]
                 }
             }
         }

@@ -310,7 +310,7 @@
                               "aircraftType": "AIRBUS INDUSTRIE A319",
                               "airline": {
                                   "code": "NK",
-                                  "name": "Spirit Airlinessssssssssssssssssssssssssssssssssssss",
+                                  "name": "Spirit Airlines",
                                   "imageUrl": "http://d1o2mbjkynteqw.cloudfront.net/Airlines/30x30/NK.JPG"
                               },
                               "arrivalAirport": {
@@ -370,7 +370,7 @@
                               "onTimePercentage": 0,
                               "operatingAirline": {
                                   "code": "NK",
-                                  "name": "Spirit Airlinessssssssssssssssssssssssssssssssssssss",
+                                  "name": "Spirit Airlines",
                                   "imageUrl": "http://d1o2mbjkynteqw.cloudfront.net/Airlines/30x30/NK.JPG"
                               },
                               "noOfSeatsLeft": 0,

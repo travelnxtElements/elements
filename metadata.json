@@ -78,7 +78,7 @@
         "githubUrl": "https://github.com/travelnxtelements/t-hotel-room-list"
     }, {
         "name": "t-itinerary",
-        "category": "general",
+        "category": "flight",
         "displayName": "Itinerary",
         "install": "travelnxtelements/t-itinerary#master",
         "githubUrl": "https://github.com/travelnxtelements/t-itinerary"
@@ -102,7 +102,7 @@
         "githubUrl": "https://github.com/travelnxtelements/t-points-payment"
     }, {
         "name": "t-result-item",
-        "category": "general",
+        "category": "flight",
         "displayName": "Result Item",
         "install": "travelnxtelements/t-result-item#master",
         "githubUrl": "https://github.com/travelnxtelements/t-result-item"

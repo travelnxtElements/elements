@@ -69,7 +69,8 @@
                 },
                 "suggestionUrl": {
                     "name": "suggestionUrl",
-                    "type": "string"
+                    "type": "string",
+                    "value": "http://www.mocky.io/v2/576ce59b1000002d025fdbfb/"
                 }
             }
         }

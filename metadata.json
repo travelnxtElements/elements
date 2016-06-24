@@ -5,23 +5,11 @@
     "absoluteBaseurl": "https://travelnxtelements.github.io/elements/",
     "footerText": "travelnxt elements",
     "elements": [{
-        "name": "t-address",
-        "category": "general",
-        "displayName": "Address",
-        "install": "travelnxtelements/t-address#master",
-        "githubUrl": "https://github.com/travelnxtelements/t-address"
-    }, {
         "name": "t-air-search",
         "category": "flight",
         "displayName": "Air Search",
         "install": "travelnxtelements/t-air-search#master",
         "githubUrl": "https://github.com/travelnxtelements/t-air-search"
-    }, {
-        "name": "t-app-footer",
-        "category": "general",
-        "displayName": "App Footer",
-        "install": "travelnxtelements/t-app-footer#master",
-        "githubUrl": "https://github.com/travelnxtelements/t-app-footer"
     }, {
         "name": "t-badge",
         "category": "general",
@@ -41,12 +29,6 @@
         "install": "travelnxtelements/t-car-search#master",
         "githubUrl": "https://github.com/travelnxtelements/t-car-search"
     }, {
-        "name": "t-creditcard",
-        "category": "general",
-        "displayName": "Credit card",
-        "install": "travelnxtelements/t-creditcard#master",
-        "githubUrl": "https://github.com/travelnxtelements/t-creditcard"
-    }, {
         "name": "t-faredetails",
         "category": "general",
         "displayName": "Fare Details",
@@ -58,12 +40,6 @@
         "displayName": "Forgot Password",
         "install": "travelnxtelements/t-forgot-password#master",
         "githubUrl": "https://github.com/travelnxtelements/t-forgot-password"
-    }, {
-        "name": "t-header",
-        "category": "general",
-        "displayName": "Header",
-        "install": "travelnxtelements/t-header#master",
-        "githubUrl": "https://github.com/travelnxtelements/t-header"
     }, {
         "name": "t-home-header",
         "category": "general",
@@ -106,12 +82,6 @@
         "displayName": "Result Item",
         "install": "travelnxtelements/t-result-item#master",
         "githubUrl": "https://github.com/travelnxtelements/t-result-item"
-    }, {
-        "name": "t-search-overlay",
-        "category": "general",
-        "displayName": "Search Overlay",
-        "install": "travelnxtelements/t-search-overlay#master",
-        "githubUrl": "https://github.com/travelnxtelements/t-search-overlay"
     }, {
         "name": "t-sign-in",
         "category": "account",

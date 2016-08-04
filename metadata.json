@@ -100,6 +100,12 @@
         "displayName": "Text Container",
         "install": "travelnxtelements/t-text-container#master",
         "githubUrl": "https://github.com/travelnxtelements/t-text-container"
+    }, {
+        "name": "t-shared-lib",
+        "category": "behaviors",
+        "displayName": "Shared Library",
+        "install": "travelnxtelements/t-shared-lib#master",
+        "githubUrl": "https://github.com/travelnxtelements/t-shared-lib"
     }],
     "categories": [{
         "name": "general",
@@ -116,5 +122,8 @@
     }, {
         "name": "car",
         "displayName": "Car"
+    }, {
+        "name": "behaviors",
+        "displayName": "Behaviors"
     }]
 }

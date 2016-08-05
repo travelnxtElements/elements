@@ -35,12 +35,6 @@
         "install": "travelnxtelements/t-faredetails#master",
         "githubUrl": "https://github.com/travelnxtelements/t-faredetails"
     }, {
-        "name": "t-forgot-password",
-        "category": "account",
-        "displayName": "Forgot Password",
-        "install": "travelnxtelements/t-forgot-password#master",
-        "githubUrl": "https://github.com/travelnxtelements/t-forgot-password"
-    }, {
         "name": "t-home-header",
         "category": "general",
         "displayName": "Home Header",
@@ -105,7 +99,8 @@
         "category": "behaviors",
         "displayName": "Shared Library",
         "install": "travelnxtelements/t-shared-lib#master",
-        "githubUrl": "https://github.com/travelnxtelements/t-shared-lib"
+        "githubUrl": "https://github.com/travelnxtelements/t-shared-lib",
+        "disableDemo": true
     }],
     "categories": [{
         "name": "general",

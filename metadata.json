@@ -16,6 +16,12 @@
         "displayName": "Badge",
         "install": "travelnxtelements/t-badge#master",
         "githubUrl": "https://github.com/travelnxtelements/t-badge"
+    },{
+        "name": "t-header",
+        "category": "general",
+        "displayName": "Header",
+        "install": "travelnxtelements/t-header#master",
+        "githubUrl": "https://github.com/travelnxtelements/t-header"
     }, {
         "name": "t-bestprice",
         "category": "flight",
@@ -41,17 +47,23 @@
         "install": "travelnxtelements/t-home-header#master",
         "githubUrl": "https://github.com/travelnxtelements/t-home-header"
     }, {
+        "name": "t-hotel-search",
+        "category": "hotel",
+        "displayName": "Hotel Search",
+        "install": "travelnxtelements/t-hotel-search#master",
+        "githubUrl": "https://github.com/travelnxtelements/t-hotel-search"
+    }, {
         "name": "t-hotel-room-list",
         "category": "hotel",
         "displayName": "Hotel Room List",
         "install": "travelnxtelements/t-hotel-room-list#master",
         "githubUrl": "https://github.com/travelnxtelements/t-hotel-room-list"
     }, {
-        "name": "t-hotel-search",
+        "name": "t-hotel-result-item",
         "category": "hotel",
-        "displayName": "Hotel Search",
-        "install": "travelnxtelements/t-hotel-search#master",
-        "githubUrl": "https://github.com/travelnxtelements/t-hotel-search"
+        "displayName": "Hotel Result item",
+        "install": "travelnxtelements/t-hotel-result-item#master",
+        "githubUrl": "https://github.com/travelnxtelements/t-hotel-result-item"
     }, {
         "name": "t-itinerary",
         "category": "flight",

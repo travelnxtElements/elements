@@ -87,6 +87,7 @@
         "displayName": "Mystique Auth",
         "install": "travelnxtelements/t-mystique-auth#master",
         "isAlpha": true,
+        "disableDemo": true,
         "githubUrl": "https://github.com/travelnxtelements/t-mystique-auth"
     }, {
         "name": "t-points-payment",

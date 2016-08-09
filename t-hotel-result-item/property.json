@@ -1,29 +1,146 @@
 {
     "name": "Hotel Result item",
-    "properties": [
-        {
-            "name": "Properties",
-            "fields": {
-                "isHotelSelected": {
-                    "name": "isHotelSelected",
-                    "type": "boolean",
-                    "value": false
-                },
-                "isMapPage": {
-                    "name": "isMapPage",
-                    "type": "boolean",
-                    "value": false
-                },
-                "itinerary": {
-                    "name": "itinerary",
-                    "type": "object"
-                },
-                "showDebugInfo": {
-                    "name": "showDebugInfo",
-                    "type": "boolean",
-                    "value": false
+    "properties": [{
+        "name": "Properties",
+        "fields": {
+            "isHotelSelected": {
+                "name": "isHotelSelected",
+                "type": "boolean",
+                "value": false
+            },
+            "isMapPage": {
+                "name": "isMapPage",
+                "type": "boolean",
+                "value": false
+            },
+            "itinerary": {
+                "name": "itinerary",
+                "type": "object",
+                "value": {
+                    "fare": {
+                        "type": "Negotiated",
+                        "code": null,
+                        "isRefundable": false,
+                        "components": [{
+                            "money": {
+                                "amount": 602.80,
+                                "currency": "USD",
+                                "displayAmount": "$602.80",
+                                "type": "USD"
+                            },
+                            "components": [
+
+                            ],
+                            "type": "BaseFare",
+                            "properties": [
+
+                            ]
+                        }, {
+                            "money": {
+                                "amount": 72.35,
+                                "currency": "USD",
+                                "displayAmount": "$72.35",
+                                "type": "USD"
+                            },
+                            "components": [
+
+                            ],
+                            "type": "Tax",
+                            "properties": [{
+                                "key": "Type",
+                                "value": null
+                            }, {
+                                "key": "Code",
+                                "value": null
+                            }, {
+                                "key": "Description",
+                                "value": "TotalTaxes"
+                            }]
+                        }, {
+                            "money": {
+                                "amount": 675.15,
+                                "currency": "USD",
+                                "displayAmount": "$675.15",
+                                "type": "USD"
+                            },
+                            "components": [
+
+                            ],
+                            "type": "TotalFare",
+                            "properties": [
+
+                            ]
+                        }, {
+                            "money": {
+                                "amount": 0.0,
+                                "currency": "USD",
+                                "displayAmount": "$0.00",
+                                "type": "USD"
+                            },
+                            "components": [
+
+                            ],
+                            "type": "TotalFee",
+                            "properties": [
+
+                            ]
+                        }, {
+                            "money": {
+                                "amount": 72.35,
+                                "currency": "USD",
+                                "displayAmount": "$72.35",
+                                "type": "USD"
+                            },
+                            "components": [
+
+                            ],
+                            "type": "TotalTax",
+                            "properties": [
+
+                            ]
+                        }, {
+                            "money": {
+                                "amount": 0.0,
+                                "currency": "USD",
+                                "displayAmount": "$0.00",
+                                "type": "USD"
+                            },
+                            "components": [
+
+                            ],
+                            "type": "TotalDiscount",
+                            "properties": [
+
+                            ]
+                        }],
+                        "equivalents": null
+                    },
+                    "deal": null,
+                    "id": "55475",
+                    "isPostPaid": false,
+                    "stayDuration": {
+                        "start": {
+                            "date": "Thursday, 10/13/2016",
+                            "time": "3:00 PM",
+                            "systemDateTime": "2016-10-13T15:00:00"
+                        },
+                        "end": {
+                            "date": "Tuesday, 10/18/2016",
+                            "time": "11:00 AM",
+                            "systemDateTime": "2016-10-18T11:00:00"
+                        }
+                    },
+                    "heroImageUrl": "https://d3mj096p5q0e20.cloudfront.net/ti/TRC/55475/1935344060_200x200.jpg",
+                    "address": "2000 Fashion Show Drive, Las Vegas",
+                    "rating": 5.0,
+                    "name": "Trump Hotel Las Vegas"
                 }
+            },
+            "showDebugInfo": {
+                "name": "showDebugInfo",
+                "type": "boolean",
+                "value": false
             }
         }
-    ]
+    }]
 }

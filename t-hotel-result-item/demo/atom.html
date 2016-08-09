@@ -1,4 +1,3 @@
-
 <!doctype html>
 
 <html>
@@ -11,12 +10,20 @@
   <title>t-hotel-result-item demo</title>
 
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../t-shared-components/theme.html">
 
   <link rel="import" href="../t-hotel-result-item.html">
+  <style>
+    html,
+    body {
+      font-family: 'Open sans';
+    }
+  </style>
 </head>
 <body>
 
-  <t-hotel-result-item></t-hotel-result-item>
+  <t-hotel-result-item check-in="11/01/2015" check-out="11/03/2015">
+  </t-hotel-result-item>
 
 </body>
 </html>

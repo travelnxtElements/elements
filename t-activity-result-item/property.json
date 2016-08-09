@@ -1,0 +1,14 @@
+{
+    "name": "Activity Result Item",
+    "properties": [
+        {
+            "name": "Properties",
+            "fields": {
+                "itinerary": {
+                    "name": "itinerary",
+                    "type": "object"
+                }
+            }
+        }
+    ]
+}

@@ -9,116 +9,217 @@
         "category": "flight",
         "displayName": "Air Search",
         "install": "travelnxtelements/t-air-search#master",
+        "isAlpha": true,
         "githubUrl": "https://github.com/travelnxtelements/t-air-search"
     }, {
         "name": "t-badge",
         "category": "general",
         "displayName": "Badge",
         "install": "travelnxtelements/t-badge#master",
+        "isAlpha": true,
         "githubUrl": "https://github.com/travelnxtelements/t-badge"
     },{
         "name": "t-header",
         "category": "general",
         "displayName": "Header",
         "install": "travelnxtelements/t-header#master",
+        "isAlpha": true,
         "githubUrl": "https://github.com/travelnxtelements/t-header"
     }, {
         "name": "t-bestprice",
         "category": "flight",
         "displayName": "Best Price",
         "install": "travelnxtelements/t-bestprice#master",
+        "isAlpha": true,
         "githubUrl": "https://github.com/travelnxtelements/t-bestprice"
     }, {
         "name": "t-car-search",
         "category": "car",
         "displayName": "Car Search",
         "install": "travelnxtelements/t-car-search#master",
+        "isAlpha": true,
         "githubUrl": "https://github.com/travelnxtelements/t-car-search"
     }, {
         "name": "t-faredetails",
         "category": "general",
         "displayName": "Fare Details",
         "install": "travelnxtelements/t-faredetails#master",
+        "isAlpha": true,
         "githubUrl": "https://github.com/travelnxtelements/t-faredetails"
     }, {
         "name": "t-home-header",
         "category": "general",
         "displayName": "Home Header",
         "install": "travelnxtelements/t-home-header#master",
+        "isAlpha": true,
         "githubUrl": "https://github.com/travelnxtelements/t-home-header"
     }, {
         "name": "t-hotel-search",
         "category": "hotel",
         "displayName": "Hotel Search",
         "install": "travelnxtelements/t-hotel-search#master",
+        "isAlpha": true,
         "githubUrl": "https://github.com/travelnxtelements/t-hotel-search"
     }, {
         "name": "t-hotel-room-list",
         "category": "hotel",
         "displayName": "Hotel Room List",
         "install": "travelnxtelements/t-hotel-room-list#master",
+        "isAlpha": true,
         "githubUrl": "https://github.com/travelnxtelements/t-hotel-room-list"
     }, {
         "name": "t-hotel-result-item",
         "category": "hotel",
         "displayName": "Hotel Result item",
         "install": "travelnxtelements/t-hotel-result-item#master",
+        "isAlpha": true,
         "githubUrl": "https://github.com/travelnxtelements/t-hotel-result-item"
     }, {
         "name": "t-itinerary",
         "category": "flight",
         "displayName": "Itinerary",
         "install": "travelnxtelements/t-itinerary#master",
+        "isAlpha": true,
         "githubUrl": "https://github.com/travelnxtelements/t-itinerary"
-    }, {
-        "name": "t-map-nearby-search",
-        "category": "general",
-        "displayName": "Map Nearby Search",
-        "install": "travelnxtelements/t-map-nearby-search#master",
-        "githubUrl": "https://github.com/travelnxtelements/t-map-nearby-search"
     }, {
         "name": "t-mystique-auth",
         "category": "general",
         "displayName": "Mystique Auth",
         "install": "travelnxtelements/t-mystique-auth#master",
+        "isAlpha": true,
         "githubUrl": "https://github.com/travelnxtelements/t-mystique-auth"
     }, {
         "name": "t-points-payment",
-        "category": "general",
+        "category": "hotel",
         "displayName": "Points Payment",
         "install": "travelnxtelements/t-points-payment#master",
+        "isAlpha": true,
         "githubUrl": "https://github.com/travelnxtelements/t-points-payment"
     }, {
         "name": "t-result-item",
         "category": "flight",
+        "isAlpha": true,
         "displayName": "Result Item",
         "install": "travelnxtelements/t-result-item#master",
         "githubUrl": "https://github.com/travelnxtelements/t-result-item"
-    }, {
-        "name": "t-sign-in",
-        "category": "account",
-        "displayName": "Sign In",
-        "install": "travelnxtelements/t-sign-in#master",
-        "githubUrl": "https://github.com/travelnxtelements/t-sign-in"
     }, {
         "name": "t-starrating",
         "category": "general",
         "displayName": "Star Rating",
         "install": "travelnxtelements/t-starrating#master",
+        "isAlpha": true,
         "githubUrl": "https://github.com/travelnxtelements/t-starrating"
-    }, {
-        "name": "t-text-container",
-        "category": "general",
-        "displayName": "Text Container",
-        "install": "travelnxtelements/t-text-container#master",
-        "githubUrl": "https://github.com/travelnxtelements/t-text-container"
     }, {
         "name": "t-shared-lib",
         "category": "behaviors",
         "displayName": "Shared Library",
         "install": "travelnxtelements/t-shared-lib#master",
+        "isAlpha": true,
         "githubUrl": "https://github.com/travelnxtelements/t-shared-lib",
         "disableDemo": true
+    }, {
+        "name": "t-passenger-info",
+        "category": "general",
+        "displayName": "Passenger Info",
+        "install": "travelnxtelements/t-passenger-info#master",
+        "isAlpha": true,
+        "githubUrl": "https://github.com/travelnxtelements/t-passenger-info",
+        "disableDemo": true
+    }, {
+        "name": "t-policy",
+        "category": "general",
+        "displayName": "Policy",
+        "install": "travelnxtelements/t-policy#master",
+        "isAlpha": true,
+        "githubUrl": "https://github.com/travelnxtelements/t-policy"
+    }, {
+        "name": "t-payment-page",
+        "category": "general",
+        "displayName": "Payment Page",
+        "install": "travelnxtelements/t-payment-page#master",
+        "isAlpha": true,
+        "githubUrl": "https://github.com/travelnxtelements/t-payment-page",
+        "disableDemo": true
+    }, {
+        "name": "t-confirmation-page",
+        "category": "general",
+        "displayName": "Confirmation Page",
+        "install": "travelnxtelements/t-confirmation-page#master",
+        "isAlpha": true,
+        "githubUrl": "https://github.com/travelnxtelements/t-confirmation-page",
+        "disableDemo": true
+    }, {
+        "name": "t-insurance",
+        "category": "flight",
+        "displayName": "Insurance",
+        "install": "travelnxtelements/t-insurance#master",
+        "isAlpha": true,
+        "githubUrl": "https://github.com/travelnxtelements/t-insurance"
+    }, {
+        "name": "t-hotel-pages",
+        "category": "hotel",
+        "displayName": "Hotel Pages",
+        "install": "travelnxtelements/t-hotel-pages#master",
+        "isAlpha": true,
+        "githubUrl": "https://github.com/travelnxtelements/t-hotel-pages",
+        "disableDemo": true
+    }, {
+        "name": "t-car-itinerary-details",
+        "category": "car",
+        "displayName": "Car Itinerary Details",
+        "install": "travelnxtelements/t-car-itinerary-details#master",
+        "isAlpha": true,
+        "githubUrl": "https://github.com/travelnxtelements/t-car-itinerary-details"
+    }, {
+        "name": "t-car-result-item",
+        "category": "car",
+        "displayName": "Car Result Item",
+        "install": "travelnxtelements/t-car-result-item#master",
+        "isAlpha": true,
+        "githubUrl": "https://github.com/travelnxtelements/t-car-result-item"
+    }, {
+        "name": "t-car-category-item",
+        "category": "car",
+        "displayName": "Car Category Item",
+        "install": "travelnxtelements/t-car-category-item#master",
+        "isAlpha": true,
+        "githubUrl": "https://github.com/travelnxtelements/t-car-category-item"
+    }, {
+        "name": "t-activity-search",
+        "category": "activity",
+        "displayName": "Activity Search",
+        "install": "travelnxtelements/t-activity-search#master",
+        "isAlpha": true,
+        "githubUrl": "https://github.com/travelnxtelements/t-activity-search"
+    }, {
+        "name": "t-activity-result-item",
+        "category": "activity",
+        "displayName": "Activity Result Item",
+        "install": "travelnxtelements/t-activity-result-item#master",
+        "isAlpha": true,
+        "githubUrl": "https://github.com/travelnxtelements/t-activity-result-item"
+    }, {
+        "name": "t-activity-itinerary-details",
+        "category": "activity",
+        "displayName": "Activity Itinerary Details",
+        "install": "travelnxtelements/t-activity-itinerary-details#master",
+        "isAlpha": true,
+        "githubUrl": "https://github.com/travelnxtelements/t-activity-itinerary-details"
+    }, {
+        "name": "t-activity-option-list",
+        "category": "activity",
+        "displayName": "Activity Option List",
+        "install": "travelnxtelements/t-activity-option-list#master",
+        "isAlpha": true,
+        "githubUrl": "https://github.com/travelnxtelements/t-activity-option-list",
+        "disableDemo": true
+    }, {
+        "name": "t-trip-item",
+        "category": "trip",
+        "displayName": "Trip Item",
+        "install": "travelnxtelements/t-trip-item#master",
+        "isAlpha": true,
+        "githubUrl": "https://github.com/travelnxtelements/t-trip-item"
     }],
     "categories": [{
         "name": "general",
@@ -130,11 +231,14 @@
         "name": "hotel",
         "displayName": "Hotel"
     }, {
-        "name": "account",
-        "displayName": "Account"
-    }, {
         "name": "car",
         "displayName": "Car"
+    }, {
+        "name": "activity",
+        "displayName": "Activity"
+    }, {
+        "name": "trip",
+        "displayName": "Trip"
     }, {
         "name": "behaviors",
         "displayName": "Behaviors"

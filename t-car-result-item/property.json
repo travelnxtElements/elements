@@ -1,0 +1,33 @@
+{
+    "name": "Car Result Item",
+    "properties": [
+        {
+            "name": "Properties",
+            "fields": {
+                "bookPeriod": {
+                    "name": "bookPeriod",
+                    "type": "number"
+                },
+                "currency": {
+                    "name": "currency",
+                    "type": "string",
+                    "value": "USD"
+                },
+                "itinerary": {
+                    "name": "itinerary",
+                    "type": "object"
+                },
+                "price": {
+                    "name": "price",
+                    "type": "string",
+                    "value": ""
+                },
+                "showImage": {
+                    "name": "showImage",
+                    "type": "boolean",
+                    "value": false
+                }
+            }
+        }
+    ]
+}

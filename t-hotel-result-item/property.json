@@ -1,0 +1,29 @@
+{
+    "name": "Hotel Result item",
+    "properties": [
+        {
+            "name": "Properties",
+            "fields": {
+                "isHotelSelected": {
+                    "name": "isHotelSelected",
+                    "type": "boolean",
+                    "value": false
+                },
+                "isMapPage": {
+                    "name": "isMapPage",
+                    "type": "boolean",
+                    "value": false
+                },
+                "itinerary": {
+                    "name": "itinerary",
+                    "type": "object"
+                },
+                "showDebugInfo": {
+                    "name": "showDebugInfo",
+                    "type": "boolean",
+                    "value": false
+                }
+            }
+        }
+    ]
+}

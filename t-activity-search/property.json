@@ -1,0 +1,38 @@
+{
+    "name": "Activity Search",
+    "properties": [
+        {
+            "name": "Properties",
+            "fields": {
+                "autosuggestApi": {
+                    "name": "autosuggestApi",
+                    "type": "string"
+                },
+                "bookDateDifference": {
+                    "name": "bookDateDifference",
+                    "type": "number",
+                    "value": 3
+                },
+                "error": {
+                    "name": "error",
+                    "type": "string",
+                    "value": ""
+                },
+                "fromDate": {
+                    "name": "fromDate",
+                    "type": "string",
+                    "value": ""
+                },
+                "location": {
+                    "name": "location",
+                    "type": "object"
+                },
+                "toDate": {
+                    "name": "toDate",
+                    "type": "string",
+                    "value": ""
+                }
+            }
+        }
+    ]
+}

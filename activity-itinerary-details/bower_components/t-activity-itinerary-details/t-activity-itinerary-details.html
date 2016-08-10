@@ -1,0 +1,153 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../t-image/t-image.html">
+<link rel="import" href="../t-shared-lib/t-date-behavior.html">
+<link rel="import" href="../t-car-result-item/t-car-result-item.html">
+<link rel="import" href="../iron-collapse/iron-collapse.html"/>
+
+<!--
+    <h3>Details:</h3>
+
+        `t-activity-itinerary-details` is a view component used to display selected activity details.
+        `t-activity-itinerary-details-page` component integrates this component with api components
+
+    <h3>Events:</h3>
+
+        following events are fired by this component
+
+            1. 'policy-click' - fired when policy link is clicked, itinerary id is provided with event.
+
+    <h3>Example:</h3>
+
+        <t-activity-itinerary-details 
+            activity-icon="[[activityIcon]]" 
+            id="itineraryView">
+        </t-activity-itinerary-details>
+
+    @demo demo/index.html
+-->
+
+<dom-module id="t-activity-itinerary-details">
+    <template>
+        <style include="t-car-result-item"></style>
+        <style include="iron-flex"></style>
+        <style include="travel-element-styles">
+            :host {
+                display: block;
+            }
+        </style>
+        <template is="dom-if" if="[[!isCollapsible]]">
+            <t-image loading-icon="[[activityIcon]]" sizing="contain" class="imageArea border-bottom" height="120" src="[[itinerary.heroImageUrl]]"></t-image>
+        </template>
+        <div class="logo-area font-semi section-small primary-light-text layout horizontal" on-tap="_toggleDetails">
+            <div class="left-section flex">
+                <div class="font-16 item">[[itinerary.name]]</div>
+                <div class="font-12 item">[[itinerary.category.name]]</div>
+            </div>
+            <template is="dom-if" if="[[isCollapsible]]">
+                <div class="right-section">
+                    <iron-icon hidden$="[[_openActivityCollapse]]" icon="icons:expand-more"></iron-icon>
+                    <iron-icon hidden$="[[!_openActivityCollapse]]" icon="icons:expand-less"></iron-icon>
+                </div>
+            </template>            
+        </div>
+        <iron-collapse  id="activityDetailsCollapse" opened$="[[_openActivityCollapse]]">
+            <div class="collapse-content">
+                <div class="font-16 item">[[itinerary.options.0.name]]</div>
+                <div class="font-12 item">[[itinerary.options.0.selectedDateTime.date]]</div>
+                <div class="secondary-text font-12">
+                  <div class="section-small">
+                      <a class="link-style" on-tap="_policyClick">Policy</a>
+                  </div>
+                </div>
+            </div>
+        </iron-collapse>      
+    </template>
+    <script>
+
+        (function () {
+            'use strict'
+
+            Polymer({
+
+                is: 't-activity-itinerary-details',
+
+                behaviors: [
+                    TravelNxt.Behaviors.DateBehavior
+                ],
+
+                properties: {
+
+                    /*
+                    * <p>This property holds the value of selected activity itinerary</p>
+                    */
+                    itinerary: {
+                      type: Object
+                    },
+
+                    /*
+                    * <p>This property holds the value of search criteria</p>
+                    */
+                    searchCriteria: {
+                      type: Object
+                    },
+
+                    /*
+                    * <p>This property makes details view collapsible</p>
+                    * <p>collapsible view can be toggled by toggling value of this flag.</p>
+                    */
+                    isCollapsible: {
+                      type: Boolean,
+                      value: false,
+                      observer: '_checkIfCollapsible'
+                    },
+
+                    /*
+                    * <p>Handles the logic of collapsible view</p>
+                    */
+                    _openActivityCollapse: {
+                      type: Boolean,
+                      value: false
+                    } 
+                },
+
+                /*
+                * <p>fires `policy-click` event</p>
+                */
+                _policyClick: function () {
+                  this.fire('policy-click', { itineraryId: this.itinerary.id });
+                },
+
+                /*
+                * <p>fires `policy-click` event</p>
+                */
+                _checkIfCollapsible: function(isCollapsible) {
+                  this._openActivityCollapse = !isCollapsible;
+                },
+
+                /*
+                * <p>toggles details view in itinerary details</p>
+                */
+                _toggleDetails: function () {
+                  if (this.isCollapsible) {
+                      this._openActivityCollapse = !this._openActivityCollapse;
+                  }
+                }, 
+
+                /*
+                * <p>method to populate the data in itinerary details view</p>
+                * <p>`itinerary` & `searchCriteria` are mandetory properties</p>
+                */        
+                setDetails: function (itinerary, searchCriteria) {
+                  if (!itinerary || !searchCriteria) {
+                      return;
+                  }
+
+                  this.itinerary = itinerary;
+                  this.searchCriteria = searchCriteria;
+                }
+            });
+
+        })();
+    </script>
+</dom-module>
+  

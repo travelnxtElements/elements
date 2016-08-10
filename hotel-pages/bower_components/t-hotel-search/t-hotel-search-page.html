@@ -1,0 +1,78 @@
+<link rel="import" href="../polymer/polymer.html" />
+<link rel="import" href="../t-sessionstorage/t-sessionstorage.html">
+<link rel="import" href="../t-notify/t-notify.html">
+<link rel="import" href="../t-shared-lib/t-search-page-behaviour.html">
+<link rel="import" href="../t-shared-lib/t-search-api.html">
+
+<link rel="import" href="t-hotel-search.html">
+<link rel="import" href="t-hotel-search-api-decorator.html">
+<!--
+This is a hotel search page component which will allow user to handle all the session handling with building search request for mystique apis.
+The page gives a succes event on successful completion of fetching search id, and throws an event with search Id in the event detail.
+
+Example:
+
+        <t-hotel-search-page
+            id="searchPage"
+            api-base-url="http://qa-mystiquecode.tavisca.com/"
+            auth-token="{{tokenResponse.authenticationToken}}"
+            api-url-format="/api/Session/SESSIONKEY">
+        </t-hotel-search-page>
+-->
+<dom-module id="t-hotel-search-page">
+    <style include="iron-flex">
+        :host {
+            display:block;
+            font-family: var(--primary-font-family);
+        }
+        
+    </style>
+    <template>
+        
+        <t-notify id="notify" message="" type="error"></t-notify>
+        <t-hotel-search 
+            id="searchView" 
+            api-base-url="[[apiBaseUrl]]" 
+            data-url="[[apiBaseUrl]]api/content/autosuggest/" query-params="token=[[authToken]]" 
+            on-t-hotel-search-validate="onSearch">
+        </t-hotel-search>
+        
+
+        <t-hotel-search-api-decorator
+            input="[[searchedData]]"
+            output="{{searchRequest}}">
+        </t-hotel-search-api-decorator>
+        <t-search-api
+            id="searchApi" 
+            data="[[searchRequest]]" 
+            api-base-url="[[apiBaseUrl]]" 
+            api-relative-url="api/hotel/search" 
+            auth-token="[[authToken]]" 
+            on-t-search-api-success="onSearchSuccess"
+            on-t-search-api-error="onSearchError">
+        </t-search-api>
+        <t-sessionstorage
+            id="sessionStore"
+            api-url-format="{{apiUrlFormat}}"
+            on-t-sessionstorage-save-success="onSessionSave"
+            on-t-sessionstorage-load-success="onSessionLoad">
+        </t-sessionstorage>
+    </template>
+</dom-module>
+<script>
+    (function () {
+        Polymer({
+            is: 't-hotel-search-page',
+            
+            
+            properties: {
+                productName: {
+                    type:String,
+                    value:'Hotel'
+                }   
+            },
+
+            behaviors:[Polymer.SearchPageBehaviour]
+        });        
+    })();
+</script>

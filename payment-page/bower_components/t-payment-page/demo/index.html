@@ -1,0 +1,694 @@
+<!doctype html>
+<html>
+    <head>
+        <title>t-activity-payment-page demo</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+        <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+        <link rel="import" href="../t-activity-payment-page.html">
+        <link rel="import" href="../../t-shared-components/theme.html">
+    </head>
+
+    <body>
+
+        <template is="dom-bind" id="templatizer">
+
+            <t-activity-payment-page
+                id="payment"
+                name="payment"
+                visible="[[visible]]"
+                search-criteria="[[searchCriteria]]"
+                api-base-url="http://demo.travelnxt.com/"
+                auth-token="deiieao2tu1iacmrqdxmsyaq"
+                payment-timer="[[paymentTimer]]"
+                itinerary="[[itinerary]]"
+                booked-itinerary="{{bookedItinerary}}"
+                passenger-info="[[passengerInfo]]"
+                api-url-format="[[apiUrlFormat]]"
+                stay-on-page
+                on-book-success="_goToConfirmationPage"
+                on-book-error="_goToFailurePage">
+                <t-header
+                    icon="arrow-back"
+                     url="[[siteUrl]]car/paxInfo"
+                    label="Make Payment"
+                    normal-heading>
+                </t-header>
+            </t-activity-payment-page>
+            
+        </template>
+    </body>
+
+    <script type="text/javascript">
+        (function() {
+
+            'use strict'
+
+            var templatizer = document.getElementById('templatizer');
+
+            setTimeout(function () {
+                templatizer.passengerInfo = {
+                    "passengerList": [{
+                        "title": "Mr",
+                        "firstName": "Manoj",
+                        "lastName": "Chalode",
+                        "type": "Adult",
+                        "genderString": "Male"
+                    }],
+                    "phone": "9730266287",
+                    "email": "chalodem@gmail.com"
+                };        
+            }.bind(this), 500);
+
+            var itinerary = {
+                "description": "<p>See all of the Las Vegas Strip in a fast, easy, convenient way &ndash; aboard the Las Vegas Monorail. Enjoy unlimited rides directly to the MGM Grand, Paris Las Vegas, Caesars Palace and more with your 1- to 7-day ticket.</p><p>With your choice of a 1- to 7-day ticket, enjoy unlimited rides on the Las Vegas Monorail to experience the best of the Las Vegas Strip. This quick, convenient, reliable form of transportation delivers you to several resorts and attractions along the Strip including the MGM Grand, Bally&rsquo;s, Paris Las Vegas, Flamingo, Caesars Palace, Harrah&rsquo;s Las Vegas and the Las Vegas Convention Center. <br /><br />These fully automated electric trains travel up to 50 mph (80 kph), getting you to your destination quickly and easily. Trains arrive every few minutes at each of the seven stations.<br /><br />Hop on the Las Vegas Monorail and any of the following stations: <br />\n<ul>\n<li>MGM Grand</li>\n<li>Bally's/Paris Las Vegas</li>\n<li>Flamingo</li>\n<li>Harrah's Las Vegas/The LINQ Hotel</li>\n<li>Las Vegas Convention Center</li>\n<li>Westgate Las Vegas (formally the Las Vegas Hotel)</li>\n<li>SLS (formally Sahara Avenue)</li>\n</ul>\n<br /><strong>Please note</strong>: Service is NOT available to the airport.</p><p><b><span class=\"vSpecial\">Special Offer - Travel through December 31, 2016 and save 20% compared to the local supplier's prices for a 2-day pass! - BOOK NOW!</span></b></p>",
+                "category": {
+                    "type": "Transfer",
+                    "name": "Transfers & Ground Transport"
+                },
+                "heroImageUrl": "http://www.dynamic.viator.com/graphicslib/5859/SITours/las-vegas-monorail-ticket-in-las-vegas-154356.jpg",
+                "photoUrls": [
+                    "http://www.dynamic.viator.com/graphicslib/5859/SITours/las-vegas-monorail-ticket-in-las-vegas-154356.jpg",
+                    "http://cache-graphicslib.viator.com/graphicslib/media/df/our-wedding-trip-to-vegas-photo_12789983-770tall.jpg",
+                    "http://cache-graphicslib.viator.com/graphicslib/media/e6/we-loved-vegas-photo_12789990-770tall.jpg",
+                    "http://cache-graphicslib.viator.com/graphicslib/media/f2/riding-the-monorail-photo_12790002-770tall.jpg",
+                    "http://cache-graphicslib.viator.com/graphicslib/media/3b/view-from-the-monorail-photo_15161147-770tall.jpg"
+                ],
+                "legalText": "<b>Conditions of Sale:</b><br>Once you have booked and received your travel voucher, the contact details for the travel service operator will be on this voucher under the heading 'Important Information'. Where applicable, you are required to call the travel service operator directly to advise of additional information such as: <ul><li>Hotel for pick up</li> <li>Weights for helicopter tours</li>  <li>Choice of times for tours</li> <li>Special dietary requirements, meal choices etc.</li></ul>",
+                "duration": "Varies",
+                "schedule": "Las Vegas, NevadaMonday - Thursday: 7am to 2am<br />Friday - Sunday: 7am to 3am<br /><br />Please note: customer service booths at SLS, Harrah's and MGM will be the only booths open on the following:<br />\n<ul>\n<li>Thanksgiving Day, November 24, 2016 (9am to 5pm)</li>\n<li>Christmas Day, December 25, 2016 (10am to 5pm)</li>\n</ul>\nThe booths will also close at 4pm on Christmas Eve. The monorail will still be operating, you will not be able to redeem your vouchers on those dates.7am-12am, Monday<br />7am-2am, Tuesday-Thursday<br />7am-3am, Friday-Sunday<br /><br />Please note: customer service booths at SLS, Harrah's and MGM will be the only booths open on the following:<br />\n<ul>\n<li>Thanksgiving Day, November 24, 2016 (9am to 5pm)</li>\n<li>Christmas Day, December 25, 2016 (10am to 5pm)</li>\n</ul>\nThe booths will also close at 4pm on Christmas Eve. The monorail will still be operating, you will not be able to redeem your vouchers on those dates.Vouchers must be presented and redeemed for physical tickets at Las Vegas Monorail Customer Service Booths which are open daily from 10am to 6pm and are located at the following stations:<br />\n<ul>\n<li>MGM Grand</li>\n<li>Bally's/Paris</li>\n<li>Flamingo</li>\n<li>Harrah's/The LINQ</li>\n<li>Westgate Las Vegas</li>\n<li>SLS</li>\n</ul>\n<br /><strong>Please note</strong>: Service is NOT available to the airport.Las Vegas, Nevada, United States of America, North America",
+                "additionalText": "<ul><li>Confirmation will be received at time of booking</li></ul><ul>  <li>Wheelchair accessible</li>  <li>Tickets are valid from the first time of use for the number of days selected; 1-day ticket is valid for 24 hours, 2-day ticket is valid for 48 hours and so on</li>  <li><strong>Please note</strong>: Service is NOT available to the airport.</li> </ul><b>Conditions of Sale:</b><br>Once you have booked and received your travel voucher, the contact details for the travel service operator will be on this voucher under the heading 'Important Information'. Where applicable, you are required to call the travel service operator directly to advise of additional information such as: <ul><li>Hotel for pick up</li> <li>Weights for helicopter tours</li>  <li>Choice of times for tours</li> <li>Special dietary requirements, meal choices etc.</li></ul>",
+                "minFare": {
+                    "areRatesAvailable": true,
+                    "fare": {
+                        "amount": 9.59,
+                        "currency": "USD",
+                        "displayAmount": "$9.59",
+                        "type": "USD"
+                    },
+                    "equivalentFares": [{
+                        "amount": 38.36,
+                        "currency": "Points",
+                        "displayAmount": "Points 38.36",
+                        "type": "Redemption"
+                    }],
+                    "equivalents": [{
+                        "currency": "Points",
+                        "factor": 0.25,
+                        "type": "Redemption"
+                    }]
+                },
+                "policies": [{
+                    "description": "Cancellation is allowed greater than 48 hours(2 days) prior to the date of activity.",
+                    "isQuantifiable": true,
+                    "window": {
+                        "start": {
+                            "date": "Thu, 28 Jul, 2016",
+                            "time": "7:02 AM",
+                            "systemDateTime": "2016-07-28T07:02:43.3760405-04:00"
+                        },
+                        "end": {
+                            "date": "Tue, 23 Aug, 2016",
+                            "time": "12:00 AM",
+                            "systemDateTime": "2016-08-23T00:00:00"
+                        }
+                    },
+                    "penalty": {
+                        "components": [{
+                            "money": {
+                                "amount": 0.0,
+                                "currency": "USD",
+                                "displayAmount": "$0.00",
+                                "type": "USD"
+                            },
+                            "components": null,
+                            "type": "BaseFare",
+                            "properties": [
+
+                            ]
+                        }, {
+                            "money": {
+                                "amount": 0.0,
+                                "currency": "USD",
+                                "displayAmount": "$0.00",
+                                "type": "USD"
+                            },
+                            "components": null,
+                            "type": "TotalFare",
+                            "properties": [
+
+                            ]
+                        }],
+                        "additionalInfo": null
+                    },
+                    "type": "FreeCancellation"
+                }, {
+                    "description": "Full penalty window",
+                    "isQuantifiable": true,
+                    "window": {
+                        "start": {
+                            "date": "Tue, 23 Aug, 2016",
+                            "time": "12:00 AM",
+                            "systemDateTime": "2016-08-23T00:00:00"
+                        },
+                        "end": {
+                            "date": "Thu, 25 Aug, 2016",
+                            "time": "12:00 AM",
+                            "systemDateTime": "2016-08-25T00:00:00"
+                        }
+                    },
+                    "penalty": {
+                        "components": [{
+                            "money": {
+                                "amount": 9.59,
+                                "currency": "USD",
+                                "displayAmount": "$9.59",
+                                "type": "USD"
+                            },
+                            "components": null,
+                            "type": "BaseFare",
+                            "properties": [
+
+                            ]
+                        }, {
+                            "money": {
+                                "amount": 9.59,
+                                "currency": "USD",
+                                "displayAmount": "$9.59",
+                                "type": "USD"
+                            },
+                            "components": null,
+                            "type": "TotalFare",
+                            "properties": [
+
+                            ]
+                        }],
+                        "additionalInfo": null
+                    },
+                    "type": "Cancellation"
+                }],
+                "voucherUrl": null,
+                "questions": null,
+                "type": "Activity",
+                "options": [{
+                    "id": "SIC.5859LVMON__1_1D_UNL",
+                    "name": "1_1-Day Unlimited Pass",
+                    "isAvailable": true,
+                    "availableOn": [{
+                        "date": "Wed, 24 Aug, 2016",
+                        "time": "12:00 AM",
+                        "systemDateTime": "2016-08-24T00:00:00"
+                    }, {
+                        "date": "Thu, 25 Aug, 2016",
+                        "time": "12:00 AM",
+                        "systemDateTime": "2016-08-25T00:00:00"
+                    }, {
+                        "date": "Fri, 26 Aug, 2016",
+                        "time": "12:00 AM",
+                        "systemDateTime": "2016-08-26T00:00:00"
+                    }, {
+                        "date": "Sat, 27 Aug, 2016",
+                        "time": "12:00 AM",
+                        "systemDateTime": "2016-08-27T00:00:00"
+                    }],
+                    "selectedDateTime": {
+                        "date": "Thu, 25 Aug, 2016",
+                        "time": "12:00 AM",
+                        "systemDateTime": "2016-08-25T00:00:00"
+                    },
+                    "passengerTypesInfo": [{
+                        "fare": {
+                            "type": "Negotiated",
+                            "code": null,
+                            "isRefundable": false,
+                            "components": [{
+                                "money": {
+                                    "amount": 9.59,
+                                    "currency": "USD",
+                                    "displayAmount": "$9.59",
+                                    "type": "USD"
+                                },
+                                "components": [{
+                                    "amount": 38.36,
+                                    "currency": "Points",
+                                    "displayAmount": "Points 38.36",
+                                    "type": "Redemption"
+                                }],
+                                "type": "BaseFare",
+                                "properties": [
+
+                                ]
+                            }, {
+                                "money": {
+                                    "amount": 9.59,
+                                    "currency": "USD",
+                                    "displayAmount": "$9.59",
+                                    "type": "USD"
+                                },
+                                "components": [{
+                                    "amount": 38.36,
+                                    "currency": "Points",
+                                    "displayAmount": "Points 38.36",
+                                    "type": "Redemption"
+                                }],
+                                "type": "TotalFare",
+                                "properties": [
+
+                                ]
+                            }, {
+                                "money": {
+                                    "amount": 0.0,
+                                    "currency": "USD",
+                                    "displayAmount": "$0.00",
+                                    "type": "USD"
+                                },
+                                "components": [{
+                                    "amount": 0.0,
+                                    "currency": "Points",
+                                    "displayAmount": "Points 0",
+                                    "type": "Redemption"
+                                }],
+                                "type": "TotalFee",
+                                "properties": [
+
+                                ]
+                            }, {
+                                "money": {
+                                    "amount": 0.0,
+                                    "currency": "USD",
+                                    "displayAmount": "$0.00",
+                                    "type": "USD"
+                                },
+                                "components": [{
+                                    "amount": 0.0,
+                                    "currency": "Points",
+                                    "displayAmount": "Points 0",
+                                    "type": "Redemption"
+                                }],
+                                "type": "TotalTax",
+                                "properties": [
+
+                                ]
+                            }, {
+                                "money": {
+                                    "amount": 0.0,
+                                    "currency": "USD",
+                                    "displayAmount": "$0.00",
+                                    "type": "USD"
+                                },
+                                "components": [{
+                                    "amount": 0.0,
+                                    "currency": "Points",
+                                    "displayAmount": "Points 0",
+                                    "type": "Redemption"
+                                }],
+                                "type": "TotalDiscount",
+                                "properties": [
+
+                                ]
+                            }],
+                            "equivalents": [{
+                                "currency": "Points",
+                                "factor": 0.25,
+                                "type": "Redemption"
+                            }]
+                        },
+                        "maxAge": 99,
+                        "minAge": 6,
+                        "minQuantity": 1,
+                        "maxQuantity": 9,
+                        "passengerType": "Adult",
+                        "step": 1,
+                        "isStepSpecified": false,
+                        "quantity": 1,
+                        "displayPassengerType": "Adult",
+                        "singlePassengerType": "Adult",
+                        "multiplePassengerType": "Adults"
+                    }, {
+                        "fare": {
+                            "type": "Negotiated",
+                            "code": null,
+                            "isRefundable": false,
+                            "components": [{
+                                "money": {
+                                    "amount": 0.00,
+                                    "currency": "USD",
+                                    "displayAmount": "$0.00",
+                                    "type": "USD"
+                                },
+                                "components": [{
+                                    "amount": 0.0,
+                                    "currency": "Points",
+                                    "displayAmount": "Points 0",
+                                    "type": "Redemption"
+                                }],
+                                "type": "BaseFare",
+                                "properties": [
+
+                                ]
+                            }, {
+                                "money": {
+                                    "amount": 0.00,
+                                    "currency": "USD",
+                                    "displayAmount": "$0.00",
+                                    "type": "USD"
+                                },
+                                "components": [{
+                                    "amount": 0.0,
+                                    "currency": "Points",
+                                    "displayAmount": "Points 0",
+                                    "type": "Redemption"
+                                }],
+                                "type": "TotalFare",
+                                "properties": [
+
+                                ]
+                            }, {
+                                "money": {
+                                    "amount": 0.0,
+                                    "currency": "USD",
+                                    "displayAmount": "$0.00",
+                                    "type": "USD"
+                                },
+                                "components": [{
+                                    "amount": 0.0,
+                                    "currency": "Points",
+                                    "displayAmount": "Points 0",
+                                    "type": "Redemption"
+                                }],
+                                "type": "TotalFee",
+                                "properties": [
+
+                                ]
+                            }, {
+                                "money": {
+                                    "amount": 0.0,
+                                    "currency": "USD",
+                                    "displayAmount": "$0.00",
+                                    "type": "USD"
+                                },
+                                "components": [{
+                                    "amount": 0.0,
+                                    "currency": "Points",
+                                    "displayAmount": "Points 0",
+                                    "type": "Redemption"
+                                }],
+                                "type": "TotalTax",
+                                "properties": [
+
+                                ]
+                            }, {
+                                "money": {
+                                    "amount": 0.0,
+                                    "currency": "USD",
+                                    "displayAmount": "$0.00",
+                                    "type": "USD"
+                                },
+                                "components": [{
+                                    "amount": 0.0,
+                                    "currency": "Points",
+                                    "displayAmount": "Points 0",
+                                    "type": "Redemption"
+                                }],
+                                "type": "TotalDiscount",
+                                "properties": [
+
+                                ]
+                            }],
+                            "equivalents": [{
+                                "currency": "Points",
+                                "factor": 0.25,
+                                "type": "Redemption"
+                            }]
+                        },
+                        "maxAge": 5,
+                        "minAge": 0,
+                        "minQuantity": 0,
+                        "maxQuantity": 9,
+                        "passengerType": "Child",
+                        "step": 1,
+                        "isStepSpecified": false,
+                        "quantity": 0,
+                        "displayPassengerType": "Child",
+                        "singlePassengerType": "Child",
+                        "multiplePassengerType": "Children"
+                    }]
+                }],
+                "generalInformation": null,
+                "inclusions": null,
+                "exclusions": null,
+                "generalPolicies": [{
+                    "key": "Cancellation",
+                    "value": "Cancellation is allowed greater than 48 hours(2 days) prior to the date of activity."
+                }],
+                "isCancellable": true,
+                "allPassengersInfoRequired": true,
+                "isGuaranteeRequired": true,
+                "id": "37798E202E88E9F75B29332FB24B2FD1",
+                "name": "Las Vegas Monorail Ticket",
+                "fare": {
+                    "type": null,
+                    "code": null,
+                    "isRefundable": false,
+                    "components": [{
+                        "money": {
+                            "amount": 9.59,
+                            "currency": "USD",
+                            "displayAmount": "$9.59",
+                            "type": "USD"
+                        },
+                        "components": [{
+                            "amount": 38.36,
+                            "currency": "Points",
+                            "displayAmount": "Points 38.36",
+                            "type": "Redemption"
+                        }],
+                        "type": "BaseFare",
+                        "properties": [
+
+                        ]
+                    }, {
+                        "money": {
+                            "amount": 9.59,
+                            "currency": "USD",
+                            "displayAmount": "$9.59",
+                            "type": "USD"
+                        },
+                        "components": [{
+                            "amount": 38.36,
+                            "currency": "Points",
+                            "displayAmount": "Points 38.36",
+                            "type": "Redemption"
+                        }],
+                        "type": "TotalFare",
+                        "properties": [
+
+                        ]
+                    }, {
+                        "money": {
+                            "amount": 0.0,
+                            "currency": "USD",
+                            "displayAmount": "$0.00",
+                            "type": "USD"
+                        },
+                        "components": [{
+                            "amount": 0.0,
+                            "currency": "Points",
+                            "displayAmount": "Points 0",
+                            "type": "Redemption"
+                        }],
+                        "type": "TotalFee",
+                        "properties": [
+
+                        ]
+                    }, {
+                        "money": {
+                            "amount": 0.0,
+                            "currency": "USD",
+                            "displayAmount": "$0.00",
+                            "type": "USD"
+                        },
+                        "components": [{
+                            "amount": 0.0,
+                            "currency": "Points",
+                            "displayAmount": "Points 0",
+                            "type": "Redemption"
+                        }],
+                        "type": "TotalTax",
+                        "properties": [
+
+                        ]
+                    }, {
+                        "money": {
+                            "amount": 0.0,
+                            "currency": "USD",
+                            "displayAmount": "$0.00",
+                            "type": "USD"
+                        },
+                        "components": [{
+                            "amount": 0.0,
+                            "currency": "Points",
+                            "displayAmount": "Points 0",
+                            "type": "Redemption"
+                        }],
+                        "type": "TotalDiscount",
+                        "properties": [
+
+                        ]
+                    }],
+                    "equivalents": [{
+                        "currency": "Points",
+                        "factor": 0.25,
+                        "type": "Redemption"
+                    }]
+                },
+                "fareWithAddOns": {
+                    "type": null,
+                    "code": null,
+                    "isRefundable": false,
+                    "components": [{
+                        "money": {
+                            "amount": 9.59,
+                            "currency": "USD",
+                            "displayAmount": "$9.59",
+                            "type": "USD"
+                        },
+                        "components": [{
+                            "amount": 38.36,
+                            "currency": "Points",
+                            "displayAmount": "Points 38.36",
+                            "type": "Redemption"
+                        }],
+                        "type": "BaseFare",
+                        "properties": [
+
+                        ]
+                    }, {
+                        "money": {
+                            "amount": 9.59,
+                            "currency": "USD",
+                            "displayAmount": "$9.59",
+                            "type": "USD"
+                        },
+                        "components": [{
+                            "amount": 38.36,
+                            "currency": "Points",
+                            "displayAmount": "Points 38.36",
+                            "type": "Redemption"
+                        }],
+                        "type": "TotalFare",
+                        "properties": [
+
+                        ]
+                    }, {
+                        "money": {
+                            "amount": 0.0,
+                            "currency": "USD",
+                            "displayAmount": "$0.00",
+                            "type": "USD"
+                        },
+                        "components": [{
+                            "amount": 0.0,
+                            "currency": "Points",
+                            "displayAmount": "Points 0",
+                            "type": "Redemption"
+                        }],
+                        "type": "TotalFee",
+                        "properties": [
+
+                        ]
+                    }, {
+                        "money": {
+                            "amount": 0.0,
+                            "currency": "USD",
+                            "displayAmount": "$0.00",
+                            "type": "USD"
+                        },
+                        "components": [{
+                            "amount": 0.0,
+                            "currency": "Points",
+                            "displayAmount": "Points 0",
+                            "type": "Redemption"
+                        }],
+                        "type": "TotalTax",
+                        "properties": [
+
+                        ]
+                    }, {
+                        "money": {
+                            "amount": 0.0,
+                            "currency": "USD",
+                            "displayAmount": "$0.00",
+                            "type": "USD"
+                        },
+                        "components": [{
+                            "amount": 0.0,
+                            "currency": "Points",
+                            "displayAmount": "Points 0",
+                            "type": "Redemption"
+                        }],
+                        "type": "TotalDiscount",
+                        "properties": [
+
+                        ]
+                    }],
+                    "equivalents": [{
+                        "currency": "Points",
+                        "factor": 0.25,
+                        "type": "Redemption"
+                    }]
+                },
+                "isPostPaid": false,
+                "isSoldOut": false,
+                "isPreferred": false,
+                "addOns": null,
+                "preferredSortOrder": 0,
+                "source": {
+                    "inventoryId": "SIC.5859LVMON",
+                    "id": 416,
+                    "name": "247_VTR"
+                },
+                "restrictions": null
+            };
+
+            templatizer.searchCriteria = {
+                "pickupLocation": {
+                    "code": "LAS",
+                    "name": "McCarran International Airport",
+                    "cityName": "Las Vegas",
+                    "countryCode": "US",
+                    "countryName": "United States",
+                    "geoCode": "36.0854,-115.15",
+                    "id": 2102,
+                    "stateCode": "NV",
+                    "stateName": "Nevada",
+                    "type": "Airport",
+                    "additionalInfo": null,
+                    "formattedAddress": "Las Vegas, NV, United States - McCarran International Airport (LAS)"
+                },
+                "pickupDate": "08/30/2016",
+                "dropoffLocation": {
+                    "code": "LAS",
+                    "name": "McCarran International Airport",
+                    "cityName": "Las Vegas",
+                    "countryCode": "US",
+                    "countryName": "United States",
+                    "geoCode": "36.0854,-115.15",
+                    "id": 2102,
+                    "stateCode": "NV",
+                    "stateName": "Nevada",
+                    "type": "Airport",
+                    "additionalInfo": null,
+                    "formattedAddress": "Las Vegas, NV, United States - McCarran International Airport (LAS)"
+                },
+                "dropoffDate": "09/06/2016",
+                "isDropoffLocationSame": true,
+                "pickupTime": "11:00 AM",
+                "dropoffTime": "11:00 AM"
+            };
+
+            templatizer.visible = true;
+
+        })();
+    </script>
+</html>

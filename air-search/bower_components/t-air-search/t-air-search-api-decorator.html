@@ -1,0 +1,108 @@
+<link rel="import" href="../polymer/polymer.html" />
+<!--
+    `<t-air-search-api-decorator>` is a polymer component that generates the  msytique request for Air.
+    Basic usage
+    
+        `<t-air-search-api-decorator 
+            input="[[something]]"
+            output="{{searchCriteria}}">
+        </t-air-search-api-decorator>`
+-->
+<dom-module id="t-air-search-api-decorator">
+</dom-module>
+<script>
+    Polymer({
+        is: 't-air-search-api-decorator',
+
+        observers:[
+            '_buildData(input)'
+        ],
+
+        properties: {
+
+            //the data object to bind to populate data
+            input: {
+                type: Object
+            },
+
+            /**
+             * Stores output of the decorator
+             * @type {Object}
+             */
+            output: {
+                type: Object,
+                notify: true
+            }
+        },
+
+        _buildData: function(data) {
+            var query = {
+                "productType": "Flight",
+                "Passengers": [
+                    {
+                        "quantity": data.adult,
+                        "type": "Adult",
+                        "ages": []
+                    },
+                    {
+                        "quantity": data.child,
+                        "type": "Child",
+                        "ages": []
+                    },
+                    {
+                        "quantity": 0,
+                        "type": "Senior",
+                        "ages": []
+                    },
+                    {
+                        "quantity": data.infant,
+                        "type": "Infant",
+                        "ages": []
+                    }
+                ],
+                "legs": [
+                    {
+                        "departureLocation": data.departureAirport,
+                        "includeNearByAirportsForDeparture": false,
+                        "arrivalLocation": data.arrivalAirport,
+                        "includeNearByAirportsForArrival": false,
+                        "travelDate": {
+                            "date":  this._getFormattedDate(data.departureDate)
+                        }
+                    }
+                ],
+                "preferences": { "nonStopOnly": false, "cabinType": data.cabinType }
+            };
+            if (data.itineraryType === 'RoundTrip') {
+                query.legs[1] = {
+                    "departureLocation": data.arrivalAirport,
+                    "includeNearByAirportsForDeparture": false,
+                    "arrivalLocation": data.departureAirport,
+                    "includeNearByAirportsForArrival": false,
+                    "travelDate": {
+                        "date":  this._getFormattedDate(data.arrivalDate)
+                    }
+
+                };
+            }
+            this.output = query;
+        },
+
+     	/*
+         * <p>Translates dates to make them compatible with t-calendar</p>
+        */
+        _getFormattedDate: function (dateString) {
+            dateString = new Date(dateString);
+
+            var date = dateString.getDate();
+            date = date <= 9 ? '0' + date : date;
+
+            var month = dateString.getMonth() + 1;
+            month = month <= 9 ? '0' + month : month;
+
+            var year = dateString.getFullYear();
+
+            return month +'/'+ date +'/'+ year;
+        }
+    });
+</script>

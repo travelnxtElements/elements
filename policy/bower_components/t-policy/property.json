@@ -1,0 +1,47 @@
+{
+    "name": "Policy",
+    "properties": [
+        {
+            "name": "Properties",
+            "fields": {
+                "apiBaseUrl": {
+                    "name": "apiBaseUrl",
+                    "type": "object"
+                },
+                "apiRelativeUrl": {
+                    "name": "apiRelativeUrl",
+                    "type": "string"
+                },
+                "authToken": {
+                    "name": "authToken",
+                    "type": "string"
+                },
+                "externalLink": {
+                    "name": "externalLink",
+                    "type": "boolean",
+                    "value": false
+                },
+                "inventoryId": {
+                    "name": "inventoryId",
+                    "type": "string"
+                },
+                "isDataProvidedByView": {
+                    "name": "isDataProvidedByView",
+                    "type": "object"
+                },
+                "label": {
+                    "name": "label",
+                    "type": "string"
+                },
+                "policies": {
+                    "name": "policies",
+                    "type": "object"
+                },
+                "searchId": {
+                    "name": "searchId",
+                    "type": "string"
+                }
+            }
+        }
+    ]
+}

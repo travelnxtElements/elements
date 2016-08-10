@@ -1,0 +1,24 @@
+{
+  "name": "t-behavior",
+  "description": "This is the page behavior for all page components.",
+  "main": "t-behavior.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.4.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.0.0",
+    "web-component-tester": "^4.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
+  },
+  "homepage": "https://github.com/travelnxtelements/t-behavior",
+  "_release": "6f90078000",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "6f9007800048a7b56e357ddfc4d89f0e906c489f"
+  },
+  "_source": "git://github.com/travelnxtelements/t-behavior.git",
+  "_target": "*",
+  "_originalSource": "travelnxtelements/t-behavior"
+}

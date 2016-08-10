@@ -1,0 +1,146 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../t-notify/t-notify.html">
+<link rel="import" href="../t-text-container/travel-element-styles.html">
+<link rel="import" href="../t-behavior/t-page-behavior.html">
+<link rel="import" href="../t-behavior/t-activity-page-behavior.html">
+
+<!--
+    <h3>Details:</h3>
+
+        `t-confirmation-failure-page` is a car confirmation page component which displays booked itinerary information.
+
+        It uses following child components in it -
+            1. `t-notify`
+            2. `t-header`
+
+    <h3>Example:</h3>
+
+        <t-confirmation-failure-page
+                id="failure"
+                name="failure"
+                home-page-url="[[siteUrl]]car"
+                results-page-url="[[siteUrl]]car/categories"
+                details-page-url="[[siteUrl]]car/details">
+            <t-header
+                icon="home"
+                url="[[siteUrl]]car"
+                label="Confirmation"
+                normal-heading>
+            </t-header>
+        </t-confirmation-failure-page>
+
+    @demo demo/index.html
+-->
+
+<dom-module id="t-confirmation-failure-page">
+	<template>
+	    <style include="travel-element-styles">
+	        .block{
+                display: block;
+                font-family: var(--header-font-family, --primary-font-family);
+                font-size: var(--font-14, 14px);
+	        }
+	    </style>
+
+        <content select="t-header"></content>
+
+        <t-notify id="notify"></t-notify>
+
+    	<t-notify 
+    		id="bookingFailureError" 
+    		active 
+    		message="[[errorMessage]]" 
+    		type="error">    			
+		</t-notify>
+    	<div class="section font-12 ">
+        	<a class="link-style block margin-bottom" href="{{homePageUrl}}">Home page</a>
+        	<a class="link-style block margin-bottom" href="{{resultsPageUrl}}">Results page</a> 
+        	<a class="link-style block margin-bottom" href="{{detailsPageUrl}}">Details page</a>
+    	</div>
+    </template>
+    <script>
+        (function () {
+            'use strict'
+
+            Polymer({
+
+                is: 't-confirmation-failure-page',
+
+                behaviors: [
+                    TravelNxt.Behaviors.PageBehavior
+                ],
+
+                properties: {
+
+                    /*
+                     * <p>Home page url to redirect to home page</p>
+                    */
+                    homePageUrl: {
+                        type: String
+                    },
+
+                    /*
+                     * <p>Result page url to redirect to result page</p>
+                    */
+                    resultsPageUrl: {
+                        type: String
+                    },
+
+                    /*
+                     * <p>Details page url to redirect to details page</p>
+                    */
+                    detailsPageUrl: {
+                        type: String
+                    },
+
+                    /*
+                     * <p>Customer care number to be displayed i the error message</p>
+                    */
+                    customerCareNumber: {
+                        type: String
+                    },
+
+                    /*
+                     * <p>custom error message</p>
+                    */
+                    errorMessage: {
+                        type: String,
+                        value : ''
+                    }
+                },
+
+                
+                /*
+                 * <p>this method gets called when page becomes visible</p>
+                 * <p>`go-to-search` event is fired if `visible` property is false.</p>
+                */
+                _onBookingFailure: function (visible) {
+                    if (!visible) {
+                        this.fire('go-to-search');
+                        return;
+                    }
+                    this._getErrorMessage();
+                },
+
+                /*
+                 * <p>this method return the error message</p>
+                 * <p>Returns the error message only if page is visible</p>
+                */
+                _getErrorMessage: function () {
+                    if (!this.visible) {
+                        return;
+                    }
+
+                    if (!this.errorMessage) {
+                        this.errorMessage = "Oops, your booking didn't go through. Sorry, there was a problem. We were not able to confirm your booking.";
+
+                        if (this.customerCareNumber) {
+                            this.errorMessage += " For any assistance, please contact " + this.customerCareNumber;
+                        }
+                    }                     
+                }
+            });
+                        
+        })();
+    </script>
+</dom-module>

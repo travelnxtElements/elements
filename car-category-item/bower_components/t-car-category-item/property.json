@@ -1,0 +1,52 @@
+{
+    "name": "Car Category Item",
+    "properties": [
+        {
+            "name": "Properties",
+            "fields": {
+                "airConditioning": {
+                    "name": "airConditioning",
+                    "type": "boolean",
+                    "value": false
+                },
+                "baggageRange": {
+                    "name": "baggageRange",
+                    "type": "string"
+                },
+                "capacityRange": {
+                    "name": "capacityRange",
+                    "type": "string"
+                },
+                "carIcon": {
+                    "name": "carIcon",
+                    "type": "string"
+                },
+                "category": {
+                    "name": "category",
+                    "type": "string"
+                },
+                "currency": {
+                    "name": "currency",
+                    "type": "string",
+                    "value": "USD"
+                },
+                "doorRange": {
+                    "name": "doorRange",
+                    "type": "number"
+                },
+                "gear": {
+                    "name": "gear",
+                    "type": "string"
+                },
+                "price": {
+                    "name": "price",
+                    "type": "string"
+                },
+                "url": {
+                    "name": "url",
+                    "type": "string"
+                }
+            }
+        }
+    ]
+}

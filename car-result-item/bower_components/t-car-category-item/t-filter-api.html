@@ -1,0 +1,138 @@
+<link rel="import" href="../polymer/polymer.html" />
+<link rel="import" href="../iron-ajax/iron-ajax.html">
+<link rel="import" href="../t-shared-lib/t-provider-behavior.html">
+<!--
+    <h3>Details:</h3>
+
+        `t-filter-api` is a car search api component integrated with mystique apis.
+
+        It fires mystique search call and returns `searchId` upon successful opearion
+
+    <h3>Object Structure:</h3>
+
+        1. This component uses following request format to search cars -
+
+            var request = {
+                "productType": "car",
+                "pickupLocation": {
+                    "name": "McCarran International Airport",
+                    "geoCode": "36.0854,-115.15",
+                    "type": "Airport",
+                    "code": "LAS",
+                    "formattedAddress": "Las Vegas, NV, United States - McCarran International Airport (LAS)"
+                },
+                "pickupDate": {
+                    "date": "06/23/2016",
+                    "time": "11 AM"
+                },
+                "dropoffDate": {
+                    "date": "06/25/2016",
+                    "time": "12 AM"
+                },
+                "dropoffLocation": {
+                    "name": "McCarran International Airport",
+                    "geoCode": "36.0854,-115.15",
+                    "type": "Airport",
+                    "code": "LAS",
+                    "formattedAddress": "Las Vegas, NV, United States - McCarran International Airport (LAS)"
+                }
+            };
+
+    <h3>Events:</h3>
+
+        following events are fired by this component
+
+            1. 't-filter-api-success' - fired upon successful search call
+            2. 't-filter-api-error' - fired if search call is failed
+
+    <h3>Example:</h3>
+
+        <t-filter-api 
+            id="searchApi" 
+            loading={{loading}} 
+            api-base-url="{{apiBaseUrl}}" 
+            api-relative-url="api/Car/search" 
+            auth-token="{{authToken}}"
+            on-t-filter-api-success="onSearchSuccess"
+            on-t-filter-api-error="onSearchError">
+        </t-filter-api>
+
+    @demo demo/index.html
+-->
+<dom-module id="t-filter-api">
+    <template>
+        <iron-ajax id="ajaxCall" method="GET" content-type="application/json" handle-as="json" verbose>
+        </iron-ajax>
+    </template>
+</dom-module>
+<script>
+(function() {
+
+        Polymer({
+        is: 't-filter-api',
+
+        properties: {
+
+            /*
+             * <p>This is the payload used while searching cars using mystique api</p>
+             * <p>Follow documentation for structure.</p>
+            */
+            request: {
+                type: Object,
+                value: null
+            }
+        },
+
+        /*
+         * <p>Behaviour to validate ajax parameters and handle error codes.</p>
+        */
+        behaviors: [TravelNxt.Behaviors.ProviderBehavior],
+
+        listeners: {
+            'ajaxCall.response': '_successCallback',
+            'ajaxCall.error': '_errorCallback'
+        },
+
+        /*
+         * <p>Event handler method to search cars</p>
+        */
+        onGetFilters: function(e) {
+
+            if (!e.detail.request) {
+                throw Error("search request is mandetory");
+            }
+
+            this.request = e.detail.request;
+            this.search();
+        },
+
+        /*
+         * <p>Method to search cars</p>
+        */
+        getFilters: function() {
+
+            if (this._validateApiMeta()) {
+                this.$.ajaxCall.url = this._getUrl();
+                this._setLoading(true);
+                this.$.ajaxCall.generateRequest();
+            }
+        },
+
+        /*
+         * <p>Success callback</p>
+        */
+        _successCallback: function(event) {
+            this._successHandler(event);
+        },
+
+
+        /*
+         * <p>error callback</p>
+        */
+        _errorCallback: function(event) {
+            this._errorHandler(event);
+        }
+
+    });
+})();
+</script>

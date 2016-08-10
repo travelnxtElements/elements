@@ -1,0 +1,62 @@
+<link rel="import" href="../polymer/polymer.html" />
+<link rel="import" href="dateBehavior.html">
+<link rel="import" href="t-trip-subitem-scaffold.html">
+<!--
+    `t-activity-item` activity product component.
+    This component shows information single activity product.
+	-->
+<dom-module id="t-activity-item">
+    <template>
+        <t-trip-subitem-scaffold icon="places:pool" status="[[model.bookingStatus]]">
+            <div class="inventory-detail layout horizontal">
+                [[model.inventory.name]]
+            </div>
+            <div class="inventory-description">
+                <template is="dom-if" if="[[model.searchCriteria.location.cityName]]">
+                    [[model.searchCriteria.location.cityName]],
+                </template>
+                [[_getDisplayDate(model.inventory.options.0.selectedDateTime.date)]]
+            </div>
+        </t-trip-subitem-scaffold>
+    </template>
+</dom-module>
+<script>
+Polymer({
+    is: "t-activity-item",
+    behaviors:[Polymer.TravelnxtDateBehaviour],
+    properties: {
+
+        /**
+         * logo url.
+         * This is required field.
+         */
+        logo: {
+            type: String,
+            value: 'activity logo'
+        },
+
+        /**
+         * activity product model.
+         * This model is inventoriesInfo model of type 'Activity' sent in mystique order api response
+         * This is required field.
+         */
+        model: {
+            type: Object,
+            value: null
+        }
+    },
+
+    attached: function() {
+        this._populateModel();
+    },
+
+    _populateModel: function() {
+        if (!this.model || !this.model.inventory || this.model.inventory.type.toLowerCase() !== 'activity') {
+            console.error("activity inventory not found!");
+            return;
+        }
+        //this._setDates();
+
+    }
+});
+</script>

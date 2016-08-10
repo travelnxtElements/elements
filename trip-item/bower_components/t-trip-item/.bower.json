@@ -1,0 +1,45 @@
+{
+  "name": "t-trip-item",
+  "authors": [
+    "Manoj Chalode <chalodem@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "keywords": [
+    "Polymer",
+    "Web",
+    "Components"
+  ],
+  "homepage": "https://github.com/travelnxtelements/t-trip-item",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0",
+    "t-text-container": "travelnxtelements/t-text-container#^1.0.0",
+    "t-list": "atomelements/t-list#^1.0.0",
+    "paper-menu-button": "PolymerElements/paper-menu-button#^1.0.4",
+    "t-filter": "atomelements/t-filter#^1.0.0"
+  },
+  "devDependencies": {
+    "web-component-tester": "*",
+    "webcomponentsjs": "~0.7.14",
+    "iron-component-page": "PolymerElements/iron-component-page#~1.0.6"
+  },
+  "_release": "c6c5de406e",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "c6c5de406e35bf34a3f779dc9eca564e73ef4142"
+  },
+  "_source": "git://github.com/travelnxtelements/t-trip-item.git",
+  "_target": "master",
+  "_originalSource": "travelnxtelements/t-trip-item",
+  "_direct": true
+}

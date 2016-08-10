@@ -1,0 +1,92 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html" />
+<link rel="import" href="../t-text-container/travel-element-styles.html" /><!--
+Trip summary component will show 
+
+Example:
+
+    <my-elem></my-elem>
+
+Example:
+
+    <my-elem>
+      <h2>Hello my-elem</h2>
+    </my-elem>
+
+@demo demo/index.html
+-->
+<dom-module id="t-hotel-trip-summary">
+    <template>
+        <style include="iron-flex"></style>
+        <style include="iron-flex-alignment"></style>
+        <style include="travel-element-styles">
+	        :host {
+	            display: block;
+	        }
+        </style>
+        <t-section-header label="Trip summary" style="margin:0"></t-section-header>
+        <div class="section font-12 primary-text border-bottom">
+            <div class="layout horizontal justified">
+                <div class="font-16 primary-text">{{itineraryName}}</div>
+                <div class="layout horizontal">
+                    <template is="dom-repeat" items="{{starRating}}">
+                        <iron-icon class="icon-star" icon="icons:star"></iron-icon>
+                    </template>
+                </div>
+            </div>
+            <div>[[stayDuration]]</div>
+            <div id="toggle" hidden>
+                <div>
+                   [[guestCount]]
+                </div>
+                <div>[[itineraryDesciption]]</div>
+                <content select=".policy"></content>
+                <div>[[itineraryAddress]]</div>
+            </div>
+            <div id="more" class="link-style" on-click="toggle">more</div>
+        </div>
+    </template>
+    <script>
+    Polymer({
+        is: 't-hotel-trip-summary',
+
+        properties: {
+
+        	/*Pass the itinerary Name*/
+        	itineraryName:{
+        		type: String,
+        		value: 'itinerary name'
+        	},
+
+        	/*Pass the stay Duration*/
+        	stayDuration:{
+        		type: String,
+        		value: 'stay Duration'
+        	},
+
+        	/*Pass the rating array*/
+        	starRating: {
+        		type:Array,
+        		value:[]
+        	},
+
+        	/*Pass the full guest count string*/
+        	guestCount:String,
+
+        	/*Pass the itinerary Desciption*/
+        	itineraryDesciption: String,
+
+        	/*Pass the itinerary Address*/
+        	itineraryAddress: String
+
+        },
+	
+		toggle : function(ev) {
+	      var isMore = this.$.toggle.hidden = !this.$.toggle.hidden;
+
+	      this.$.more.innerText = isMore ? 'more' : 'less';
+	    }
+
+    });
+    </script>
+</dom-module>

@@ -1,0 +1,99 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../t-text-container/travel-element-styles.html" />
+<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html" />
+<link rel="import" href="../juicy-html/juicy-html.html">
+<link rel="import" href="../t-overlay/t-overlay.html">
+<link rel="import" href="t-itinerary-baggage-policies-list.html">
+<link rel="import" href="t-itinerary-baggage-policies-provider.html">
+<!--
+    `<t-itinerary>` is a polymer component that generates a list of legs in a flight.
+
+    Basic usage
+    `
+    <t-itinerary-baggage-policies-list>
+	    <content select="#policyProvider"></content>     
+    </t-itinerary-baggage-policies-list>   
+    `
+-->
+
+<dom-module id="t-itinerary-baggage-policies">    
+    <template>
+    <style include="iron-flex"></style>
+    <style include="travel-element-styles">
+        :host {
+            display: inline-block;
+            font-family: var(--primary-font-family);
+        }
+
+    </style>
+        <label class="link-style" on-tap="_initiateBaggageCall">[[label]]</label>
+        
+        <t-overlay id="overlay" header="[[label]]">
+            <t-itinerary-baggage-policies-list>
+
+            </t-itinerary-baggage-policies-list>
+        </t-overlay>
+        <t-itinerary-baggage-policies-provider 
+            id="baggagePoliciesProvider" 
+            api-relative-url="[[baggageUrl]]" 
+            api-base-url="[[apiBaseUrl]]"
+            auth-token="[[authToken]]"
+            airline-codes="[[airlineCodes]]"
+            on-baggage-policies-success="_onBaggagePoliciesSuccess"
+            on-baggage-policies-error="_onBaggagePoliciesError">
+        </t-itinerary-baggage-policies-provider>
+    </template>
+</dom-module>
+<script>
+    Polymer({
+        is: 't-itinerary-baggage-policies',
+
+        properties: {
+            //text of the component to show
+            label: {
+                type: String,
+                value: 'Baggage Information'
+            },
+
+            searchId: {
+                type: String
+            },
+
+            inventoryId:{
+                type: String
+            },
+
+            authToken: String,
+
+            apiRelativeUrl: {
+                type: String,
+                value: ''
+            }
+        },
+
+        _baggagePolicies: null,
+
+        _onBaggagePoliciesSuccess: function (event) {
+            if (!this._baggagePolicies) {
+                this._baggagePolicies = event.detail;
+            }
+            Polymer.dom(this.root).querySelector('t-itinerary-baggage-policies-list').onBaggagePoliciesSuccess(event);
+        },
+
+        _onBaggagePoliciesError: function (event) {
+            Polymer.dom(this.root).querySelector('t-itinerary-baggage-policies-list').onBaggagePoliciesError(event);
+        },
+
+        _initiateBaggageCall: function () {
+            //active overlay
+            this.$.overlay.active = true;
+
+            if (!this._baggagePolicies) {
+                //make call to provider
+                Polymer.dom(this.root).querySelector('t-itinerary-baggage-policies-list').showBaggagePolicies();
+                this.$.baggagePoliciesProvider.getBaggagePolicies();
+            }
+        }
+
+    });
+</script>

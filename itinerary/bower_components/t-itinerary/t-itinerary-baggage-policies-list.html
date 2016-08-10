@@ -1,0 +1,122 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../t-text-container/travel-element-styles.html" />
+<link rel="import" href="../juicy-html/juicy-html.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html" />
+<!--
+    `<t-itinerary>` is a polymer component that generates a list of legs in a flight.
+
+    Basic usage
+    `
+    <t-itinerary-baggage-policies-list>
+        <content select="#policyProvider"></content>
+    </t-itinerary-baggage-policies-list>
+    `
+-->
+<dom-module id="t-itinerary-baggage-policies-list">
+    <template>
+        <style include="iron-flex"></style>
+        <style include="travel-element-styles">
+        :host {
+            display: block;
+            font-family: var(--primary-font-family, 'Open sans');
+        }
+        
+        .airlineCode {
+            width: 85px;
+            text-align: center;
+        }
+        
+        .margin-bottom-10 {
+            margin-bottom: 10px;
+        }
+        </style>
+        <template is="dom-if" if="{{_baggagePoliciesFailed}}">
+            <t-notify active message="Sorry we are having difficulties fetching baggage policies."></t-notify>
+        </template>
+        <div class="section-small font-14">
+            <template is="dom-if" if="{{_baggagePoliciesLoading}}">
+                <div class="text-center margin-bottom">
+                    Please wait, we are fetching baggage information for your selected itinerary.
+                </div>
+                <div class="horizontal layout flex center-justified">
+                    <t-loader active></t-loader>
+                </div>
+            </template>
+            <template is="dom-if" if="[[_showBaggagePolicies]]">
+                <div class="margin-bottom-medium">
+                    <div class="font-semi margin-bottom">
+                        Airline baggage charges/fees
+                    </div>
+                    <div class="font-12 secondary-text">
+                        Airlines may charge additional fees at check-in. These fees are determined by airline and may change at anytime.
+                    </div>
+                </div>
+                <div class="devider border-bottom margin-bottom-medium"></div>
+                <template is="dom-if" if="[[baggagePolicies]]">
+                    <div class="layout horizontal font-semi  margin-bottom-10">
+                        <div class="flex">
+                            Airline Name
+                        </div>
+                        <div class="airlineCode">
+                            Airline Code
+                        </div>
+                    </div>
+                    <template is="dom-repeat" items="[[baggagePolicies]]">
+                        <div class=" layout horizontal  margin-bottom-10">
+                            <a class="link-style flex" target="_blank" href$="[[item.policyLink]]">
+                                [[item.airlineName]]
+                            </a>
+                            <div class="text-center airlineCode secondary-text">[[item.airlineCode]]</div>
+                        </div>
+                    </template>
+                </template>
+                <template is="dom-if" if="[[!baggagePolicies]]">
+                    <div class="layout horizontal margin-bottom-10">
+                        Sorry, Airline baggage information unavailable. Please check with airlines directly.
+                    </div>
+                </template>
+            </template>
+        </div>
+    </template>
+</dom-module>
+<script>
+Polymer({
+    is: 't-itinerary-baggage-policies-list',
+
+    properties: {
+        /**
+         * Provides array of all flight fare rules in an itinerary. Object in an array includes airline, airport details and its Fare Rules
+         */
+        baggagePolicies: Array
+    },
+
+    _baggagePoliciesLoading: false,
+
+    _baggagePoliciesFailed: false,
+
+    _showBaggagePolicies: false,
+    /**
+     * This method will initiate a call to show fare rules
+     */
+    showBaggagePolicies: function() {
+        this._baggagePoliciesLoading = true;
+        this._baggagePoliciesFailed = false;
+        this._showBaggagePolicies = false;
+        this.baggagePolicies = null;
+    },
+
+    onBaggagePoliciesSuccess: function(event) {
+        this._baggagePoliciesLoading = false;
+        this._baggagePoliciesFailed = false;
+        this._showBaggagePolicies = true;
+        this.baggagePolicies = event.detail.baggageData;
+    },
+
+    onBaggagePoliciesError: function(event) {
+        this._baggagePoliciesLoading = false;
+        this._showBaggagePolicies = false;
+        this._baggagePoliciesFailed = true;
+
+    }
+})
+</script>

@@ -1,0 +1,396 @@
+<link rel="import" href="../polymer/polymer.html" />
+<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html" />
+<link rel="import" href="../t-button/t-button.html">
+<link rel="import" href="../t-input/t-input.html">
+<link rel="import" href="../paper-input/paper-input-error.html">
+<link rel="import" href="../t-text-container/travel-element-styles.html">
+<!--
+`t-points-payment` is a component used for points payment
+It displays points and handles split payment functionality.
+Events:
+
+    't-points-payment-breakup-change' event gets fired when -
+        1. points are redeemed
+        2. redeemed points are reset.
+
+Example:
+
+    <t-points-payment></t-points-payment>
+-->
+<dom-module id="t-points-payment">
+    <template>
+        <style include="iron-flex"></style>
+        <style include="iron-flex-alignment"></style>
+        <style include="travel-element-styles">
+        .t-points-block {
+            border: 1px dashed var(--t-points-border-color, --default-primary-color);
+            display: block;
+        }
+        
+        :host([show-breakup]) .t-points-block {
+            border: 1px dashed var(--t-points-border-applied-color, --success-color);
+        }
+        
+        .pointmark {
+            font-size: var(--font-14, 14px);
+            color: #fff;
+            border-radius: 50%;
+            background: var(--bgv-price-orange, #ff9900);
+            padding: 8px 5px;
+            width: 22px;
+            height: 16px;
+            text-align: center;
+            display: inline-block;
+            margin-right: 10px;
+        }
+        
+        .total-points {
+            padding: 10px 0;
+            margin: 10px 0;
+        }
+        
+        :host([show-breakup]) .success {
+            color: var(--t-points-success-color, --success-color);
+        }
+        
+        :host([show-breakup]) .pointmark {
+            background: var(--t-points-success-color, --success-color);
+        }
+        
+        .item {
+            padding: 10px 0;
+        }
+        
+        .custome-error {
+            color: var(--error-color, #ff0000);
+            font-size: var(--font-12, 12px);
+        }
+        
+        #pointsInput {
+            text-align: center;
+        }
+        </style>
+        <section class$="[[showBreakup]] section-small t-points-block">
+            <!-- Link for view total points -->
+            <template is="dom-if" if="[[!showBreakup]]">
+                <div class="layout horizontal center" on-tap="_showPointSection">
+                    <span class="pointmark">P</span>
+                    <a class="font-14 link-style">Click here if you want to pay with points</a>
+                </div>
+            </template>
+            <template is="dom-if" if="[[showBreakup]]">
+                <div class="layout horizontal center justified">
+                    <div class="layout horizontal center flex">
+                        <span class="pointmark">P</span>
+                        <a class="font-14 success">Points used {{pointsToBeUsed}} ({{currency}} {{payableByPoints}})</a>
+                    </div>
+                    <a class="font-14 link-style" on-tap="_resetView">remove</a>
+                </div>
+            </template>
+            <!-- Link for view total points -->
+            <!-- Total points Block-->
+            <template id="points-apply-section-1" if="[[showPointsSection]]" is="dom-if">
+                <div class="layout horizontal center justified total-points border-bottom">
+                    <span class="font-16 secondary-text ">Total points available</span>
+                    <span class="font-18 primary-text">{{userPoints}}</span>
+                </div>
+                <div class="layout horizontal center justified">
+                    <div class="layout horizontal center">
+                        <div class="font-16 secondary-text">Use &nbsp;</div>
+                        <div class="flex">
+                            <t-input id="pointsInput" name="pointsUsed" validate-on-blur="[[validateOnBlur]]" type="text" value="{{pointsToBeUsed}}" label="Points" no-label-float required></t-input>
+                        </div>
+                        <div class="font-16 secondary-text">Points &nbsp;</div>
+                    </div>
+                    <div>
+                        <t-button class="primary block" disabled$="[[!userPoints]]" label="Apply" on-tap="_splitPayable"></t-button>
+                    </div>
+                </div>
+                <div class="custome-error">{{errorMessage}}</div>
+            </template>
+            <!-- Total points Block-->
+        </section>
+        <template is="dom-if" if="[[showBreakup]]">
+            <div class="layout vertical flex">
+                <div class="layout horizontal item border-bottom insurance">
+                    <span class="secondary-text">Payable by Points</span>
+                    <span class="flex"></span>
+                    <span>[[currency]] [[payableByPoints]]</span>
+                </div>
+                <template is="dom-if" if="[[payableByCard]]">
+                    <div class="layout horizontal item border-bottom insurance">
+                        <span class="secondary-text">Payable by Card</span>
+                        <span class="flex"></span>
+                        <span>[[currency]] [[payableByCard]]</span>
+                    </div>
+                </template>
+            </div>
+        </template>
+    </template>
+</dom-module>
+<script>
+Polymer({
+    is: "t-points-payment",
+
+    properties: {
+        /**
+         * Handles visibility of points section
+         * section includes user points, points to be redeemed & fare breakup after points redemption
+         */
+        showPointsSection: {
+            type: Boolean,
+            value: false
+        },
+
+        /**
+         * fare of selected room
+         * holds values for fare, points and point factor
+         */
+        roomFare: {
+            type: Object,
+            vallue: {},
+            observer: '_onFareChanged'
+        },
+
+        /**
+         * Toogles between point redemption view and fare breakup view. 
+         */
+        showBreakup: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute: true
+        },
+
+
+        /**
+         * User points information
+         */
+        userPoints: {
+            type: Number,
+            vallue: 0
+        },
+
+        /**
+         * points selected to be reedemed
+         */
+        pointsToBeUsed: {
+            type: Number,
+            value: 0,
+            observer: '_clearMessage'
+        },
+
+        /**
+         * room fare
+         */
+        totalFare: {
+            type: Number,
+            value: 0
+        },
+
+        /**
+         * room fare points equivalent
+         */
+        farePoints: {
+            type: Number,
+            value: 0
+        },
+
+        /**
+         * points conversion factor
+         */
+        pointsFactor: {
+            type: Number,
+            value: 0
+        },
+
+        /**
+         * currency string
+         */
+        currency: {
+            type: String,
+            value: ''
+        },
+
+        /**
+         * fare amount payable by points
+         */
+        payableByPoints: {
+            type: Number,
+            value: 0
+        },
+
+        /**
+         * fare amount payable by card
+         */
+        payableByCard: {
+            type: Number,
+            value: 0
+        },
+
+        /***
+         * Check points entered by user are valid.
+         */
+        isValidPoints: {
+            type: Boolean,
+            value: false
+        },
+
+        /***
+         * Store value of custom error messages.
+         */
+        errorMessage: {
+            type: String,
+            value: ""
+        },
+
+        /***
+         * Store value of maximum redeem points.
+         */
+
+        maxPoints: {
+            type: Number,
+            value: 0
+        },
+
+        /***
+         * Disabled On blur validation in t-input.
+         */
+        validateOnBlur: {
+            type: Boolean,
+            value: false,
+            readOnly: true
+        }
+    },
+
+    _onFareChanged: function() {
+        if (this.hidden || !this.roomFare)
+            return;
+
+        this.userPoints = Math.floor(parseFloat(this.userPoints || 0));
+
+        this._getPointsFactor();
+        this._getPointsToBeUsed();
+    },
+
+    _getPointsToBeUsed: function() {
+        this._getFarePoints();
+
+        if (!this.farePoints)
+            return;
+
+        this.pointsToBeUsed = Math.ceil(parseFloat(this.userPoints > this.farePoints ? this.farePoints : this.userPoints));
+
+        this.maxPoints = this.pointsToBeUsed;
+    },
+
+    _getFarePoints: function() {
+        var totalFare = this._getComponentByName('TotalFare');
+
+        if (!totalFare)
+            return;
+
+        this.totalFare = totalFare.money.amount;
+        this.currency = totalFare.money.currency;
+
+        var pointComponent = totalFare.components.find(function(component, index, array) {
+            return component.currency.toLowerCase() === "points";
+        });
+
+        if (pointComponent) {
+            this.farePoints = Math.ceil(parseFloat(pointComponent.amount));
+        }
+    },
+
+    _getPointsFactor: function() {
+
+        if (!this.roomFare.equivalents || !this.roomFare.equivalents.length) {
+            return;
+        }
+
+        var pointEquivalent = this.roomFare.equivalents.find(function(equivalent, index, array) {
+            return equivalent.currency.toLowerCase() === "points";
+        });
+
+        if (pointEquivalent) {
+            this.pointsFactor = pointEquivalent.factor;
+        }
+    },
+
+    _splitPayable: function(e) {
+
+        this._customeValidatePoints();
+
+        if (this.isValidPoints) {
+
+            this.payableByPoints = this.pointsToBeUsed * this.pointsFactor > this.totalFare ? this.totalFare : this.pointsToBeUsed * this.pointsFactor;
+            this.payableByPoints = Math.round(this.payableByPoints * 100) / 100;
+            this.payableByCard = Math.round((this.totalFare - this.payableByPoints) * 100) / 100;
+
+            this.fire('t-points-payment-breakup-change', {
+                resetData: false,
+                isSplitPayment: this.payableByCard > 0,
+                points: this.pointsToBeUsed,
+                amount: this.payableByCard,
+                currency: this.currency
+            });
+
+            this.showBreakup = true;
+            this.showPointsSection = false;
+        }
+
+
+    },
+
+
+    _resetView: function() {
+        this.showBreakup = false;
+        this.showPointsSection = false;
+        this.fire('t-points-payment-breakup-change', {
+            resetData: true
+        });
+    },
+
+    _getComponentByName: function(name) {
+        if (!this.roomFare.components || !this.roomFare.components.length) {
+            return null;
+        }
+
+        return this.roomFare.components.find(function(component, index, array) {
+            return component.type.toLowerCase() === name.toLowerCase();
+        });
+    },
+
+    _showPointSection: function() {
+        this.showPointsSection = !this.showPointsSection;
+    },
+
+    _customeValidatePoints: function() {
+
+        if (this.userPoints <= 0) {
+            return;
+        }
+
+        this.isValidPoints = false;
+        var enteredPoints = parseInt(this.pointsToBeUsed);
+
+        if (isNaN(enteredPoints) || enteredPoints <= 0) {
+            this.errorMessage = "Please enter valid points";
+            return;
+        }
+
+        if (this.maxPoints < enteredPoints) {
+            this.errorMessage = "You can use upto " + this.maxPoints + " points     only.";
+            return;
+        }
+
+        if (!this.$$('#pointsInput').validate()) {
+            return;
+        }
+        this.isValidPoints = true;
+    },
+
+    _clearMessage: function() {
+        this.errorMessage = "";
+    }
+});
+</script>

@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>t-policy demo</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+    <link rel="import" href="../t-policy.html">
+    <link rel="import" href="../../t-shared-components/theme.html">
+    <style is="custom-style" include="demo-pages-shared-styles">
+        .link-style{
+            color: #0099cc;
+            text-decoration: none;
+        }
+    </style>
+    <style include="iron-flex"></style>
+</head>
+
+<body>
+    <div class="vertical-section-container centered">
+        <h3>Basic t-policy Demo</h3>
+        <template is="dom-bind" id="domBindTemplate">
+            <t-policy id="policy"
+            label="Policies"
+            external-link
+            api-relative-url="api/ShoppingCart/add"
+            api-base-url="http://qa-mystiquecode.tavisca.com/"
+            auth-token="e5e31tboymuukfoplyc41wcr"
+            search-id="84e0ed56-9b29-443c-84b0-7d2d3d3dde2d"
+            inventory-id="MjFfXzg0ZTBlZDU2LTliMjktNDQzYy04NGIwLTdkMmQzZDNkZGUyZA--">
+            </t-policy>
+            <div class="section-small layout horizontal">
+                <label id="policy-label" class="link-style font-12" on-tap="_policyClick">Policy</label>
+            </div>
+        </template>
+    </div>
+</body>
+<script>
+window.addEventListener('WebComponentsReady', function(e) {
+    var templatizer = document.getElementById('domBindTemplate');
+    templatizer._policyClick = function() {
+        setTimeout(function() {
+            this.$.policy.initiatePolicyCall();
+        }.bind(this), 100);
+    }
+});
+</script>
+</html>

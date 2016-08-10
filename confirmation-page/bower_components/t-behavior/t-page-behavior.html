@@ -1,0 +1,111 @@
+/**
+ * A comment describing this behavior...
+ * @polymerBehavior PageBehavior
+ */
+
+<script>
+
+    (function(window, undefined) {
+
+        'use strict'
+
+        window.TravelNxt = window.TravelNxt || {};
+        window.TravelNxt.Behaviors = window.TravelNxt.Behaviors || {};
+        window.TravelNxt.Behaviors.PageBehavior = {
+
+            properties: {
+
+                /*
+                 * <p>This is a notification flag to indicate current page state</p>
+                 * <p>Set it to true if page needs to be displayed on browser</p>
+                 */
+                visible: {
+                    type: Boolean,
+                    value: false,
+                    notify: true
+                },
+
+                /*
+                 * <p>This flag is et to true whenever server side call is made</p>
+                 * <p>Bind it with `loading` property of `provider behavior`</p>
+                 */
+                loading: {
+                    type: Boolean,
+                    notify: true
+                },
+
+                /*
+                 * <p>This string is query string containing token value</p>
+                 */
+                authToken: {
+                    type: String
+                },
+
+                /*
+                 * <p>This property holds the value of api base URL</p>
+                 */
+                apiBaseUrl: {
+                    type: String
+                },
+
+                /*
+                 * <p>This property holds the value of web api URL format</p>
+                 */
+                apiUrlFormat: {
+                    type: String
+                },
+
+                /**
+                 * This property holds value of currency.
+                 */
+                currency: {
+                    type: String,
+                    value: 'USD'
+                },
+
+                /*
+                 * <p>This property holds value of search id generated after search call</p>
+                */
+                searchId: {
+                    type: String
+                },
+
+                /*
+                 * <p>This property holds the value of search criteria</p>
+                 */
+                searchCriteria: {
+                    type: Object
+                },
+
+                /*
+                 * <p>This property holds the value of selected itinerary</p>
+                 */
+                itinerary: {
+                    type: Object
+                },
+
+                /*
+                 * <p>This property holds the value of selected itinerary id</p>
+                 */
+                itineraryId: {
+                    type: String
+                },
+
+                /*
+                 * <p>This property holds the value of passenger info</p>
+                 */
+                passengerInfo: {
+                    type: Object
+                },
+
+                /*
+                 * <p>This property holds the value of booked itinerary</p>
+                 */
+                bookedItinerary: {
+                    type: Object
+                }
+            },
+        };
+    })(window);
+
+</script>

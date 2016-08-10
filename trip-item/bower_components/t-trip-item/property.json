@@ -1,0 +1,14 @@
+{
+    "name": "Trip Item",
+    "properties": [
+        {
+            "name": "Properties",
+            "fields": {
+                "model": {
+                    "name": "model",
+                    "type": "object"
+                }
+            }
+        }
+    ]
+}

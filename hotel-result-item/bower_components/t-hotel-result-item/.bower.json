@@ -1,0 +1,49 @@
+{
+  "name": "t-hotel-result-item",
+  "authors": [
+    "Rahul Pilkhwal <rahul.pilkhwal@tavisca.com>",
+    "Shailesh Kumar Srivastava <ssrivastava@tavisca.com>",
+    "Sounak Pal <spal@tavisca.com>",
+    "Ajinkya Tejankar <tejankarajinkya@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "keywords": [
+    "Polymer",
+    "Web",
+    "Components"
+  ],
+  "homepage": "https://github.com/travelnxtelements/t-hotel-result-item",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "iron-flex-layout": "PolymerElements/iron-flex-layout#^1.0.0",
+    "iron-icons": "PolymerElements/iron-icons#^1.0.3",
+    "polymer": "Polymer/polymer#^1.0.0",
+    "t-text-container": "travelnxtElements/t-text-container#^1.0.0",
+    "t-shared-lib": "travelnxtElements/t-shared-lib#^1.0.0",
+    "t-image": "atomelements/t-image#^1.0.0"
+  },
+  "devDependencies": {
+    "webcomponentsjs": "~0.7.14",
+    "iron-component-page": "PolymerElements/iron-component-page#~1.0.6",
+    "t-shared-components": "atomelements/t-shared-components#^1.0.5"
+  },
+  "_release": "3dd3ded1b5",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "3dd3ded1b5b0dbc2e57951515cdfc168d6da6b29"
+  },
+  "_source": "git://github.com/travelnxtelements/t-hotel-result-item.git",
+  "_target": "master",
+  "_originalSource": "travelnxtelements/t-hotel-result-item",
+  "_direct": true
+}

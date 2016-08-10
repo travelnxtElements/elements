@@ -1,0 +1,51 @@
+{
+  "name": "t-faredetails",
+  "authors": [
+    "Rahul Pilkhwal <rahul.pilkhwal@tavisca.com>",
+    "Shailesh Kumar Srivastava <ssrivastava@tavisca.com>",
+    "Sounak Pal <spal@tavisca.com>",
+    "Ajinkya Tejankar <tejankarajinkya@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "keywords": [
+    "Polymer",
+    "Web",
+    "Components"
+  ],
+  "homepage": "https://github.com/travelnxtelements/t-faredetails",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "iron-flex-layout": "PolymerElements/iron-flex-layout#^1.0.0",
+    "iron-collapse": "PolymerElements/iron-collapse#^1.0.0",
+    "iron-icon": "PolymerElements/iron-icon#^1.0.7",
+    "iron-icons": "PolymerElements/iron-icons#^1.0.5",
+    "t-loader": "atomelements/t-loader#^1.0.0",
+    "t-section-header": "atomelements/t-section-header#^1.0.0",
+    "t-text-container": "travelnxtelements/t-text-container#^1.0.0",
+    "polymer": "Polymer/polymer#^1.0.0"
+  },
+  "devDependencies": {
+    "t-shared-components": "atomelements/t-shared-components#^1.0.0",
+    "webcomponentsjs": "~0.7.14",
+    "iron-component-page": "PolymerElements/iron-component-page#~1.0.6"
+  },
+  "_release": "01bc290b3d",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "01bc290b3d110b3146ba178a2a071482224bf7ae"
+  },
+  "_source": "git://github.com/travelnxtelements/t-faredetails.git",
+  "_target": "master",
+  "_originalSource": "travelnxtelements/t-faredetails",
+  "_direct": true
+}

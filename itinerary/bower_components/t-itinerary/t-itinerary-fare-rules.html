@@ -1,0 +1,100 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../t-text-container/travel-element-styles.html" />
+<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html" />
+<link rel="import" href="../juicy-html/juicy-html.html">
+<link rel="import" href="../t-overlay/t-overlay.html">
+<link rel="import" href="t-itinerary-fare-rules-list.html">
+<link rel="import" href="t-itinerary-fare-rules-provider.html">
+<!--
+    `<t-itinerary>` is a polymer component that generates a list of legs in a flight.
+
+    Basic usage
+    `
+    <t-itinerary-fare-rules-list>
+	    <content select="#policyProvider"></content>     
+    </t-itinerary-fare-rules-list>   
+    `
+-->
+
+<dom-module id="t-itinerary-fare-rules">    
+    <template>
+    <style include="iron-flex"></style>
+    <style include="travel-element-styles">
+        :host {
+            display: inline-block;
+            font-family: var(--primary-font-family);
+        }
+
+    </style>
+        <label class="link-style" on-tap="_initiateFareCall">[[label]]</label>
+        
+        <t-overlay id="overlay" header="Fare Rules">
+            <t-itinerary-fare-rules-list>
+
+            </t-itinerary-fare-rules-list>
+        </t-overlay>
+        <t-itinerary-fare-rules-provider 
+            id="fareRulesProvider" 
+            api-relative-url="[[apiRelativeUrl]]" 
+            api-base-url="[[apiBaseUrl]]"
+            auth-token="[[authToken]]"
+            search-id="[[searchId]]"
+            inventory-id="[[inventoryId]]"
+            on-fare-rules-success="_onFareRuleSuccess"
+            on-fare-rules-error="_onFareRuleError">
+        </t-itinerary-fare-rules-provider>
+    </template>
+</dom-module>
+<script>
+    Polymer({
+        is: 't-itinerary-fare-rules',
+
+        properties: {
+            //text of the component to show
+            label: {
+                type: String,
+                value: 'Fare rules'
+            },
+
+            searchId: {
+                type: String
+            },
+
+            inventoryId:{
+                type: String
+            },
+
+            authToken: String,
+
+            apiRelativeUrl: {
+                type: String,
+                value: 'api/Flight/results/single/fareRules'
+            }
+        },
+
+        _fareRules: null,
+
+        _onFareRuleSuccess: function (event) {
+            if (!this._fareRules) {
+                this._fareRules = event.detail;
+            }
+            Polymer.dom(this.root).querySelector('t-itinerary-fare-rules-list').onFareRuleSuccess(event);
+        },
+
+        _onFareRuleError: function (event) {
+            Polymer.dom(this.root).querySelector('t-itinerary-fare-rules-list').onFareRuleError(event);
+        },
+
+        _initiateFareCall: function () {
+            //active overlay
+            this.$.overlay.active = true;
+
+            if (!this._fareRules) {
+                //make call to provider
+                Polymer.dom(this.root).querySelector('t-itinerary-fare-rules-list').showFareRules();
+                this.$.fareRulesProvider.getFareRules();
+            }
+        }
+
+    });
+</script>

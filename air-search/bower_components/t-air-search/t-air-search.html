@@ -1,0 +1,318 @@
+<link rel='import' href='../polymer/polymer.html'>
+<link rel="import" href="../t-stepper/t-stepper.html" />
+<link rel="import" href="../t-button/t-button.html" />
+<link rel="import" href="../t-radio-group/t-radio-group.html" />
+<link rel="import" href="../t-autosuggest/t-autosuggest.html" />
+<link rel="import" href="../t-calendar/t-calendar.html" />
+<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html" />
+<link rel="import" href="../t-shared-lib/t-form-behavior.html" />
+<link rel="import" href="../t-text-container/t-search-form-styles.html" />
+<!--
+This component is a form that allows a user to search for flights.
+It exposes certain prperties which allow control over different aspects
+of searching.
+
+There are fundamentally three types of properties that form the public
+api of this component.
+
+__User input__: Properties like `DepartureAirport`, `adult` etc. reflect the user input
+necessary for searching
+
+__Validation__: Properties like `maxChildren` reflect the validation limits imposed
+on user input
+
+__For component consumers__: Properties like `searchType` allow the consumer
+of this component to control the behaviour of this component.
+
+-->
+<dom-module id='t-air-search'>
+    <template>
+        <style include="t-search-form-styles"></style>
+        <style include="iron-flex">
+            [pill-button] ::content iron-selector {
+                width: 100%;
+                text-align: center;
+            }
+            
+            ::content t-radio-button {
+                -ms-flex: 1;
+                -webkit-flex: 1;
+                flex: 1;
+            }
+            
+            t-autosuggest,
+            t-calendar,
+            t-stepper {
+                outline: 0;
+            }
+        </style>
+            <div class="form flex ">
+                <div class="row">
+                    <t-radio-group id="itineraryType" name="itineraryType" data='["RoundTrip","OneWay"]' pill-button selected-item="{{itineraryType}}">
+                    </t-radio-group>
+                </div>
+                <div class="row">
+                    <t-autosuggest id="DepartureAirport" name="DepartureAirport" required selected-item="{{departureAirport}}" query-params="token={{authToken}}" label="Origin" token-param="formattedAddress" data-url="{{autosuggestApi}}" error-message="You missed this."></t-autosuggest>
+                </div>
+                <div class="row">
+                    <t-autosuggest id="ArrivalAirport" name="ArrivalAirport" selected-item="{{arrivalAirport}}" query-params="token={{authToken}}" sub-type="airport" required label="Destination" token-param="formattedAddress" data-url="{{autosuggestApi}}" error-message="You missed this." invalid-error-message="Destination is same as Origin"></t-autosuggest>
+                </div>
+                <div class="row layout horizontal">
+                    <t-calendar class="flex horizontal-margin-right" id="departureDate" required selected-date="{{departureDate}}" label="Departing" name="departureDate" format="mm/dd/yyyy" submit-format="mm/dd/yyyy" error-message="You missed this."></t-calendar>
+                    <t-calendar class="flex" id="arrivalDate" hidden$="{{_isRoundTrip}}" required$="{{!_isRoundTrip}}" selected-date="{{arrivalDate}}" label="Returning" name="arrivalDate" format="mm/dd/yyyy" submit-format="mm/dd/yyyy" error-message="You missed this."></t-calendar>
+                </div>
+                <div class="row">
+                    <t-stepper min="1" max="9" plural-label="Adults" singular-label="Adult" secondary-label="(12+ years)" count="{{adult}}" name="adult" on-count-changed="changeMaxCount" id="adult"></t-stepper>
+                </div>
+                <div class="row">
+                    <t-stepper min="0" max$="{{_maxChildren}}" secondary-label="(0-11 years)" plural-label="Children" singular-label="Child" count="{{child}}" name="child" id="child" on-count-changed="changeMaxCount"></t-stepper>
+                </div>
+                <div class="row">
+                    <t-stepper min="0" max$="{{_maxInfants}}" secondary-label="(<2 years, in lap)" plural-label="Infants" singular-label="Infant" count="{{infant}}" name="infant" id="infant"></t-stepper>
+                </div>
+                <div class="row">
+                    <t-radio-group id="cabinType" pill-button name="cabinType" selected-item="{{cabinType}}" data='["Economy","Business","First"]' class="flightClass">
+                    </t-radio-group>
+                </div>
+                <t-button id="search" class="primary row" on-click="searchFlight" type="button" label="Search Cars" /></t-button>
+            </div>
+    </template>
+</dom-module>
+<script>
+Polymer({
+    is: 't-air-search',
+
+    /*
+     * <p>Behaviour to validate forms and other.</p>
+     */
+    behaviors: [TravelNxt.Behaviors.FormBehavior],
+
+    properties: {
+
+        /**
+         * The location to search from.
+         * Must be a value picked from suggested locations?.
+         */
+        departureAirport: Object,
+
+        /**
+         * The location of arrival.
+         * Must be a value picked from suggested locations?.
+         */
+        arrivalAirport: {
+            type:Object
+        },
+        /**
+         * The date of departure.
+         */
+        departureDate: {
+            type: String,
+            value: '',
+            notify: true,
+            observer: '_travelDateChanged'
+        },
+
+        /**
+         * The date of returning back to the departure location
+         * __if__ the type of trip is _Round Trip_
+         */
+        arrivalDate: {
+            type: String,
+            value: '',
+            notify: true
+        },
+
+        /**
+         * The value of adults selected.
+         */
+        adult: {
+            type: Number,
+            value: 1
+        },
+
+        /**
+         * The value of children selected.
+         */
+        child: {
+            type: Number,
+            value: 0
+        },
+
+        /**
+         * The value of infants selected.
+         */
+        infant: {
+            type: Number,
+            value: 0
+        },
+
+        /**
+         * The maximum number of children allowed for travel
+         */
+        _maxChildren: {
+            type: Number,
+            notify: true,
+            value: 6
+        },
+
+        /**
+         * The maximum number of infants allowed for travel
+         */
+        _maxInfants: {
+            type: Number,
+            notify: true,
+            value: 1
+        },
+
+        /**
+         * The api url that returns suggestions (auto suggest) shown in
+         * departure and arrival airport fields
+         */
+        autosuggestApi: String,
+
+        /**
+         * The error message that will be shown to the user
+         */
+        error: {
+            type: String,
+            value: ''
+        },
+
+        /**
+         * The type of trip, possible values are _Round Trip_ and _One Way_
+         */
+        itineraryType: {
+            type: String,
+            value: 'RoundTrip',
+            reflectToAttribute: true,
+            notify: true,
+            observer: '_tripTypeChanged'
+        },
+
+        /**
+         * Check if the type of trip is _Round Trip_
+         */
+        _isRoundTrip: {
+            type: Boolean,
+            computed: '_tripTypeChanged(itineraryType)'
+        },
+
+
+        /**
+         * The query parameter for autosuggest to work. This is token to pass with the request for * autosuggest.
+         */
+        authToken: {
+            type: String,
+            value: ""
+        },
+
+        /**
+         * The type of cabin, example values are _Economy_ and _Business_
+         */
+        cabinType: {
+            type: String,
+            value: "Economy"
+        },
+
+         /**
+         * Pass the minimum date difference to start booking from
+         *///
+        bookDateDifference: {
+            type: Number,
+            value: 3
+        }
+    },
+
+    observers: [
+        '_validateDestinations(departureAirport,arrivalAirport)'
+    ],
+
+    attached: function() {
+        var component = this;
+        this.async(function() {
+            // access sibling or parent elements here
+            var startDate = new Date();
+            startDate.setDate(startDate.getDate() + this.bookDateDifference);
+            this.$.departureDate.picker.set('min', startDate);
+        });
+    },
+
+    _tripTypeChanged: function (tripType) {
+        if (this.itineraryType !== undefined) {
+            if (this.itineraryType === 'RoundTrip') {
+                this._travelDateChanged();
+                return false;
+            }
+        }
+        return true;
+    },
+
+    _travelDateChanged: function() {
+        if (this.itineraryType !== undefined) {
+            if (this.itineraryType === 'RoundTrip') {
+                if (this.departureDate != '') {
+                    this.$.arrivalDate.picker.set('min', new Date(this.departureDate));
+                    if(this.departureDate > this.arrivalDate){
+                        this.arrivalDate = null;
+                    }
+                }
+            } 
+        }
+    },
+
+    _getDateArray: function(dateString) {
+        var date = new Date(dateString);
+        return [date.getFullYear, date.getMonth(), date.getDate()];
+    },
+
+    _validateDestinations: function (event) {
+        if (this.$.DepartureAirport.selectedItem != null && this.$.ArrivalAirport.selectedItem != null) {
+            if (this.$.DepartureAirport.selectedItem.code == this.$.ArrivalAirport.selectedItem.code) {
+                this.$.ArrivalAirport.isInvalid = true;
+                this.$.ArrivalAirport.validate();
+            } else if (this.ArrivalAirport != null) {
+                this.$.ArrivalAirport.isInvalid = false;
+                this.$.ArrivalAirport.validate();
+            }
+        }
+    },
+
+    changeMaxCount: function() {
+        this.$.adult.max = 9 - this.$.child.count;
+        this.$.child.max = 9 - this.$.adult.count;
+        this.$.infant.max = this.$.adult.count;
+    },
+
+    /*
+     * <p>Builds search request</p>
+    */
+    _buildSearchRequest: function() {
+
+        return {
+            itineraryType: this.itineraryType,
+            departureAirport: this.departureAirport,
+            arrivalAirport: this.arrivalAirport,
+            departureDate: this.departureDate,
+            arrivalDate: this.arrivalDate,
+            adult: this.adult,
+            child : this.child,
+            infant : this.infant,
+            cabinType : this.cabinType
+            
+        };
+    },
+
+    /**
+     * The method to fire the search function
+     */
+    searchFlight: function(searchParams) {
+        if (!this.validate()) {
+            return;
+        }
+
+        var request = this._buildSearchRequest();
+
+        this.fire('t-air-search-validate', request);
+    }
+});
+</script>

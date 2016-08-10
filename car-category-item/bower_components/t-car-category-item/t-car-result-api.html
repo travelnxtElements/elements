@@ -1,0 +1,106 @@
+<link rel="import" href="../polymer/polymer.html" />
+<link rel="import" href="../iron-ajax/iron-ajax.html">
+<link rel="import" href="../t-shared-lib/t-provider-behavior.html">
+<!--
+    <h3>Details:</h3>
+
+        `t-car-result-api` is a car search api component integrated with mystique apis.
+
+    <h3>Events:</h3>
+
+        following events are fired by this component
+
+            1. 't-car-result-api-success' - fired upon successful search call
+            2. 't-car-result-api-error' - fired if search call is failed
+
+    <h3>Example:</h3>
+
+        t-car-result-api
+            id="resultApi"
+            loading="{{loading}}"            
+            api-base-url="{{apiBaseUrl}}"
+            api-relative-url="{{relativeUrlWithSearchId}}"
+            auth-token="{{authToken}}"
+            on-t-car-result-api-success="{{_onResultSuccessMethod}}"
+            on-t-car-result-api-error="{{_onResultErrorMethod}}">
+        </t-car-result-api>
+
+    @demo demo/index.html
+-->
+<dom-module id="t-car-result-api">
+    <template>
+        <iron-ajax id="ajaxCall" method="GET" content-type="application/json" handle-as="json" verbose>
+        </iron-ajax>
+    </template>
+</dom-module>
+<script>
+(function() {
+
+        Polymer({
+        is: 't-car-result-api',
+
+        properties: {
+
+            /*
+             * <p>This is the payload used while searching cars using mystique api</p>
+             * <p>Follow documentation for structure.</p>
+            */
+            request: {
+                type: Object,
+                value: null
+            }
+        },
+
+        /*
+         * <p>Behaviour to validate ajax parameters and handle error codes.</p>
+        */
+        behaviors: [TravelNxt.Behaviors.ProviderBehavior],
+
+        listeners: {
+            'ajaxCall.response': '_successCallback',
+            'ajaxCall.error': '_errorCallback'
+        },
+
+        /*
+         * <p>Event handler method to search cars</p>
+        */
+        onSearch: function(e) {
+
+            if (!e.detail.request) {
+                throw Error("search request is mandetory");
+            }
+
+            this.request = e.detail.request;
+            this.search();
+        },
+
+        /*
+         * <p>Method to search cars</p>
+        */
+        search: function() {
+
+            if (this._validateApiMeta()) {
+                this.$.ajaxCall.url = this._getUrl();
+                this._setLoading(true);
+                this.$.ajaxCall.generateRequest();
+            }
+        },
+
+        /*
+         * <p>Success callback, called when Api returns some response from server</p>
+        */
+        _successCallback: function(event) {
+            this._successHandler(event);
+        },
+
+
+        /*
+         * <p>error callback, called when Api throws error</p>
+        */
+        _errorCallback: function(event) {
+            this._errorHandler(event);
+        }
+
+    });
+})();
+</script>

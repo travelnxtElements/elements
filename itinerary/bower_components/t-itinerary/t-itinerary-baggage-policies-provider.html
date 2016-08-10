@@ -1,0 +1,78 @@
+<link rel="import" href="../polymer/polymer.html" />
+<link rel="import" href="../iron-ajax/iron-ajax.html">
+<link rel="import" href="../t-shared-lib/t-provider-behavior.html" />
+<!--
+    `<t-itinerary-baggage-policies-provider>` is a polymer component that makes the call to fetch baggage policies for selected flight.
+-->
+
+<dom-module id="t-itinerary-baggage-policies-provider">
+    <template>
+        <iron-ajax id="ajaxCall" 
+            method="POST"            
+            content-type="application/json"
+            handle-as="json"
+            verbose>
+        </iron-ajax>
+    </template>
+</dom-module>
+<<script>
+	Polymer({
+        is: 't-itinerary-baggage-policies-provider',
+
+        properties:{
+            /**
+             * The ajax request object
+             */
+            ajaxCall: {
+                type: Object,
+                notify: true,
+                readOnly: true
+            }
+        },
+
+        behaviors: [TravelNxt.Behaviors.ProviderBehavior],
+
+        listeners: {
+            'ajaxCall.response': '_successCallback',
+            'ajaxCall.error': '_errorCallback',
+            'ajaxCall.request': '_requestCallback'
+        },
+
+        getBaggagePolicies: function () {
+
+            var buildReq = function (provider) {
+                var serviceModel = {
+                    "airlineCodes": provider.airlineCodes,
+                };
+                return serviceModel;
+            }
+
+            //validate api data before initiating call
+            if (this._validateApiMeta()) {
+                this.$.ajaxCall.url = this._getUrl();
+                this.$.ajaxCall.body = JSON.stringify(buildReq(this));
+                this.$.ajaxCall.generateRequest();
+            }
+        },
+
+        _requestCallback: function () {
+            this.fire('request', this.$.ajaxCall.toRequestOptions(), { bubbles: false });
+        },
+
+        _successCallback: function (event) {
+            if (!event.detail.response || !event.detail.response.status)
+                this.fire('baggage-policies-error', 'Operation error occured, please try again.', { bubbles: false });
+            else if (!event.detail.response.status.isSuccessful) {
+                this.fire('baggage-policies-error', event.detail.response.status.message, { bubbles: false });
+            }
+            else {
+                this.fire('baggage-policies-success', event.detail.response, { bubbles: false });
+            }
+        },
+
+        _errorCallback: function (event) {
+            this.fire('baggage-policies-error', 'Connection error occured, please try again.', { bubbles: false })
+        }
+
+    })
+</script>

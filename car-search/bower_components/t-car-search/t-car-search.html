@@ -1,0 +1,292 @@
+<link rel="import" href="../polymer/polymer.html" />
+<link rel="import" href="../t-input/t-input.html" />
+<link rel="import" href="../t-button/t-button.html" />
+<link rel="import" href="../t-checkbox/t-checkbox.html" />
+<link rel="import" href="../t-autosuggest/t-autosuggest.html" />
+<link rel="import" href="../t-calendar/t-calendar.html" />
+<link rel="import" href="../t-dropdown/t-dropdown.html" />
+<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../t-shared-lib/t-form-behavior.html" />
+<link rel="import" href="../t-text-container/t-search-form-styles.html" />
+<!--
+    <h3>Details:</h3>
+
+        `t-car-search` is a car search component integrated with mystique apis
+
+        The dropoff location selection is optional. It is same as pickup location 
+        if isDropoffLocationSame flag is set to true
+
+        This component calls t-car-search-api api component to generate search id.
+
+        components expects an autocomplete api url and a valid mystique api token 
+        in order to integrate with t-autosuggest.
+
+    <h3>Events:</h3>
+
+        following events are fired by this component
+
+            1. 't-car-search' - sends car search request object upon successful validation
+
+    <h3>Example:</h3>
+
+        <t-car-search 
+            id="searchView"
+            autosuggest-api="{{apiBaseUrl}}api/content/autosuggest/"
+            auth-token="{{authToken}}"
+            on-t-car-search="onSearch">
+        </t-car-search>
+
+    @demo demo/index.html
+-->
+<dom-module id="t-car-search">
+    <style include="iron-flex"></style>
+    <style include="t-search-form-styles"></style>
+    <template>
+        <div class="row">
+            <t-autosuggest id="pick-up-location" required selected-item="{{pickupLocation}}" label="Pick-up from" data-url="{{autosuggestApi}}" query-params="token={{authToken}}" token-param="formattedAddress" error-message="You missed this."></t-autosuggest>
+        </div>
+            <t-checkbox class="row checkbox" id="acceptance" checked="{{isDropoffLocationSame}}">Drop-off at same location </t-checkbox>
+        <div class="row">
+            <t-autosuggest hidden$="[[isDropoffLocationSame]]" id="drop-off-location" required$="[[!isDropoffLocationSame]]" selected-item="{{dropoffLocation}}" label="Drop-off to" data-url="{{autosuggestApi}}" query-params="token={{authToken}}" token-param="formattedAddress" error-message="You missed this."></t-autosuggest>
+        </div>
+        <div class="row layout horizontal">
+            <t-calendar class="flex horizontal-margin-right" required label="Pick-up date" name="Pick-up date" id="pickupDate" selected-date="{{pickupDate}}" error-msg="You missed this." format="mm/dd/yyyy">
+            </t-calendar>
+
+            <t-dropdown  required error-message="You missed this." class="flex" id="pickupTime" label="Pick-up time" selected-item="{{pickupTime}}" dropdown-array="[[arrayTime]]" ></t-dropdown>
+        </div>
+        <div class="row  layout horizontal">
+            <t-calendar  class="flex horizontal-margin-right" required label="Drop-off date" name="Drop-off date" id="dropoffDate" selected-date="{{dropoffDate}}" error-msg="You missed this." format="mm/dd/yyyy">
+            </t-calendar>
+
+            <t-dropdown required  class="flex" error-message="You missed this." id="dropoffTime" label="Drop-off time" selected-item="{{dropoffTime}}" dropdown-array="[[arrayTime]]" ></t-dropdown>
+        </div>
+            <t-button id="search" class="primary row" on-click="searchCars" type="button" label="Search Cars" /></t-button>
+    </template>
+</dom-module>
+<script>
+Polymer({
+    is: 't-car-search',
+
+    /*
+     * <p>Behaviour to validate forms and other.</p>
+     */
+    behaviors: [TravelNxt.Behaviors.FormBehavior],
+    
+    properties: {
+
+
+        arrayTime: {
+            type: Array,
+            value:['12:00 AM','12:30 AM','01:00 AM','01:30 AM','02:00 AM','02:30 AM','03:00 AM','03:30 AM','04:00 AM','04:30 AM','05:00 AM','05:30 AM','06:00 AM','06:30 AM','07:00 AM','07:30 AM','08:00 AM','08:30 AM','09:00 AM','09:30 AM','10:00 AM','10:30 AM','11:00 AM','11:30 AM','12:00 PM','12:30 PM','01:00 PM','01:30 PM','02:00 PM','02:30 PM','03:00 PM','03:30 PM','04:00 PM','04:30 PM','05:00 PM','05:30 PM','06:00 PM','06:30 PM','07:00 PM','07:30 PM','08:00 PM','08:30 PM','09:00 PM','09:30 PM','10:00 PM','10:30 PM','11:00 PM','11:30 PM'],
+            readOnly: true
+        },
+
+        /*
+         * <p>This is the copy of dropoff location proeprty</p>
+         * <p>Not to be used from outside.</p>
+        */
+        _previousDropoffLocation: {
+            type: String
+        },
+
+        /*
+         * <p>This stores item selected by pickup location autosuggest</p>
+         * <p>The item includes location information like geocode, city code, etc.</p>
+        */
+        pickupLocation: {
+            type: Object,
+            observer: '_pickupLocationChanged'
+        },
+
+        /*
+         * <p>This stores item selected by dropoff location autosuggest</p>
+         * <p>The item includes location information like geocode, city code, etc.</p>
+         * <p>Observer function keeps a copy of dropoff location to re populate precious data if required.</p>
+        */
+        dropoffLocation: {
+            type: Object,
+            observer: '_storeLocation'
+        },
+
+        /*
+         * <p>This stores the pickup date</p>
+         * <p>Observer function resets the min max values for dropoff dates to meet validation constraints.</p>
+        */
+        pickupDate: {
+            type: String,
+            observer: '_pickupDateChanged'
+        },
+
+        /*
+         * <p>This stores the dropoff date.</p>
+         * <p>Observer function resets the min max values for pickup dates to meet validation constraints.</p>
+        */
+        dropoffDate: {
+            type: String
+        },
+
+        /*
+         * <p>This stores the pickup time</p>
+        */
+        pickupTime: {
+            type: String,
+            observer: '_pickupTimeChanged',
+            value: '11:00 AM'
+        },
+
+        /*
+         * <p>This stores the dropoff time</p>
+        */
+        dropoffTime: {
+            type: String,
+            observer: '_dropoffTimeChanged',
+            value: '11:00 AM'
+        },
+
+        /*
+         * <p>This flag switches dropoff location view visibility</p>
+         * <p>Observer function updates dropoff location and uses past dropoff value if exists</p>
+        */
+        isDropoffLocationSame: {
+            type: Boolean,
+            value: true,
+            observer: '_updateDropoffLocation'
+        },
+
+        /*
+         * <p>This url is used as base api url for t-autosuggest</p>
+        */
+        autosuggestApi: {
+            type: String,
+            value: ''
+        },
+
+        /*
+         * <p>This string is query string parameter containing token value</p>
+        */
+        authToken: {
+            type: String,
+            value: ''
+        }
+    },
+
+
+    /*
+     * <p>Stores the previous value of `dropoffLocation` property</p>
+    */
+    _storeLocation: function() {
+        this._previousDropoffLocation = this.dropoffLocation;
+    },
+
+    /*
+     * <p>updates dropoffLocation if `isDropoffLocationSame` property is set to true</p>
+    */
+    _pickupLocationChanged:function () {
+
+        if (this.isDropoffLocationSame) {
+            this.dropoffLocation = this.pickupLocation;
+        }
+        
+    },
+
+    /*
+     * <p>Observer function to update dropoff location when `isDropoffLocationSame` property is updated</p>
+    */
+    _updateDropoffLocation: function() {
+        if (this.isDropoffLocationSame) {
+            var previousValue = this._previousDropoffLocation;
+            this.dropoffLocation = this.pickupLocation;
+            this._previousDropoffLocation = previousValue;
+        } else if (this._previousDropoffLocation) {
+            this.dropoffLocation = this._previousDropoffLocation;
+        }
+    },
+
+    /*
+     * <p>Builds search request</p>
+    */
+    _buildSearchRequest: function() {
+
+        return {
+            pickupLocation: this.pickupLocation,
+            pickupDate: this.pickupDate,
+            dropoffLocation: this.dropoffLocation,
+            dropoffDate: this.dropoffDate,
+            isDropoffLocationSame: this.isDropoffLocationSame,
+
+            pickupTime : this.pickupTime,
+            dropoffTime : this.dropoffTime
+            
+        };
+    },
+
+    /*
+     * <p>Observer function to change dropoff date when pickup date is updated</p>
+    */
+    _pickupDateChanged: function() {
+
+        setTimeout(function(){
+            this.$.dropoffDate.min = this.$.pickupDate.selectedDate;
+            this.$.dropoffDate._changeMinMax(); 
+            if(this.dropoffDate && new Date(this.dropoffDate) < new Date(this.pickupDate)){
+                this.$.dropoffDate._clear();
+            }
+        }.bind(this), 10);
+    },
+
+    /*
+     * <p>Observer function to change dropoff time when pickup time is updated</p>
+    */
+    _pickupTimeChanged: function () {
+
+        if (!this.dropoffDate && !this.pickupDate) {
+            return;
+        }
+
+        if (new Date(this.dropoffDate) - new Date(this.pickupDate) > 0 || !this.pickupTime) {
+            return;
+        }
+
+        if (this.arrayTime.indexOf(this.pickupTime) >= this.arrayTime.indexOf(this.dropoffTime) ) {
+            this.$.dropoffTime.clear();
+        }
+    },
+
+    /*
+     * <p>Observer function to change pickup time when dropoff time is updated</p>
+    */
+    _dropoffTimeChanged: function () {
+
+        if (!this.dropoffDate && !this.pickupDate) {
+            return;
+        }
+        
+        if (new Date(this.dropoffDate) - new Date(this.pickupDate) > 0 || !this.dropoffTime) {
+            return;
+        }
+
+        if (this.arrayTime.indexOf(this.pickupTime) >= this.arrayTime.indexOf(this.dropoffTime) ) {
+            this.$.pickupTime.clear();
+        }   
+    },
+
+    /*
+     * <p>Search button event handler</p>
+    */
+    searchCars: function() {
+
+        if (!this.dropoffLocation) {
+            this.dropoffLocation = this.pickupLocation;
+        }
+        
+        if (!this.validate()) {
+            return;
+        }
+
+        var request = this._buildSearchRequest();
+
+        this.fire('t-car-search-validate', request);
+    }
+});
+</script>

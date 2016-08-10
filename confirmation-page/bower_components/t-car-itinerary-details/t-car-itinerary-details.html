@@ -1,0 +1,293 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../t-image/t-image.html">
+<link rel="import" href="../t-shared-lib/t-date-behavior.html">
+<link rel="import" href="../iron-collapse/iron-collapse.html"/>
+
+<!--
+    <h3>Details:</h3>
+
+        `t-car-itinerary-details` is a view component used to display selected car details.
+        `t-car-itinerary-details-page` component integrates this component with api components
+
+    <h3>Events:</h3>
+
+        following events are fired by this component
+
+            1. 'policy-click' - fired when policy link is clicked, itinerary id is provided with event.
+
+    <h3>Example:</h3>
+
+        <t-car-itinerary-details 
+            car-icon="[[carIcon]]" 
+            id="itineraryView">
+        </t-car-itinerary-details>
+
+    @demo demo/index.html
+-->
+
+<dom-module id="t-car-itinerary-details">
+    <template>
+        <style include="t-car-result-item"></style>
+        <style include="iron-flex"></style>
+        <style include="travel-element-styles">
+            :host {
+                display: block;
+            }
+            .dotted-border{
+                position: relative;
+                margin: -5px var(--normal-spacing,10px) 0;
+                border-bottom: 1px dotted;
+            }
+            .techStopStar {
+                color: #cd0a0a;
+            }
+            .devider {
+                margin: 0 var(--normal-spacing,10px);
+            }
+        </style>
+        <template is="dom-if" if="[[!isCollapsible]]">
+            <t-image loading-icon="[[carIcon]]" sizing="contain" class="imageArea border-bottom" height="120" src="[[itinerary.heroImageUrl]]"></t-image>
+        </template>
+        <div class="logo-area font-semi section-small primary-light-text layout horizontal" on-tap="_toggleDetails">
+            <div class="left-section flex">
+                <div class="font-16 item">[[itinerary.name]]</div>
+                <div class="font-12 item">[[itinerary.category]]</div>
+                <img src$="[[itinerary.brand.logo]]" alt$="[[itinerary.brand.name]]" class="item" />
+            </div>
+            <template is="dom-if" if="[[isCollapsible]]">
+                <div class="right-section">
+                    <iron-icon hidden$="[[_openCarCollapse]]" icon="icons:expand-more"></iron-icon>
+                    <iron-icon hidden$="[[!_openCarCollapse]]" icon="icons:expand-less"></iron-icon>
+                </div>
+            </template>            
+        </div>
+        <iron-collapse  id="carDetailsCollapse" opened$="[[_openCarCollapse]]">
+            <div class="collapse-content">
+                <div class="section-small secondary-text">
+                    <template is="dom-if" if="[[itinerary.pickupInfo.inTerminal]]">
+                        <div class="font-12 margin-bottom">In terminal - [[itinerary.pickupInfo.completeAddress.city]]</div>
+                    </template>
+                    <div class="icons-area flex layout horizontal font-10">
+                        <template is="dom-if" if="[[_checkIfNotSpecified(itinerary.capacity)]]">
+                            <div class="icon-item">
+                                <iron-icon icon="car:seat"></iron-icon>
+                                <span class="text">[[itinerary.capacity]]</span>
+                            </div>
+                        </template>
+
+                        <div class="icon-item">
+                            <iron-icon icon="car:luggage"></iron-icon>
+                            <span class="text">[[itinerary.baggage]]</span>
+                        </div>
+
+                        <div class="icon-item">
+                            <iron-icon icon="car:gear"></iron-icon>
+                            <span class="text">[[gear]]</span>
+                        </div>
+
+                        <template is="dom-if" if="[[_checkIfNotSpecified(itinerary.doors)]]">
+                          <div class="icon-item">
+                              <iron-icon icon="car:door"></iron-icon>
+                              <span class="text">[[itinerary.doors]]</span>
+                          </div>
+                        </template>
+                        
+                        <template is="dom-if" if="[[itinerary.airConditioning]]">
+                            <div class="icon-item">
+                                <iron-icon icon="car:ac"></iron-icon>
+                                <span class="text">AC</span>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+                <div class="secondary-text font-12">
+                  <div class="section-small layout horizontal font-semi">
+                    <div class="primary-text font-14">Pick-up from</div>
+                    <div class="flex"></div>
+                    <div class="primary-light-text">[[pickupDate]]</div>
+                  </div>
+                  <div class="dotted-border"></div>
+                  <div class="section-small font-14">
+                      [[itinerary.pickupInfo.address]]
+                  </div>
+                  <div class="section-small layout horizontal font-semi">
+                      <div class="primary-text font-14">Drop-off to</div>
+                      <div class="flex"></div>
+                      <div class="primary-light-text">[[dropoffDate]]</div>
+                  </div>
+                  <div class="dotted-border"></div>
+                  <div class="section-small">
+                      <div class="margin-bottom font-14">
+                        [[dropoffAddress]]
+                      </div>
+                      <a class="link-style" on-tap="_policyClick">Policy</a>
+                  </div>
+                </div>
+                <template is="dom-if" if="[[addons.length]]">
+                    <div class="section-small secondary-text font-semi layout horizontal " on-tap="_toggleAddons">
+                        <div class="left-section flex">
+                            <div class="primary-text font-14">Optional Addons</div>
+                        </div>
+                        <div class="right-section">
+                            <iron-icon hidden$="[[_openAddons]]"  icon="icons:expand-more"></iron-icon>
+                            <iron-icon hidden$="[[!_openAddons]]" icon="icons:expand-less"></iron-icon>
+                        </div>
+                    </div>
+                    <div class="border-bottom devider"></div>
+                    <iron-collapse opened="[[_openAddons]]" id="addons" class="secondary-text font-14">
+                        <template is="dom-repeat" items="{{addons}}">
+                            <div class="section-small layout horizontal">
+                                <div class="left-section flex">
+                                    [[item.description]]
+                                </div>
+                                <div class="right-section">[[item.charge.amount.currency]]&nbsp;[[item.charge.amount.amount]]</div>
+                            </div>
+                            <div class="flex"></div>
+                        </template>
+                        <div class="font-12 section-small">
+                            <span class="techStopStar font-bold">*</span> Car vendor provides above equipments on extra cost basis, though we cannot guarantee of availabilty. kindly recheck with the vendor directly.
+                        </div>
+                    </iron-collapse>
+                </template>
+            </div>
+        </iron-collapse>      
+    </template>
+    <script>
+
+        (function () {
+            'use strict'
+
+            Polymer({
+
+                is: 't-car-itinerary-details',
+
+                behaviors: [
+                  TravelNxt.Behaviors.DateBehavior
+                ],
+
+                properties: {
+
+                    /*
+                    * <p>This property holds the value of selected car itinerary</p>
+                    */
+                    itinerary: {
+                      type: Object
+                    },
+
+                    /*
+                    * <p>This property holds the value of search criteria</p>
+                    */
+                    searchCriteria: {
+                      type: Object
+                    },
+                    /*
+                    * <p>This property holds the value of search id</p>
+                    */
+                    searchId: {
+                      type: String
+                    },
+
+                    /*
+                    * <p>This property makes details view collapsible</p>
+                    * <p>collapsible view can be toggled by toggling value of this flag.</p>
+                    */
+                    isCollapsible: {
+                      type: Boolean,
+                      value: false,
+                      observer: '_checkIfCollapsible'
+                    },
+
+                    /*
+                    * <p>Handles the logic of collapsible view</p>
+                    */
+                    _openCarCollapse: {
+                      type: Boolean,
+                      value: false
+                    },
+
+                    /*
+                    * <p>toggles addons view in itinerary details</p>
+                    */
+                    _openAddons: {
+                      type: Boolean,
+                      value: false
+                    }   
+                },
+
+                /*
+                * <p>toggles addons view in itinerary details</p>
+                */
+                _toggleAddons: function () {
+                  this._openAddons = !this._openAddons;
+                },
+
+                /*
+                * <p>fires `policy-click` event</p>
+                */
+                _policyClick: function () {
+                  this.fire('policy-click', { itineraryId: this.itinerary.id });
+                },
+
+                /*
+                * <p>fires `policy-click` event</p>
+                */
+                _checkIfCollapsible: function(isCollapsible) {
+                  this._openCarCollapse = !isCollapsible;
+                },
+
+                /*
+                * <p>toggles details view in itinerary details</p>
+                */
+                _toggleDetails: function () {
+                  if (this.isCollapsible) {
+                      this._openCarCollapse = !this._openCarCollapse;
+                  }
+                }, 
+
+                /*
+                * <p>translator to display updated content</p>
+                */
+                _checkIfNotSpecified: function (value) {
+                  if (!value) {
+                      return false;
+                  }
+                  if (value.toLowerCase() === 'notspecified') {
+                      return false;
+                  }
+                  return true;
+                },
+
+                /*
+                * <p>method to populate the data in itinerary details view</p>
+                * <p>`itinerary` & `searchCriteria` are mandetory properties</p>
+                */        
+                setDetails: function (itinerary, searchCriteria) {
+                  if (!itinerary || !searchCriteria) {
+                      return;
+                  }
+
+                  this.itinerary = itinerary;
+                  this.searchCriteria = searchCriteria;
+
+                  this.gear = this.itinerary.transmission.toLowerCase() === 'automatic' ? 'Auto' : this.itinerary.transmission;
+
+                  this.dropoffAddress = this.itinerary.pickupInfo.address === this.itinerary.dropoffInfo.address
+                                      ? 'Same as pickup'
+                                      : this.itinerary.dropoffInfo.address;
+
+                  var formattedDate = this._getDateComponents(this.searchCriteria.pickupDate);
+                  this.pickupDate = formattedDate.date + ' ' + formattedDate.shortMonth + ' ' + this.searchCriteria.pickupTime;
+
+                  formattedDate = this._getDateComponents(this.searchCriteria.dropoffDate);
+                  this.dropoffDate = formattedDate.date + ' ' + formattedDate.shortMonth + ' ' + this.searchCriteria.dropoffTime;
+                  
+                  if (this.itinerary.optionalEquipment && this.itinerary.optionalEquipment.length) {
+                      this.addons = this.itinerary.optionalEquipment;
+                  }
+                }
+            });
+
+        })();
+    </script>
+</dom-module>
+  

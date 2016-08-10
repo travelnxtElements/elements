@@ -1,0 +1,20 @@
+
+
+<link rel="import" href="../polymer/polymer.html">
+<script>
+	
+  Polymer.TravelnxtDateBehaviour = {
+     /*This function is used to format date to (dd mmm)*/
+	    _getDisplayDate: function(val) {
+	        if(!val)
+	            return '';
+	        //TODO: accept format from globalization or from user
+	        var dateObj = new Date(val);
+	        var date = dateObj.getDate() < 10 ? '0' + dateObj.getDate() : dateObj.getDate();
+	        var month = dateObj.toDateString().substr(3, 5);
+	        return (date + " " + month).trim();
+	    }
+  	
+  }
+
+</script>

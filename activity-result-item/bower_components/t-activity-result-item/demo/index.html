@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>t-activity-result-item demo</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+    <link rel="import" href="../t-activity-result-page.html">
+    <link rel="import" href="../../t-header/t-header.html">
+    <link rel="import" href="../../t-header/t-activity-search-decorator.html">
+    <link rel="import" href="../../t-header/t-header-search-recap.html">
+    <link rel="import" href="../../t-shared-components/theme.html">
+    <style is="custom-style" include="demo-pages-shared-styles">
+        body {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <template is="dom-bind" id="domBindTemplate">
+        <t-activity-result-page id="activtyResultPage"
+            api-base-url="http://qa-mystiquecode.tavisca.com/"
+            auth-token="ukrkqswnzfmdnyt22almbs3z"
+            search-id="52c7bf49-c695-468e-9365-c27d9fe5d9c9"
+            activity-recap-data="{{activityRecapData}}"
+            api-url-format="/api/Session/SESSIONKEY">
+            <t-header icon="arrow-back" url="#">
+                <t-header-search-recap recap-data="{{activityRecapData}}">
+                </t-header-search-recap>
+                <t-activity-search-decorator id="searchCriteriaRecap" output="{{activityRecapData}}"></t-activity-search-decorator>
+            </t-header>
+        </t-activity-result-page>
+    </template>
+</body>
+<script type="text/javascript">
+        (function () {
+
+        window.addEventListener('WebComponentsReady', function(e) {
+            var searchCriteria = {
+                                    "location": {
+                                        "code": "LAS",
+                                        "name": "McCarran International Airport",
+                                        "cityName": "Las Vegas",
+                                        "countryCode": "US",
+                                        "countryName": "United States",
+                                        "geoCode": "36.0854,-115.15",
+                                        "id": 2178,
+                                        "stateCode": "NV",
+                                        "stateName": "Nevada",
+                                        "type": "Airport",
+                                        "additionalInfo": null,
+                                        "formattedAddress": "Las Vegas, NV, United States - McCarran International Airport (LAS)"
+                                    },
+                                    "fromDate": "08/31/2016",
+                                    "toDate": "09/02/2016"
+                                };
+            var template = document.getElementById('domBindTemplate');
+            template.$.activtyResultPage.searchCriteria = searchCriteria;
+            template.$.searchCriteriaRecap.input = searchCriteria;
+        });
+
+    })();
+</script>
+</html>

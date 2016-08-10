@@ -1,0 +1,171 @@
+{
+    "name": "Fare Details",
+    "properties": [
+        {
+            "name": "Properties",
+            "fields": {
+                "baseFareLabel": {
+                    "name": "baseFareLabel",
+                    "type": "string",
+                    "value": "Base Fare"
+                },
+                "isCollapsible": {
+                    "name": "isCollapsible",
+                    "type": "boolean",
+                    "value": false
+                },
+                "itineraryFareLabel": {
+                    "name": "itineraryFareLabel",
+                    "type": "string",
+                    "value": "Itinerary Fare"
+                },
+                "label": {
+                    "name": "label",
+                    "type": "string",
+                    "value": "Fare Details"
+                },
+                "data": {
+                    "name": "data",
+                    "type": "object",
+                    "value": [{
+                      "money": {
+                          "amount": 6.07,
+                          "currency": "USD",
+                          "displayAmount": "$6.07",
+                          "type": "USD"
+                      },
+                      "components": [],
+                      "type": "Tax",
+                      "properties": [{
+                          "key": "Type",
+                          "value": null
+                      }, {
+                          "key": "Code",
+                          "value": null
+                      }, {
+                          "key": "Description",
+                          "value": null
+                      }]
+                  }, {
+                      "money": {
+                          "amount": 11.2,
+                          "currency": "USD",
+                          "displayAmount": "$11.20",
+                          "type": "USD"
+                      },
+                      "components": [],
+                      "type": "Tax",
+                      "properties": [{
+                          "key": "Type",
+                          "value": null
+                      }, {
+                          "key": "Code",
+                          "value": null
+                      }, {
+                          "key": "Description",
+                          "value": null
+                      }]
+                  }, {
+                      "money": {
+                          "amount": 8,
+                          "currency": "USD",
+                          "displayAmount": "$8.00",
+                          "type": "USD"
+                      },
+                      "components": [],
+                      "type": "Tax",
+                      "properties": [{
+                          "key": "Type",
+                          "value": null
+                      }, {
+                          "key": "Code",
+                          "value": null
+                      }, {
+                          "key": "Description",
+                          "value": null
+                      }]
+                  }, {
+                      "money": {
+                          "amount": 9,
+                          "currency": "USD",
+                          "displayAmount": "$9.00",
+                          "type": "USD"
+                      },
+                      "components": [],
+                      "type": "Tax",
+                      "properties": [{
+                          "key": "Type",
+                          "value": null
+                      }, {
+                          "key": "Code",
+                          "value": null
+                      }, {
+                          "key": "Description",
+                          "value": null
+                      }]
+                  }, {
+                      "money": {
+                          "amount": 115.2,
+                          "currency": "USD",
+                          "displayAmount": "$115.20",
+                          "type": "USD"
+                      },
+                      "components": [{
+                          "amount": 115.2,
+                          "currency": "USD",
+                          "displayAmount": "$115.20",
+                          "type": "USD"
+                      }],
+                      "type": "TotalFare",
+                      "properties": []
+                  }, {
+                      "money": {
+                          "amount": 80.93,
+                          "currency": "USD",
+                          "displayAmount": "$80.93",
+                          "type": "USD"
+                      },
+                      "components": [{
+                          "amount": 115.2,
+                          "currency": "USD",
+                          "displayAmount": "$80.93",
+                          "type": "USD"
+                      }],
+                      "type": "BaseFare",
+                      "properties": []
+                  }, {
+                      "money": {
+                          "amount": 0,
+                          "currency": "USD",
+                          "displayAmount": "$0.00",
+                          "type": "USD"
+                      },
+                      "components": [],
+                      "type": "TotalFee",
+                      "properties": []
+                  }, {
+                      "money": {
+                          "amount": 34.27,
+                          "currency": "USD",
+                          "displayAmount": "$34.27",
+                          "type": "USD"
+                      },
+                      "components": [],
+                      "type": "TotalTax",
+                      "properties": []
+                  }, {
+                      "money": {
+                          "amount": 0,
+                          "currency": "USD",
+                          "displayAmount": "$0.00",
+                          "type": "USD"
+                      },
+                      "components": [],
+                      "type": "TotalDiscount",
+                      "properties": []
+                  }]
+                }
+            }
+        }
+    ]
+}

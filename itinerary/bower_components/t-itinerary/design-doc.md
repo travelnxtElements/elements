@@ -1,0 +1,17 @@
+This element provides details of a flight to the user. Generally, for each segment these are details about
+- Timings and duration
+- Origin, Destination and Layover Airports
+- Number of stops
+- Class of service and details of amenities like wi-fi, in-seat power, on-demand video, legroom
+- Details about fare rules, baggage policies and cancellation policies
+- Refundability, offers
+- Departure and arrival stats including probability of timely departure and/ or arrival
+- Operating/ Marketing Airline
+- Change of gauge
+- Air miles - number of miles that can be earned for traveling on this flight
+- Aircraft details
+- Seatmap
+- Food preferences
+- Reviews
+- Entertainment options
+- Red eye flight and day change

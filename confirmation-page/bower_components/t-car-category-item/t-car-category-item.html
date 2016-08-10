@@ -1,0 +1,139 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../t-image/t-image.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html" />
+<link rel="import" href="../t-text-container/travel-element-styles.html">
+<link rel="import" href="t-car-icons.html">
+<dom-module id="t-car-category-item">
+    <template>
+
+        <style include="travel-element-styles"></style>
+
+        <style include="iron-flex">
+            :host {
+                display: block;
+                background:#fff;
+                border: 1px solid var(--grey-two,#eeeeee);
+                font-family: var(--primary-font-family,'Open sans');
+            }
+            
+            .imageArea {
+                width: 100%;
+                display: block;
+            }
+            .category {
+                line-height: 1.7;
+                padding: 0 var(--normal-spacing, 10px);
+                text-transform: uppercase;
+            }
+            [icon]{
+                height: 22px;
+                width: 22px;
+                color: var(--grey-six,#333333);
+            }
+            .gear{
+                height: 18px;
+            }
+            .luggage{
+                position: relative;
+                top: -2px;
+                margin-right: 4px;
+            }
+            .font-10{
+                font-size: var(--font-10,10px);
+            }
+            .icons-area > .flex:last-of-type{
+                display:none;
+            }
+            @media (max-width: 340px){
+                .large-category{
+                    font-size: 15px;
+                }
+            }
+        </style>
+
+        <t-image 
+            sizing="contain" 
+            class="imageArea" 
+            height="120" src="[[url]]" 
+            loading-icon="[[carIcon]]">                
+        </t-image>
+
+        <div class="font-12 category primary-light-text layout horizontal center border-bottom">
+            <span id="category" class="font-18 ">[[_checkIfNotSpecified(category)]]</span>
+            <span class="flex"></span>
+            <span>[[currency]]&nbsp;</span>
+            <span class="font-16">[[price]]</span>
+            <span>&nbsp;AVG PER DAY</span>
+        </div>
+
+        <div class="icons-area layout horizontal center font-10 section-small secondary-text">
+
+            <template is="dom-if" if="[[capacityRange]]">
+                <iron-icon icon="car:seat"></iron-icon>
+                <span class="text">[[capacityRange]]</span>
+                <div class="flex"></div>
+            </template>
+
+            <template is="dom-if" if="[[baggageRange]]">
+                <iron-icon class="luggage" icon="car:luggage"></iron-icon>
+                <span class="text">[[baggageRange]]</span>
+                <div class="flex"></div>
+            </template>
+
+            <template is="dom-if" if="[[gear]]">
+                <iron-icon class="gear" icon="car:gear"></iron-icon>
+                <span class="text">[[gear]]</span>
+                <div class="flex"></div>
+            </template>
+
+            <template is="dom-if" if="[[doorRange]]">
+                <iron-icon icon="car:door"></iron-icon>
+                <span class="text">[[doorRange]]</span>
+                <div class="flex"></div>
+            </template>
+
+            <template is="dom-if" if="[[airConditioning]]">
+                <iron-icon icon="car:ac"></iron-icon>
+                <span class="text">AC</span>
+                <div class="flex"></div>
+            </template>
+        </div>
+
+    </template>
+    <script>
+        (function () {
+            
+            'use strict'
+
+            Polymer({
+
+                is: 't-car-category-item',
+
+                properties: {
+                    
+                    currency: {
+                        type: String,
+                        value: 'USD',
+                    },
+
+                    doorRange: Number,
+
+                    rentDuration: {
+                        type: Number,
+                        value: 1
+                    }
+                },
+
+                _checkIfNotSpecified: function(category){
+                    if(category.length >= 15){
+                        this.$.category.classList.add('large-category');
+                    }
+                     return category.toLowerCase() === 'notspecified' 
+                                                    ? 'Other' 
+                                                    : category;
+                }
+            });
+
+        })();
+    </script>
+</dom-module>

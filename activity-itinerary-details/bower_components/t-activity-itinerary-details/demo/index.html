@@ -1,0 +1,792 @@
+<!doctype html>
+<html>
+    <head>
+        <title>t-activity-itinerary-details demo</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+        <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+        <link rel="import" href="../t-activity-itinerary-details-page.html">
+        <link rel="import" href="../../t-shared-components/theme.html">
+
+        <style>
+            body {
+                padding: 0;
+                margin: 0;
+            }
+
+            t-header .body.t-header {
+                background: #0099cc;
+                height: 48px;
+            }
+        </style>
+    </head>
+    <body>
+        <template is="dom-bind" id="domBindTemplate">
+            <t-activity-itinerary-details-page id="activityItineraryDetails"
+                api-base-url="http://demo.travelnxt.com/"
+                auth-token="deiieao2tu1iacmrqdxmsyaq"
+                car-icon="maps:directions-car"
+                search-id="e326c42c-8643-4951-9d49-f3d80012c433">
+                <t-header icon="arrow-back" normal-heading label="Review Itinerary"  url="#">
+                    <t-car-search-recap id="searchCriteriaRecap"></t-car-search-recap>
+                </t-header>
+            </t-activity-itinerary-details-page>
+        </template>
+    </body>
+
+    <script type="text/javascript">
+
+        (function() {
+
+            window.addEventListener('WebComponentsReady', function(e) {
+                var template = document.getElementById('domBindTemplate');
+                template.$.activityItineraryDetails.searchCriteria = searchCriteria;
+                template.$.activityItineraryDetails.itinerary = itinerary;
+                template.$.activityItineraryDetails.itineraryId = itinerary.id;
+                template.$.activityItineraryDetails.optionId = "SIC.5156SHARK_CXL0__1_AZZ_AN3";
+                template.$.activityItineraryDetails.passengerTypesInfo = passengers;
+                template.$.searchCriteriaRecap.data = searchCriteria;
+            });
+
+            var passengers = [{
+                type: "Adult",
+                quantity: 2
+            }, {
+                type: "Child",
+                quantity: 2
+            }, {
+                type: "Infant",
+                quantity: 2
+            }, {
+                type: "Senior",
+                quantity: 0
+            }];
+
+            var itinerary = {
+                "description": "<p>Marvel at the incredible Shark Reef Aquarium in the heart of the desert at Mandalay Bay Hotel and Casino on the Las Vegas Strip. Explore the 14 exhibits containing exotic and endangered fish, reptiles and &mdash; of course &mdash; sharks. Enjoy up-close views of more than 100 sharks, including 30 in the 1.3 million-gallon (4.9 million-liter) main tank, one of the largest in the US. By walking through two underwater tunnels, get an even better sense of what it's like to be under the sea.</p><p>Enter the Shark Reef at Mandalay Bay Hotel and Casino on the Las Vegas Strip anytime during its open hours to witness an incredible array of aquatic and reptilian life. Shark Reef contains more than 2,000 animals in 14 exhibits, which offer Vegas visitors the chance to escape the desert heat and immerse themselves in a marine oasis. <br /><br />Observe more than 100 sharks from 15 different species, including Galapagos sharks, grey reef sharks and zebra sharks. See more than 30 sharks swimming in the 1.3 million-gallon (4.9 million-liter) main tank, one of the biggest in the US. Plus, observe a multitude of other sea life including angelfish, parrotfish, pufferfish, green sawfish, piranhas, arowanas, Moray eels and jellyfish. <br /><br />Check out the touch pool to feel horseshoe crabs and a variety of rays, and walk through two underwater tunnels for a more intimate view of the sharks and other marine life. Shark Reef is also home to reptiles such as green sea turtles, golden crocodiles, Burmese pythons and a Komodo dragon. Learn about all the fascinating species through educational displays as you explore Shark Reef at your own pace.</p>",
+                "category": {
+                    "type": "NonTransfer",
+                    "name": "Sightseeing Tickets & Passes"
+                },
+                "heroImageUrl": "http://www.dynamic.viator.com/graphicslib/5156/SITours/shark-reef-at-mandalay-bay-hotel-and-casino-in-las-vegas-160823.jpg",
+                "photoUrls": [
+                    "http://www.dynamic.viator.com/graphicslib/5156/SITours/shark-reef-at-mandalay-bay-hotel-and-casino-in-las-vegas-160823.jpg",
+                    "http://cache-graphicslib.viator.com/graphicslib/media/ce/attach6-jpg-photo_11226574-770tall.jpg",
+                    "http://cache-graphicslib.viator.com/graphicslib/media/d0/attach6-jpg-photo_11226576-770tall.jpg",
+                    "http://cache-graphicslib.viator.com/graphicslib/media/d1/attach6-jpg-photo_11226577-770tall.jpg",
+                    "http://cache-graphicslib.viator.com/graphicslib/media/d2/attach6-jpg-photo_11226578-770tall.jpg",
+                    "http://cache-graphicslib.viator.com/graphicslib/media/d3/attach6-jpg-photo_11226579-770tall.jpg",
+                    "http://cache-graphicslib.viator.com/graphicslib/media/d5/attach6-jpg-photo_11226581-770tall.jpg",
+                    "http://cache-graphicslib.viator.com/graphicslib/media/d6/attach6-jpg-photo_11226582-770tall.jpg",
+                    "http://cache-graphicslib.viator.com/graphicslib/media/d7/attach6-jpg-photo_11226583-770tall.jpg",
+                    "http://cache-graphicslib.viator.com/graphicslib/media/d8/attach6-jpg-photo_11226584-770tall.jpg"
+                ],
+                "legalText": "<b>Conditions of Sale:</b><br>Once you have booked and received your travel voucher, the contact details for the travel service operator will be on this voucher under the heading 'Important Information'. Where applicable, you are required to call the travel service operator directly to advise of additional information such as: <ul><li>Hotel for pick up</li> <li>Weights for helicopter tours</li>  <li>Choice of times for tours</li> <li>Special dietary requirements, meal choices etc.</li></ul>",
+                "duration": "Varies",
+                "schedule": "Las Vegas, NevadaDailySunday to Thursday; 10am - 8pm<br />Friday to Saturday; 10am to 10pm<br /><br />Summer hours - from Memorial Day to Labor Day<br />10am to 10pm<br /><br />Last admission is 1 hour prior to closing time. Please note, hours of operation are subject to change without notice. It is advised that you reconfirm hours of operation prior to date of travel.Mandalay Bay Hotel and CasinoLas Vegas, Nevada, United States of America, North America",
+                "additionalText": "<ul><li>Confirmation will be received at time of booking</li></ul><b>Conditions of Sale:</b><br>Once you have booked and received your travel voucher, the contact details for the travel service operator will be on this voucher under the heading 'Important Information'. Where applicable, you are required to call the travel service operator directly to advise of additional information such as: <ul><li>Hotel for pick up</li> <li>Weights for helicopter tours</li>  <li>Choice of times for tours</li> <li>Special dietary requirements, meal choices etc.</li></ul>",
+                "minFare": {
+                    "areRatesAvailable": true,
+                    "fare": {
+                        "amount": 55.38,
+                        "currency": "USD",
+                        "displayAmount": "$55.38",
+                        "type": "USD"
+                    },
+                    "equivalentFares": [{
+                        "amount": 221.52,
+                        "currency": "Points",
+                        "displayAmount": "Points 221.52",
+                        "type": "Redemption"
+                    }],
+                    "equivalents": [{
+                        "currency": "Points",
+                        "factor": 0.25,
+                        "type": "Redemption"
+                    }]
+                },
+                "policies": [{
+                    "description": "Full penalty window",
+                    "isQuantifiable": true,
+                    "window": {
+                        "start": {
+                            "date": "Fri, 29 Jul, 2016",
+                            "time": "8:42 AM",
+                            "systemDateTime": "2016-07-29T08:42:06.0996882-04:00"
+                        },
+                        "end": {
+                            "date": "Wed, 14 Sep, 2016",
+                            "time": "12:00 AM",
+                            "systemDateTime": "2016-09-14T00:00:00"
+                        }
+                    },
+                    "penalty": {
+                        "components": [{
+                            "money": {
+                                "amount": 55.38,
+                                "currency": "USD",
+                                "displayAmount": "$55.38",
+                                "type": "USD"
+                            },
+                            "components": null,
+                            "type": "BaseFare",
+                            "properties": [
+
+                            ]
+                        }, {
+                            "money": {
+                                "amount": 55.38,
+                                "currency": "USD",
+                                "displayAmount": "$55.38",
+                                "type": "USD"
+                            },
+                            "components": null,
+                            "type": "TotalFare",
+                            "properties": [
+
+                            ]
+                        }],
+                        "additionalInfo": null
+                    },
+                    "type": "Cancellation"
+                }],
+                "voucherUrl": null,
+                "questions": null,
+                "type": "Activity",
+                "options": [{
+                    "id": "SIC.5156SHARK_CXL0__1_AZZ_AN3",
+                    "name": "1_General Admission",
+                    "isAvailable": true,
+                    "availableOn": [{
+                        "date": "Wed, 14 Sep, 2016",
+                        "time": "12:00 AM",
+                        "systemDateTime": "2016-09-14T00:00:00"
+                    }, {
+                        "date": "Thu, 15 Sep, 2016",
+                        "time": "12:00 AM",
+                        "systemDateTime": "2016-09-15T00:00:00"
+                    }, {
+                        "date": "Fri, 16 Sep, 2016",
+                        "time": "12:00 AM",
+                        "systemDateTime": "2016-09-16T00:00:00"
+                    }, {
+                        "date": "Sat, 17 Sep, 2016",
+                        "time": "12:00 AM",
+                        "systemDateTime": "2016-09-17T00:00:00"
+                    }, {
+                        "date": "Sun, 18 Sep, 2016",
+                        "time": "12:00 AM",
+                        "systemDateTime": "2016-09-18T00:00:00"
+                    }, {
+                        "date": "Mon, 19 Sep, 2016",
+                        "time": "12:00 AM",
+                        "systemDateTime": "2016-09-19T00:00:00"
+                    }, {
+                        "date": "Tue, 20 Sep, 2016",
+                        "time": "12:00 AM",
+                        "systemDateTime": "2016-09-20T00:00:00"
+                    }, {
+                        "date": "Wed, 21 Sep, 2016",
+                        "time": "12:00 AM",
+                        "systemDateTime": "2016-09-21T00:00:00"
+                    }, {
+                        "date": "Thu, 22 Sep, 2016",
+                        "time": "12:00 AM",
+                        "systemDateTime": "2016-09-22T00:00:00"
+                    }, {
+                        "date": "Fri, 23 Sep, 2016",
+                        "time": "12:00 AM",
+                        "systemDateTime": "2016-09-23T00:00:00"
+                    }, {
+                        "date": "Sat, 24 Sep, 2016",
+                        "time": "12:00 AM",
+                        "systemDateTime": "2016-09-24T00:00:00"
+                    }],
+                    "selectedDateTime": {
+                        "date": "Wed, 14 Sep, 2016",
+                        "time": "12:00 AM",
+                        "systemDateTime": "2016-09-14T00:00:00"
+                    },
+                    "passengerTypesInfo": [{
+                        "fare": {
+                            "type": "Negotiated",
+                            "code": null,
+                            "isRefundable": false,
+                            "components": [{
+                                "money": {
+                                    "amount": 17.04,
+                                    "currency": "USD",
+                                    "displayAmount": "$17.04",
+                                    "type": "USD"
+                                },
+                                "components": [{
+                                    "amount": 68.16,
+                                    "currency": "Points",
+                                    "displayAmount": "Points 68.16",
+                                    "type": "Redemption"
+                                }],
+                                "type": "BaseFare",
+                                "properties": [
+
+                                ]
+                            }, {
+                                "money": {
+                                    "amount": 17.04,
+                                    "currency": "USD",
+                                    "displayAmount": "$17.04",
+                                    "type": "USD"
+                                },
+                                "components": [{
+                                    "amount": 68.16,
+                                    "currency": "Points",
+                                    "displayAmount": "Points 68.16",
+                                    "type": "Redemption"
+                                }],
+                                "type": "TotalFare",
+                                "properties": [
+
+                                ]
+                            }, {
+                                "money": {
+                                    "amount": 0.0,
+                                    "currency": "USD",
+                                    "displayAmount": "$0.00",
+                                    "type": "USD"
+                                },
+                                "components": [{
+                                    "amount": 0.0,
+                                    "currency": "Points",
+                                    "displayAmount": "Points 0",
+                                    "type": "Redemption"
+                                }],
+                                "type": "TotalFee",
+                                "properties": [
+
+                                ]
+                            }, {
+                                "money": {
+                                    "amount": 0.0,
+                                    "currency": "USD",
+                                    "displayAmount": "$0.00",
+                                    "type": "USD"
+                                },
+                                "components": [{
+                                    "amount": 0.0,
+                                    "currency": "Points",
+                                    "displayAmount": "Points 0",
+                                    "type": "Redemption"
+                                }],
+                                "type": "TotalTax",
+                                "properties": [
+
+                                ]
+                            }, {
+                                "money": {
+                                    "amount": 0.0,
+                                    "currency": "USD",
+                                    "displayAmount": "$0.00",
+                                    "type": "USD"
+                                },
+                                "components": [{
+                                    "amount": 0.0,
+                                    "currency": "Points",
+                                    "displayAmount": "Points 0",
+                                    "type": "Redemption"
+                                }],
+                                "type": "TotalDiscount",
+                                "properties": [
+
+                                ]
+                            }],
+                            "equivalents": [{
+                                "currency": "Points",
+                                "factor": 0.25,
+                                "type": "Redemption"
+                            }]
+                        },
+                        "maxAge": 99,
+                        "minAge": 13,
+                        "minQuantity": 1,
+                        "maxQuantity": 9,
+                        "passengerType": "Adult",
+                        "step": 1,
+                        "isStepSpecified": false,
+                        "quantity": 2,
+                        "displayPassengerType": "Adults",
+                        "singlePassengerType": "Adult",
+                        "multiplePassengerType": "Adults"
+                    }, {
+                        "fare": {
+                            "type": "Negotiated",
+                            "code": null,
+                            "isRefundable": false,
+                            "components": [{
+                                "money": {
+                                    "amount": 10.65,
+                                    "currency": "USD",
+                                    "displayAmount": "$10.65",
+                                    "type": "USD"
+                                },
+                                "components": [{
+                                    "amount": 42.6,
+                                    "currency": "Points",
+                                    "displayAmount": "Points 42.6",
+                                    "type": "Redemption"
+                                }],
+                                "type": "BaseFare",
+                                "properties": [
+
+                                ]
+                            }, {
+                                "money": {
+                                    "amount": 10.65,
+                                    "currency": "USD",
+                                    "displayAmount": "$10.65",
+                                    "type": "USD"
+                                },
+                                "components": [{
+                                    "amount": 42.6,
+                                    "currency": "Points",
+                                    "displayAmount": "Points 42.6",
+                                    "type": "Redemption"
+                                }],
+                                "type": "TotalFare",
+                                "properties": [
+
+                                ]
+                            }, {
+                                "money": {
+                                    "amount": 0.0,
+                                    "currency": "USD",
+                                    "displayAmount": "$0.00",
+                                    "type": "USD"
+                                },
+                                "components": [{
+                                    "amount": 0.0,
+                                    "currency": "Points",
+                                    "displayAmount": "Points 0",
+                                    "type": "Redemption"
+                                }],
+                                "type": "TotalFee",
+                                "properties": [
+
+                                ]
+                            }, {
+                                "money": {
+                                    "amount": 0.0,
+                                    "currency": "USD",
+                                    "displayAmount": "$0.00",
+                                    "type": "USD"
+                                },
+                                "components": [{
+                                    "amount": 0.0,
+                                    "currency": "Points",
+                                    "displayAmount": "Points 0",
+                                    "type": "Redemption"
+                                }],
+                                "type": "TotalTax",
+                                "properties": [
+
+                                ]
+                            }, {
+                                "money": {
+                                    "amount": 0.0,
+                                    "currency": "USD",
+                                    "displayAmount": "$0.00",
+                                    "type": "USD"
+                                },
+                                "components": [{
+                                    "amount": 0.0,
+                                    "currency": "Points",
+                                    "displayAmount": "Points 0",
+                                    "type": "Redemption"
+                                }],
+                                "type": "TotalDiscount",
+                                "properties": [
+
+                                ]
+                            }],
+                            "equivalents": [{
+                                "currency": "Points",
+                                "factor": 0.25,
+                                "type": "Redemption"
+                            }]
+                        },
+                        "maxAge": 12,
+                        "minAge": 4,
+                        "minQuantity": 0,
+                        "maxQuantity": 9,
+                        "passengerType": "Child",
+                        "step": 1,
+                        "isStepSpecified": false,
+                        "quantity": 2,
+                        "displayPassengerType": "Children",
+                        "singlePassengerType": "Child",
+                        "multiplePassengerType": "Children"
+                    }, {
+                        "fare": {
+                            "type": "Negotiated",
+                            "code": null,
+                            "isRefundable": false,
+                            "components": [{
+                                "money": {
+                                    "amount": 0.00,
+                                    "currency": "USD",
+                                    "displayAmount": "$0.00",
+                                    "type": "USD"
+                                },
+                                "components": [{
+                                    "amount": 0.0,
+                                    "currency": "Points",
+                                    "displayAmount": "Points 0",
+                                    "type": "Redemption"
+                                }],
+                                "type": "BaseFare",
+                                "properties": [
+
+                                ]
+                            }, {
+                                "money": {
+                                    "amount": 0.00,
+                                    "currency": "USD",
+                                    "displayAmount": "$0.00",
+                                    "type": "USD"
+                                },
+                                "components": [{
+                                    "amount": 0.0,
+                                    "currency": "Points",
+                                    "displayAmount": "Points 0",
+                                    "type": "Redemption"
+                                }],
+                                "type": "TotalFare",
+                                "properties": [
+
+                                ]
+                            }, {
+                                "money": {
+                                    "amount": 0.0,
+                                    "currency": "USD",
+                                    "displayAmount": "$0.00",
+                                    "type": "USD"
+                                },
+                                "components": [{
+                                    "amount": 0.0,
+                                    "currency": "Points",
+                                    "displayAmount": "Points 0",
+                                    "type": "Redemption"
+                                }],
+                                "type": "TotalFee",
+                                "properties": [
+
+                                ]
+                            }, {
+                                "money": {
+                                    "amount": 0.0,
+                                    "currency": "USD",
+                                    "displayAmount": "$0.00",
+                                    "type": "USD"
+                                },
+                                "components": [{
+                                    "amount": 0.0,
+                                    "currency": "Points",
+                                    "displayAmount": "Points 0",
+                                    "type": "Redemption"
+                                }],
+                                "type": "TotalTax",
+                                "properties": [
+
+                                ]
+                            }, {
+                                "money": {
+                                    "amount": 0.0,
+                                    "currency": "USD",
+                                    "displayAmount": "$0.00",
+                                    "type": "USD"
+                                },
+                                "components": [{
+                                    "amount": 0.0,
+                                    "currency": "Points",
+                                    "displayAmount": "Points 0",
+                                    "type": "Redemption"
+                                }],
+                                "type": "TotalDiscount",
+                                "properties": [
+
+                                ]
+                            }],
+                            "equivalents": [{
+                                "currency": "Points",
+                                "factor": 0.25,
+                                "type": "Redemption"
+                            }]
+                        },
+                        "maxAge": 3,
+                        "minAge": 0,
+                        "minQuantity": 0,
+                        "maxQuantity": 9,
+                        "passengerType": "Infant",
+                        "step": 1,
+                        "isStepSpecified": false,
+                        "quantity": 2,
+                        "displayPassengerType": "Infants",
+                        "singlePassengerType": "Infant",
+                        "multiplePassengerType": "Infants"
+                    }]
+                }],
+                "generalInformation": null,
+                "inclusions": null,
+                "exclusions": null,
+                "generalPolicies": [{
+                    "key": "Cancellation",
+                    "value": "This is non-cancellable , non-refundable activity."
+                }],
+                "isCancellable": true,
+                "allPassengersInfoRequired": true,
+                "isGuaranteeRequired": true,
+                "id": "CFFD55008DFBEC2FF6680DBA2CC5EF13",
+                "name": "Shark Reef at Mandalay Bay Hotel and Casino",
+                "fare": {
+                    "type": null,
+                    "code": null,
+                    "isRefundable": false,
+                    "components": [{
+                        "money": {
+                            "amount": 55.38,
+                            "currency": "USD",
+                            "displayAmount": "$55.38",
+                            "type": "USD"
+                        },
+                        "components": [{
+                            "amount": 221.52,
+                            "currency": "Points",
+                            "displayAmount": "Points 221.52",
+                            "type": "Redemption"
+                        }],
+                        "type": "BaseFare",
+                        "properties": [
+
+                        ]
+                    }, {
+                        "money": {
+                            "amount": 55.38,
+                            "currency": "USD",
+                            "displayAmount": "$55.38",
+                            "type": "USD"
+                        },
+                        "components": [{
+                            "amount": 221.52,
+                            "currency": "Points",
+                            "displayAmount": "Points 221.52",
+                            "type": "Redemption"
+                        }],
+                        "type": "TotalFare",
+                        "properties": [
+
+                        ]
+                    }, {
+                        "money": {
+                            "amount": 0.0,
+                            "currency": "USD",
+                            "displayAmount": "$0.00",
+                            "type": "USD"
+                        },
+                        "components": [{
+                            "amount": 0.0,
+                            "currency": "Points",
+                            "displayAmount": "Points 0",
+                            "type": "Redemption"
+                        }],
+                        "type": "TotalFee",
+                        "properties": [
+
+                        ]
+                    }, {
+                        "money": {
+                            "amount": 0.0,
+                            "currency": "USD",
+                            "displayAmount": "$0.00",
+                            "type": "USD"
+                        },
+                        "components": [{
+                            "amount": 0.0,
+                            "currency": "Points",
+                            "displayAmount": "Points 0",
+                            "type": "Redemption"
+                        }],
+                        "type": "TotalTax",
+                        "properties": [
+
+                        ]
+                    }, {
+                        "money": {
+                            "amount": 0.0,
+                            "currency": "USD",
+                            "displayAmount": "$0.00",
+                            "type": "USD"
+                        },
+                        "components": [{
+                            "amount": 0.0,
+                            "currency": "Points",
+                            "displayAmount": "Points 0",
+                            "type": "Redemption"
+                        }],
+                        "type": "TotalDiscount",
+                        "properties": [
+
+                        ]
+                    }],
+                    "equivalents": [{
+                        "currency": "Points",
+                        "factor": 0.25,
+                        "type": "Redemption"
+                    }]
+                },
+                "fareWithAddOns": {
+                    "type": null,
+                    "code": null,
+                    "isRefundable": false,
+                    "components": [{
+                        "money": {
+                            "amount": 55.38,
+                            "currency": "USD",
+                            "displayAmount": "$55.38",
+                            "type": "USD"
+                        },
+                        "components": [{
+                            "amount": 221.52,
+                            "currency": "Points",
+                            "displayAmount": "Points 221.52",
+                            "type": "Redemption"
+                        }],
+                        "type": "BaseFare",
+                        "properties": [
+
+                        ]
+                    }, {
+                        "money": {
+                            "amount": 55.38,
+                            "currency": "USD",
+                            "displayAmount": "$55.38",
+                            "type": "USD"
+                        },
+                        "components": [{
+                            "amount": 221.52,
+                            "currency": "Points",
+                            "displayAmount": "Points 221.52",
+                            "type": "Redemption"
+                        }],
+                        "type": "TotalFare",
+                        "properties": [
+
+                        ]
+                    }, {
+                        "money": {
+                            "amount": 0.0,
+                            "currency": "USD",
+                            "displayAmount": "$0.00",
+                            "type": "USD"
+                        },
+                        "components": [{
+                            "amount": 0.0,
+                            "currency": "Points",
+                            "displayAmount": "Points 0",
+                            "type": "Redemption"
+                        }],
+                        "type": "TotalFee",
+                        "properties": [
+
+                        ]
+                    }, {
+                        "money": {
+                            "amount": 0.0,
+                            "currency": "USD",
+                            "displayAmount": "$0.00",
+                            "type": "USD"
+                        },
+                        "components": [{
+                            "amount": 0.0,
+                            "currency": "Points",
+                            "displayAmount": "Points 0",
+                            "type": "Redemption"
+                        }],
+                        "type": "TotalTax",
+                        "properties": [
+
+                        ]
+                    }, {
+                        "money": {
+                            "amount": 0.0,
+                            "currency": "USD",
+                            "displayAmount": "$0.00",
+                            "type": "USD"
+                        },
+                        "components": [{
+                            "amount": 0.0,
+                            "currency": "Points",
+                            "displayAmount": "Points 0",
+                            "type": "Redemption"
+                        }],
+                        "type": "TotalDiscount",
+                        "properties": [
+
+                        ]
+                    }],
+                    "equivalents": [{
+                        "currency": "Points",
+                        "factor": 0.25,
+                        "type": "Redemption"
+                    }]
+                },
+                "isPostPaid": false,
+                "isSoldOut": false,
+                "isPreferred": false,
+                "addOns": null,
+                "preferredSortOrder": 0,
+                "source": {
+                    "inventoryId": "SIC.5156SHARK_CXL0",
+                    "id": 416,
+                    "name": "247_VTR"
+                },
+                "restrictions": null
+            };
+
+            var searchCriteria = {
+                "pickupLocation": {
+                    "code": "LAS",
+                    "name": "McCarran International Airport",
+                    "cityName": "Las Vegas",
+                    "countryCode": "US",
+                    "countryName": "United States",
+                    "geoCode": "36.0854,-115.15",
+                    "id": 2102,
+                    "stateCode": "NV",
+                    "stateName": "Nevada",
+                    "type": "Airport",
+                    "additionalInfo": null,
+                    "formattedAddress": "Las Vegas, NV, United States - McCarran International Airport (LAS)"
+                },
+                "pickupDate": "08/30/2016",
+                "dropoffLocation": {
+                    "code": "LAS",
+                    "name": "McCarran International Airport",
+                    "cityName": "Las Vegas",
+                    "countryCode": "US",
+                    "countryName": "United States",
+                    "geoCode": "36.0854,-115.15",
+                    "id": 2102,
+                    "stateCode": "NV",
+                    "stateName": "Nevada",
+                    "type": "Airport",
+                    "additionalInfo": null,
+                    "formattedAddress": "Las Vegas, NV, United States - McCarran International Airport (LAS)"
+                },
+                "dropoffDate": "09/06/2016",
+                "isDropoffLocationSame": true,
+                "pickupTime": "11:00 AM",
+                "dropoffTime": "11:00 AM"
+            };
+        })();
+
+    </script>
+
+</html>

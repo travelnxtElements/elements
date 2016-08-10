@@ -1,0 +1,226 @@
+<link rel="import" href="../polymer/polymer.html" />
+<link rel="import" href="../iron-ajax/iron-ajax.html" />
+<link rel="import" href="../t-notify/t-notify.html" />
+<link rel="import" href="../t-loader/t-fullpage-loader.html" />
+<link rel="import" href="../t-list/t-list.html" />
+<link rel="import" href="../t-search-overlay/t-search-overlay.html" />
+<link rel="import" href="../t-header/t-header.html" />
+<link rel="import" href="../t-header/t-hotel-search-recap.html" />
+<link rel="import" href="../t-hotel-result-item/t-hotel-itinerary-item.html">
+<link rel="import" href="../t-sessionstorage/t-sessionstorage.html" />
+<!--
+    `<t-hotel-results-page>` is a polymer component that generates results page component handling all required resources of Hotel result page
+
+
+    Basic usage
+    `<t-hotel-results-page
+            api-base-url="http://qa-mystiquecode.tavisca.com/" 
+            auth-token="{{token.authenticationToken}}"
+            search-id="[[searchId]]"></t-hotel-results-page>`
+-->
+<dom-module id="t-hotel-results-page">
+    <template>
+        <div>
+            <t-header on-left-button-click="_headerLeftClick" right-icon="maps:place" on-right-button-click="_mapClick">
+                <t-hotel-search-recap location="{{criteria.location}}" check-in="{{criteria.checkIn}}" check-out="{{criteria.checkOut}}" adult-count="{{criteria.adultCount}}" child-count="{{criteria.childCount}}" search-page-url="@Url.Action(" Index ", "Home ")">
+                </t-hotel-search-recap>
+            </t-header>
+        </div>
+        <div class="layout vertical flex">
+            <template is="dom-if" if="[[isSingleItemLoading]]">
+                <t-fullpage-loader active>
+                    <div>Loading hotel details...</div>
+                </t-fullpage-loader>
+            </template>
+            <template is="dom-if" if="[[isSingleItemFailed]]">
+                <t-notify message="We could not find selected itinerary, please select another." active type="error"></t-notify>
+            </template>
+            <t-list id="listComponent" no-results-filtered-message="We could not find any hotels for the filters you have applied." no-results-found-message="We could not find any hotels for your search." no-results-filtered-for-search-term-message="We could not find any hotel names containing 'SEARCHTERM’." token-param="inventories" with-sorting with-filter on-list-population="_listPopulated" on-item-selected="_resultSelected">
+                <template>
+                    <t-hotel-itinerary-item itinerary="{{item}}">
+                    </t-hotel-itinerary-item>
+                </template>
+            </t-list>
+        </div>
+        <template is="dom-if" if="[[showInterstetial]]">
+            <t-search-overlay icon="maps:local-hotel" id="loadingOverlay" value="[[searchOverlayValue]]">
+                <div class="data">
+                    <t-hotel-search-recap hide-icon location="{{criteria.location}}" check-in="{{criteria.checkIn}}" check-out="{{criteria.checkOut}}" adult-count="{{criteria.adultCount}}" child-count="{{criteria.childCount}}">
+                    </t-hotel-search-recap>
+                </div>
+                <div class="footer">
+                    <img src="http://dev-capi.tavisca.com/NewUI/eva/Air/images/main-logo.png" alt="">
+                </div>
+            </t-search-overlay>
+        </template>
+        <template is="dom-if" if="[[criteriaInProgress]]">
+            <t-fullpage-loader active>
+            </t-fullpage-loader>
+        </template>
+        <t-sessionstorage id="criteriaElem" key="Eva_Hotel_SearchCriteria" in-progress="{{criteriaInProgress}}" api-url-format="[[sessionApiUrlFormat]]" auto>
+        </t-sessionstorage>
+        <t-sessionstorage id="itineraryInfoElem" key="Eva_Hotel_SeclectedItinerary" api-url-format="[[sessionApiUrlFormat]]" on-t-sessionstorage-save-success="onItinerarySaved">
+        </t-sessionstorage>
+        <iron-ajax id="singleItineraryAjax" method="GET" verbose content-type="application/json" handle-as="json" on-response="_singleItemSuccess" on-error="_singleItemError">
+        </iron-ajax>
+    </template>
+</dom-module>
+<script>
+Polymer({
+    is: "t-hotel-results-page",
+
+    /**
+     * Fired when succesfuly gets the response from search.
+     * Passing the search id with the event
+     *
+     * @event request
+     */
+
+
+    /**
+     * Fired when clicked on the header left click
+     *
+     * @event header-left-click
+     */
+
+
+    /**
+     * Fired when clicked on the header right click
+     *
+     * @event header-right-click
+     */
+
+    properties: {
+
+        /*The session api Url format to be provided*/
+        sessionApiUrlFormat: String,
+
+        /*The auth token to be provided*/
+        authToken: String,
+
+        /*The api Base Url*/
+        apiBaseUrl: String,
+
+        /*Pass the search Id of the component*/
+        searchId: String,
+
+
+    },
+    observers: [
+        '_setUpPrerequisites(authToken,apiBaseUrl,searchId)'
+    ],
+    attached: function() {
+        this._setUpPrerequisites();
+        this._bindTemplate();
+    },
+
+    _headerLeftClick: function(){
+        this.fire('header-left-click',  {bubbles: false});
+    },
+
+    _setUpPrerequisites: function(authToken,apiBaseUrl,searchId) {
+            if(!authToken || !apiBaseUrl || !searchId){
+                return;
+            }
+        //list config        
+        this.$.listComponent.dataApi = apiBaseUrl + 'api/hotel/results/' + searchId + '/rates?$top=20&token=' + authToken + '&$select=Name,Rating,Address,HeroImageUrl,StayDuration,IsPostPaid,Source,Id,Deal,Fare';
+        this.$.listComponent.filterApi = apiBaseUrl + 'api/hotel/filter/' + searchId + '/rates?token=' + authToken;
+        this.$.listComponent.filterResultsApi = apiBaseUrl + 'api/hotel/results/filter/' + searchId + '/rates?$top=20&token=' + authToken + '&$select=Name,Rating,Address,HeroImageUrl,StayDuration,IsPostPaid,Source,Id,Deal,Fare';
+        /*
+        this.$.listComponent.withSorting = true;
+        this.$.listComponent.withFilter = true;
+        */
+        this.$.listComponent.sortParams = [{
+            "key": "Price",
+            "value": "$orderby=MinFare/Fare/Amount",
+            "default": true
+        }, {
+            "key": "Name",
+            "value": "$orderby=Name"
+        }, {
+            "key": "Rating",
+            "value": "$orderby=Rating"
+        }];
+        this.$.listComponent.includeFilters = ["Price", "Rating", "Brand", "Hotel Name"];
+
+        //this.$.listComponent.redirectLink = Eva.searchPage;
+
+        this.$.listComponent.generateList();
+
+        //caling bind template
+        this._bindTemplate();
+
+    },
+
+    _listPopulated: function() {
+        this.searchOverlayValue = 100;
+        this.noInterstetial = false;
+        this.$.listComponent.querySelector('t-filter').generateFilter();
+    },
+
+    _resultSelected: function(event) {
+        if (event.detail) {
+            this.isSingleItemLoading = true;
+
+            this.$.singleItineraryAjax.url = this.apiBaseUrl + 'api/hotel/results/' + this.searchId + '/rates?token=' + this.authToken + "&$filter=Id eq '" + event.detail.id + "'";
+            this.$.singleItineraryAjax.generateRequest();
+
+            this.isSingleItemFailed = false;
+        }
+    },
+
+    _mapClick: function() {
+        this.fire('header-right-click',  {bubbles: false});
+    },
+
+    _singleItemSuccess: function(e) {
+        if (!event.detail.response || !event.detail.response.status)
+            this._singleItemError();
+        else if (!event.detail.response.status.isSuccessful || !event.detail.response.inventories || !event.detail.response.inventories.length) {
+            this._singleItemError();
+        } else {
+            this.$.itineraryInfoElem.value = event.detail.response.inventories[0];
+            this.$.itineraryInfoElem.save();
+        }
+    },
+
+    _singleItemError: function(e) {
+        this.isSingleItemFailed = true;
+        this.isSingleItemLoading = false;
+    },
+
+    _bindTemplate: function() {
+        this.showInterstetial = window.location.href.indexOf('showInterstetial') >= 0;
+
+        //do data binding
+
+        this.setHeaderInfo();
+
+
+        if (window.location.search.toLowerCase().indexOf('showdebuginfo=true') != -1) {
+            //_templatizer.showDebugInfo = true;
+        }
+    },
+    setHeaderInfo: function() {
+        var criteria = null;
+        if (this.$.criteriaElem && this.$.criteriaElem.value && this.$.criteriaElem.value.criteria) {
+            var sessionCriteria = JSON.parse(this.$.criteriaElem.value.criteria);
+
+            var criteria = {};
+            criteria.location = sessionCriteria.destination.name || sessionCriteria.destination.formattedAddress;
+            criteria.checkIn = new Date(sessionCriteria.checkInDate.date);
+            criteria.checkOut = new Date(sessionCriteria.checkOutDate.date);
+            criteria.adultCount = sessionCriteria.rooms[0].adults.quantity;
+            criteria.childCount = sessionCriteria.rooms[0].children.quantity;
+            this.criteria = criteria;
+        }
+    },
+    onItinerarySaved: function() {
+
+        this.fire('result-select-success', this.$.itineraryInfoElem.value.id , {bubbles: false});
+        //window.location = Eva.detailsPage + '?sid=' + Eva.searchId + '&hid=' + document.getElementById('itineraryInfoElem').value.id;
+    }
+
+
+});
+</script>

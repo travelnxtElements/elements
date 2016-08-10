@@ -1,0 +1,27 @@
+{
+  "name": "t-activity-itinerary-details",
+  "description": "This element shows details of selected activity.",
+  "main": "t-activity-itinerary-details.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.4.0",
+    "t-notify": "atomelements/t-notify#^1.1.1",
+    "t-policy": "travelnxtElements/t-policy#^1.0.0",
+    "t-shared-lib": "travelnxtelements/t-shared-lib#^1.0.2",
+    "t-image": "atomelements/t-image#^1.2.1",
+    "t-button": "atomelements/t-button#^1.0.0",
+    "iron-flex-layout": "PolymerElements/iron-flex-layout#^1.2.1",
+    "t-text-container": "travelnxtelements/t-text-container#^1.1.1",
+    "juicy-html": "Juicy/juicy-html#^1.0.2",
+    "t-car-result-item": "travelnxtElements/t-car-result-item#^1.0.0",
+    "t-car-itinerary-details": "travelnxtElements/t-car-itinerary-details#^1.0.0",
+    "iron-collapse": "PolymerElements/iron-collapse#^1.2.0",
+    "t-behavior": "travelnxtelements/t-behavior"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "t-faredetails": "travelnxtelements/t-faredetails#^1.1.0",
+    "web-component-tester": "^4.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0",
+    "t-shared-components": "atomelements/t-shared-components#^1.0.5"
+  }
+}

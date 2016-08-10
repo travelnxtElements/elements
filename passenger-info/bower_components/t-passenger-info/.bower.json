@@ -1,0 +1,56 @@
+{
+  "name": "t-passenger-info",
+  "authors": [
+    "Rahul Pilkhwal <rahul.pilkhwal@tavisca.com>",
+    "Shailesh Kumar Srivastava <ssrivastava@tavisca.com>",
+    "Sounak Pal <spal@tavisca.com>",
+    "Ajinkya Tejankar <tejankarajinkya@gmail.com>",
+    "Manoj Chalode <chalodem@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "keywords": [
+    "Polymer",
+    "Web",
+    "Components"
+  ],
+  "homepage": "https://github.com/travelnxtelements/t-passenger-info",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "t-sessionstorage": "travelnxtelements/t-sessionstorage#^1.0.1",
+    "t-button": "atomelements/t-button#^1.2.0",
+    "t-section-header": "atomelements/t-section-header#^1.0.4",
+    "t-calendar": "atomelements/t-calendar#^1.3.0",
+    "t-dropdown-menu": "atomelements/t-dropdown-menu#^1.2.1",
+    "t-radio-group": "atomelements/t-radio-group#^1.1.2",
+    "t-dropdown": "atomelements/t-dropdown#^2.0.5",
+    "iron-flex-layout": "PolymerElements/iron-flex-layout#^1.2.1",
+    "t-text-container": "travelnxtelements/t-text-container#^1.1.1",
+    "t-behavior": "travelnxtelements/t-behavior"
+  },
+  "devDependencies": {
+    "t-shared-components": "atomelements/t-shared-components#^1.0.5",
+    "webcomponentsjs": "~0.7.14",
+    "iron-component-page": "PolymerElements/iron-component-page#~1.0.6",
+    "t-header": "travelnxtElements/t-header#^1.0.0",
+    "iron-flex-layout": "PolymerElements/iron-flex-layout#^1.2.1"
+  },
+  "_release": "d4a1517df9",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "d4a1517df9981475a994f8bd21cac795bc0175c2"
+  },
+  "_source": "git://github.com/travelnxtelements/t-passenger-info.git",
+  "_target": "master",
+  "_originalSource": "travelnxtelements/t-passenger-info",
+  "_direct": true
+}

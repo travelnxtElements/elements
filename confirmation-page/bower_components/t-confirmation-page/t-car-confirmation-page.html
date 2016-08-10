@@ -1,0 +1,140 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../juicy-html/juicy-html.html">
+<link rel="import" href="../t-notify/t-notify.html">
+<link rel="import" href="../t-policy/t-policy.html">
+<link rel="import" href="../t-car-itinerary-details/t-car-itinerary-details.html">
+<link rel="import" href="../t-section-header/t-section-header.html">
+<link rel="import" href="../t-header/t-header.html">
+<link rel="import" href="../t-text-container/travel-element-styles.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html"/>
+<link rel="import" href="../t-car-result-item/t-car-result-item.html" />
+<link rel="import" href="../t-sessionstorage/t-sessionstorage.html">
+<link rel="import" href="../t-shared-lib/t-confirmation-behavior.html">
+<link rel="import" href="../t-shared-lib/t-date-behavior.html">
+
+<!--
+    <h3>Details:</h3>
+
+        `t-car-confirmation-page` is a car confirmation page component which displays booked itinerary information.
+
+        It uses following child components in it -
+            1. `t-notify`
+            2. `t-header`
+            3. `t-policy`
+            4. `t-car-itinerary-details`
+            5. `t-faredetails`
+            6. `t-sessionstorage`
+
+    <h3>Events:</h3>
+
+        following events are fired by this component
+
+            1. 'confirmation-error' - fired when error is occured while fetching booked itinerary from session, session is currently not used in this page.
+            2. 'confirmation-success' - fired when confirmation page is loaded succesfully.
+            3. `go-to-search` - fired when page is loaded without required page data.
+
+    <h3>Example:</h3>
+
+        <t-car-confirmation-page
+            id="confirmation"
+            success-icon="[[successIcon]]"
+            api-base-url="[[apiBaseUrl]]"
+            auth-token="[[authToken]]"
+            booked-itinerary="[[bookedItinerary]]"
+            api-url-format="[[apiUrlFormat]]">
+            <t-header
+                icon="home"
+                on-left-button-click="_goToSearch"
+                label="Confirmation"
+                normal-heading>
+            </t-header>
+        </t-car-confirmation-page>
+
+    @demo demo/index.html
+-->
+
+<dom-module id="t-car-confirmation-page">
+    <template>
+        <style include="t-car-result-item"></style>
+        <style include="iron-flex"></style>
+        <style include="travel-element-styles">
+            :host {
+                display: block;
+                font-family: var(--header-font-family, --primary-font-family);
+                font-size: var(--font-14, 14px);
+            }
+            .payable {
+                font-size: var(--font-18, 18px);
+            }
+        </style>
+
+        <content select="t-header"></content>
+
+        <t-notify id="notify" success-icon="[[successIcon]]" type="success"></t-notify>
+
+        <t-policy id="policy" 
+            label="Policies"
+            external-link
+            policies="[[bookedItinerary.itinerary.generalPolicies]]"
+            is-data-provided-by-view>
+        </t-policy>
+
+        <t-section-header class="margin-bottom" label="Trip Summary"></t-section-header>
+        
+        <t-car-itinerary-details
+            id="itineraryDetails"
+            is-collapsible
+            itinerary="[[bookedItinerary.itinerary]]"
+            search-criteria=[[bookedItinerary.searchCriteria]]>
+        </t-car-itinerary-details>
+
+        <t-section-header class="margin-bottom" label="Guest Info"></t-section-header>
+
+        <div class="section-small font-14 layout horizontal">
+            <template is="dom-repeat" items="[[bookedItinerary.passengers]]">
+                <span class="name flex font-16">[[_capitalize(item.title, item.firstName, item.lastName)]]</span>
+                <span class="secondary-text">Confirmation # -&nbsp;</span>
+                <span class=""> [[_getConfirmationNumber(bookedItinerary.passengerSegment)]]</span>
+            </template>
+        </div> 
+
+        <t-faredetails 
+          id="fareDetails"
+          label="Payment Details"
+          is-collapsible
+          itinerary-fare-label="Car Rental">
+        </t-faredetails>
+
+        <template is="dom-if" if="[[bookedItinerary.itinerary.isPostPaid]]">
+            <div class="layout horizontal section-small payable">
+                <span class="secondary-text">Due at pick-up</span>
+                <span class="flex"></span>
+                <span>[[bookedItinerary.paymentBreakup.amount.currency]] [[bookedItinerary.paymentBreakup.amount.amount]]</span>
+            </div>
+        </template>       
+
+        <t-sessionstorage
+            id="sessionStore"
+            key="Car_Booked_Itinerary"
+            api-url-format="[[apiUrlFormat]]"
+            on-t-sessionstorage-load-success="_onSessionLoad">
+        </t-sessionstorage>
+    </template>
+
+    <script>
+        (function () {
+            
+            'use strict'
+
+            Polymer({
+                is: 't-car-confirmation-page',
+
+                behaviors: [
+                    TravelNxt.Behaviors.ConfirmationBehavior,
+                    TravelNxt.Behaviors.DateBehavior
+                ]
+            });
+
+        })();
+    </script>
+</dom-module>

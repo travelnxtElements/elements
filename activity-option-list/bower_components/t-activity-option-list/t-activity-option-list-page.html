@@ -1,0 +1,147 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../t-text-container/travel-element-styles.html">
+<link rel="import" href="../t-shared-lib/t-date-behavior.html">
+<link rel="import" href="../t-sessionstorage/t-sessionstorage.html">
+<link rel="import" href="t-activity-single-avail-api.html">
+<link rel="import" href="../t-behavior/t-page-behavior.html">
+<link rel="import" href="../t-behavior/t-activity-page-behavior.html">
+<link rel="import" href="t-activity-option-item.html">
+<!--
+A comment describing this element
+
+Example:
+
+    <t-activity-option-list-page></t-activity-option-list-page>
+
+Example:
+
+    <t-activity-option-list-page>
+      <h2>Hello t-activity-option-list-page</h2>
+    </t-activity-option-list-page>
+
+@demo demo/index.html
+-->
+<dom-module id="t-activity-option-list-page">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+        </style>
+
+        <content></content>
+
+        <template id="list" is="dom-repeat" items="[[itinerary.options]]">
+            <t-activity-option-item option=[[item]]></t-activity-option-item>
+        </template>
+
+        <t-activity-single-avail-api
+            id="singleAvailApi" 
+            loading={{loading}} 
+            api-base-url="[[apiBaseUrl]]"
+            api-relative-url="api/activity/results/single" 
+            auth-token="[[authToken]]"
+            on-t-activity-single-avail-api-success="_onSingleAvailSuccess"
+            on-t-activity-single-avail-api-error="_onSingleAvailError">
+        </t-activity-single-avail-api>
+
+        <t-sessionstorage
+            id="sessionStore"
+            key="Activitie_Option_Data"
+            api-url-format="[[apiUrlFormat]]"
+            on-t-sessionstorage-load-success="_onSessionLoad">
+        </t-sessionstorage>
+
+    </template>
+
+    <script>
+        (function () {
+
+            'use strict'
+
+            Polymer({
+
+                is: 't-activity-option-list-page',
+
+                behaviors: [
+                    TravelNxt.Behaviors.PageBehavior,
+                    TravelNxt.Behaviors.ActivityPageBehavior
+                ],
+
+                behaviors: [
+                    TravelNxt.Behaviors.DateBehavior
+                ],
+
+                properties: {
+
+                    /*
+                     * <p>This property holds the value of currency</p>
+                     */
+                    itinerary: {
+                        type: Object,
+                        notify: true
+                    }
+                },
+
+                listeners: {
+                    'option-selected': '_onOptionSelect'
+                },
+
+                /*
+                 * <p>Event handler method called when `t-car-search-api-error` event is fired</p>
+                 */
+                observers: [
+                    '_visibleChange(visible)',
+                    '_pageLoad(authToken, itineraryId, apiBaseUrl)'
+                ],
+
+                /*
+                 * <p>observer function for page `visible` property</p>
+                */
+                _visibleChange: function (visible) {
+                    if (visible && (!this.itineraryId || !this.authToken || !this.searchId || !this.apiBaseUrl)) {
+                        this.fire('go-to-search');
+                    }
+                },
+
+                /*
+                 * <p>Event handler method called when `t-car-search-api-error` event is fired</p>
+                 */
+                _pageLoad: function (authToken, itineraryId, apiBaseUrl) {
+                    if (!itineraryId || !authToken || !this.searchId || !apiBaseUrl) {
+                        return;
+                    }
+
+                    this.$.singleAvailApi.getActivity({
+                        searchId: this.searchId,
+                        itineraryId: this.itineraryId
+                    });
+
+                },
+
+                _onSingleAvailSuccess: function (e) {
+                    if (!e.detail.inventory) {
+                        this.$.fareDetails.error = true;
+                        throw Error('failed to add itinerary in the cart!');
+                    }
+
+                    this.itinerary = e.detail.inventory;
+                },
+
+                _onSingleAvailError: function (e) {
+                    
+                },
+
+                _onOptionSelect: function (e) {
+                    if (e.detail) {
+                        this.$.sessionStore.value = e.detail;
+                        this.$.sessionStore.save();
+                        this.fire('option-select', e.detail);
+                    }
+                }
+
+            });
+        })();                
+    </script>
+</dom-module>

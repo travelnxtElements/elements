@@ -1,0 +1,220 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../juicy-html/juicy-html.html">
+<link rel="import" href="../t-notify/t-notify.html">
+<link rel="import" href="../t-policy/t-policy.html">
+<link rel="import" href="../t-activity-itinerary-details/t-activity-itinerary-details.html">
+<link rel="import" href="../t-section-header/t-section-header.html">
+<link rel="import" href="../t-header/t-header.html">
+<link rel="import" href="../t-text-container/travel-element-styles.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html"/>
+<link rel="import" href="../t-car-result-item/t-car-result-item.html" />
+<link rel="import" href="../t-sessionstorage/t-sessionstorage.html">
+<link rel="import" href="../t-shared-lib/t-confirmation-behavior.html">
+<link rel="import" href="../t-shared-lib/t-date-behavior.html">
+<link rel="import" href="../t-behavior/t-page-behavior.html">
+<link rel="import" href="../t-behavior/t-activity-page-behavior.html">
+
+<!--
+    <h3>Details:</h3>
+
+        `t-activity-confirmation-page` is a activity confirmation page component which displays booked itinerary information.
+
+        It uses following child components in it -
+            1. `t-notify`
+            2. `t-header`
+            3. `t-policy`
+            4. `t-activity-itinerary-details`
+            5. `t-faredetails`
+            6. `t-sessionstorage`
+
+    <h3>Events:</h3>
+
+        following events are fired by this component
+
+            1. 'confirmation-error' - fired when error is occured while fetching booked itinerary from session, session is currently not used in this page.
+            2. 'confirmation-success' - fired when confirmation page is loaded succesfully.
+            3. `go-to-search` - fired when page is loaded without required page data.
+
+    <h3>Example:</h3>
+
+        <t-activity-confirmation-page
+            id="confirmation"
+            success-icon="[[successIcon]]"
+            api-base-url="[[apiBaseUrl]]"
+            auth-token="[[authToken]]"
+            booked-itinerary="[[bookedItinerary]]"
+            api-url-format="[[apiUrlFormat]]">
+            <t-header
+                icon="home"
+                on-left-button-click="_goToSearch"
+                label="Confirmation"
+                normal-heading>
+            </t-header>
+        </t-activity-confirmation-page>
+
+    @demo demo/index.html
+-->
+
+<dom-module id="t-activity-confirmation-page">
+    <template>
+        <style include="t-car-result-item"></style>
+        <style include="iron-flex"></style>
+        <style include="travel-element-styles">
+            :host {
+                display: block;
+                font-family: var(--header-font-family, --primary-font-family);
+                font-size: var(--font-14, 14px);
+            }
+            .payable {
+                font-size: var(--font-18, 18px);
+            }
+        </style>
+
+        <content select="t-header"></content>
+
+        <t-notify id="notify" success-icon="[[successIcon]]" type="success"></t-notify>
+
+        <t-policy id="policy" 
+            label="Policies"
+            external-link
+            policies="[[bookedItinerary.itinerary.generalPolicies]]"
+            is-data-provided-by-view>
+        </t-policy>
+
+        <t-section-header class="margin-bottom" label="Trip Summary"></t-section-header>
+        
+        <t-activity-itinerary-details
+            id="itineraryDetails"
+            is-collapsible
+            itinerary="[[bookedItinerary.itinerary]]"
+            search-criteria=[[bookedItinerary.searchCriteria]]>
+        </t-activity-itinerary-details>
+
+        <t-section-header class="margin-bottom" label="Guest Info"></t-section-header>
+
+        <div class="section-small font-14 layout horizontal">
+            <template is="dom-repeat" items="[[bookedItinerary.passengers]]">
+                <span class="name flex font-16">[[_capitalize(item.title, item.firstName, item.lastName)]]</span>
+                <span class="secondary-text">Confirmation # -&nbsp;</span>
+                <span class=""> [[_getConfirmationNumber(bookedItinerary.passengerSegment)]]</span>
+            </template>
+        </div> 
+
+        <t-faredetails 
+            id="fareDetails"
+            label="Payment Details"
+            is-collapsible
+            itinerary-fare-label="Activity Rental">
+            <div class="passenger-fare-components">
+                <template is="dom-repeat" items="[[_passengerFares]]">
+                    <div class="layout horizontal item border-bottom baseFare">
+                        <span class="secondary-text">[[item.label]]</span>
+                        <span class="flex"></span>
+                        <span>[[item.currency]] [[item.fare]]</span>
+                    </div>                    
+                </template>
+            </div>
+        </t-faredetails>
+
+        <template is="dom-if" if="[[bookedItinerary.itinerary.isPostPaid]]">
+            <div class="layout horizontal section-small payable">
+                <span class="secondary-text">Due at pick-up</span>
+                <span class="flex"></span>
+                <span>[[bookedItinerary.paymentBreakup.amount.currency]] [[bookedItinerary.paymentBreakup.amount.amount]]</span>
+            </div>
+        </template>       
+
+        <t-sessionstorage
+            id="sessionStore"
+            key="Activity_Booked_Itinerary"
+            api-url-format="[[apiUrlFormat]]"
+            on-t-sessionstorage-load-success="_onSessionLoad">
+        </t-sessionstorage>
+    </template>
+
+    <script>
+        (function () {
+            
+            'use strict'
+
+            Polymer({
+                is: 't-activity-confirmation-page',
+
+                behaviors: [
+                    TravelNxt.Behaviors.ConfirmationBehavior,
+                    TravelNxt.Behaviors.DateBehavior,
+                    TravelNxt.Behaviors.PageBehavior,
+                    TravelNxt.Behaviors.ActivityPageBehavior
+                ],
+
+                properties: {                   
+                },
+
+                /*
+                * <p>translator method to set view components data</p>
+                * <p>This method overrides behavior implementation</p>
+                */
+                _setFareDetails: function () {
+                    if (!this.itinerary || !this.searchCriteria) {
+                        return;
+                    }
+
+                    if (this.itinerary.fare && this.itinerary.fare.components) {
+                        this.$.fareDetails.data = this.itinerary.fare.components.filter(function (item) {
+                            return item.type.toLowerCase() !== 'basefare';
+                        });
+
+                        this._buildFareComponents();
+                    }
+                },
+
+                /*
+                 * <p>Builds fare components to include passenger-wise prices as per passenger counts provided while pricing</p>
+                */
+                _buildFareComponents: function () {
+                    if (!this.itinerary.options || !this.itinerary.options.length) {
+                        return;
+                    }
+
+                    var paxInfo = this.itinerary.options[0].passengerTypesInfo;
+
+                    var passengerFares = [];
+
+                    for (var i = 0; i < paxInfo.length; i++) {
+
+                        if (paxInfo[i].passengerType.toLowerCase() === 'youth') {
+                            continue;
+                        }
+
+                        var baseFare = paxInfo[i].fare.components.find(function (item) {
+                            return item.type.toLowerCase() === 'basefare';
+                        });
+
+                        if (!baseFare || !this.paxCountMap || !this.paxCountMap.length) {
+                            continue;
+                        }
+
+                        var passenger = this.paxCountMap.find(function (item) {
+                            return item.type.toLowerCase() === paxInfo[i].passengerType.toLowerCase();
+                        });
+
+                        if (passenger && passenger.quantity) {
+                            passenger = parseInt(passenger.quantity);
+                        }
+
+                        if (passenger) {
+                            passengerFares.push({
+                                label: paxInfo[i].passengerType + ' x ' + passenger,
+                                fare: (baseFare.money.amount * passenger).toFixed(2),
+                                currency: baseFare.money.currency
+                            });
+                        }
+                    }
+
+                    this._passengerFares = passengerFares;
+                },
+            });
+
+        })();
+    </script>
+</dom-module>

@@ -1,0 +1,42 @@
+{
+  "name": "t-payment-page",
+  "authors": [
+    "Manoj Chalode <chalodem@gmail.com>"
+  ],
+  "description": "this is a generic payment page componentpage component ",
+  "main": "t-car-payment-page.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.4.0",
+    "t-notify": "atomelements/t-notify#^1.1.1",
+    "t-creditcard": "travelnxtElements/t-creditcard#^1.2.2",
+    "t-section-header": "atomelements/t-section-header#^1.0.4",
+    "t-address": "travelnxtElements/t-address#^1.0.2",
+    "t-checkbox": "atomelements/t-checkbox#^1.1.3",
+    "t-button": "atomelements/t-button#^1.2.0",
+    "t-car-itinerary-details": "travelnxtelements/t-car-itinerary-details#^1.0.0",
+    "t-activity-itinerary-details": "travelnxtelements/t-activity-itinerary-details#master",
+    "t-shared-lib": "travelnxtelements/t-shared-lib#^1.0.2",
+    "t-sessionstorage": "travelnxtelements/t-sessionstorage#^1.0.1",
+    "t-loader": "atomelements/t-loader#^1.1.4",
+    "t-behavior": "travelnxtelements/t-behavior"
+  },
+  "devDependencies": {
+    "t-shared-components": "atomelements/t-shared-components#^1.0.5",
+    "webcomponentsjs": "~0.7.14",
+    "iron-component-page": "PolymerElements/iron-component-page#~1.0.6",
+    "t-faredetails": "travelnxtelements/t-faredetails#^1.1.1",
+    "iron-flex-layout": "PolymerElements/iron-flex-layout#^1.2.1",
+    "t-text-container": "travelnxtelements/t-text-container#^1.1.1"
+  },
+  "homepage": "https://github.com/travelnxtelements/t-payment-page",
+  "_release": "1d09dd8790",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "1d09dd879005ad1e454ba18f84c62fd1f23deb17"
+  },
+  "_source": "git://github.com/travelnxtelements/t-payment-page.git",
+  "_target": "master",
+  "_originalSource": "travelnxtelements/t-payment-page",
+  "_direct": true
+}

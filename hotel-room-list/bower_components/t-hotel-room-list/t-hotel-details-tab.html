@@ -1,0 +1,129 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html" />
+<link rel="import" href="../t-text-container/travel-element-styles.html" />
+<!--
+A comment describing this element
+
+Example:
+
+    <my-elem></my-elem>
+
+Example:
+
+    <my-elem>
+      <h2>Hello my-elem</h2>
+    </my-elem>
+
+@demo demo/index.html
+-->
+<dom-module id="t-hotel-details-tab">
+    <template>
+        <style include="iron-flex"></style>
+        <style include="iron-flex-alignment"></style>
+        <style include="travel-element-styles">
+        :host {
+            display: block;
+        }
+        .list-item-half{
+        	width: 50%;
+    		box-sizing: border-box;
+        }
+        .list-item-half:nth-child(even){
+			padding-left: 10px;
+        }
+        </style>
+        <div class="section-small font-12 secondary-text">
+            <template is="dom-repeat" items="{{descriptions}}">
+                <template is="dom-if" if="{{item.key}}">
+                    <div class="margin-bottom font-14 primary-text font-semi">{{item.key}} </div>
+                </template>
+                <div class="margin-bottom">{{item.value}}</div>
+                <div class="border-bottom margin-bottom"></div>
+            </template>
+            <template is="dom-if" if="{{amenities.length}}">
+                <div class="margin-bottom font-semi font-14 primary-text">Amenities</div>
+                <div class="layout horizontal wrap">
+                    <template is="dom-repeat" items="{{_amenities}}" as="amenity">
+                        <div class="margin-bottom list-item-half">[[amenity.description]]</div>
+                    </template>
+                </div>
+                <template is="dom-if" if="{{showMoreAmenities}}">
+                    <a href="javascript:void(0);" class="link-style block margin-bottom" on-click="onShowAmenities">more</a>
+                </template>
+                <template is="dom-if" if="{{!showMoreAmenities}}">
+                    <a href="javascript:void(0);" class="link-style block margin-bottom" on-click="onShowAmenities">less</a>
+                </template>
+                <div class="border-bottom margin-bottom"></div>
+            </template>
+            <template is="dom-if" if="{{pointsOfInterest.length}}">
+                <div class="margin-bottom font-semi font-14 primary-text">Points of interest</div>
+                <div class="layout horizontal wrap">
+                    <template is="dom-repeat" items="{{_pointsOfInterest}}" as="poi">
+                        <div class="margin-bottom list-item-half">[[poi]]</div>
+                    </template>
+                </div>
+                <template is="dom-if" if="{{showMorePointsOfInterest}}">
+                    <a href="javascript:void(0);" class="link-style block margin-bottom" on-click="onShowPOI">more</a>
+                </template>
+                <template is="dom-if" if="{{!showMorePointsOfInterest}}">
+                    <a href="javascript:void(0);" class="link-style block margin-bottom" on-click="onShowPOI">less</a>
+                </template>
+                <div class="border-bottom margin-bottom"></div>
+            </template>
+        </div>
+    </template>
+    <script>
+    Polymer({
+        is: 't-hotel-details-tab',
+
+        properties: {
+            /*Pass the descriptions array*/
+            descriptions: {
+                type: Array,
+                value: []
+            },
+
+            /*Pass the amenities array*/
+            amenities: {
+                type: Array,
+                value: [],
+                observer: '_hideAmenities'
+            },
+
+            /*Pass the pointsOfInterest array*/
+            pointsOfInterest: {
+                type: Array,
+                value: [],
+                observer: '_hidePois'
+            }
+
+        },
+
+        _hideAmenities: function() {
+            this._amenities = this.amenities;
+            if (this.amenities && this.amenities.length > 15) {
+                this._amenities = this.amenities.slice(0, 10);
+                this.showMoreAmenities = true;
+            }
+        },
+
+        _hidePois: function() {
+            this._pointsOfInterest = this.pointsOfInterest;
+            if (this.pointsOfInterest && this.pointsOfInterest.length > 15) {
+                this._pointsOfInterest = this.pointsOfInterest.slice(0, 10);
+                this.showMorePointsOfInterest = true;
+            }
+        },
+
+        onShowAmenities: function() {
+            this._amenities = this.showMoreAmenities ? this.amenities : this.amenities.slice(0, 10);
+            this.showMoreAmenities = !this.showMoreAmenities;
+        },
+
+        onShowPOI: function() {
+            this._pointsOfInterest = this.showMorePointsOfInterest ? this.pointsOfInterest : this.pointsOfInterest.slice(0, 10);
+            this.showMorePointsOfInterest = !this.showMorePointsOfInterest;
+        }
+    });
+    </script>
+</dom-module>

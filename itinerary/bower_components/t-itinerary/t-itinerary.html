@@ -1,0 +1,401 @@
+<!--We are still creating this components -->
+<link rel="import" href="../polymer/polymer.html" />
+<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html" />
+<link rel="import" href="../iron-icons/iron-icons.html" />
+<link rel="import" href="../t-text-container/travel-element-styles.html" />
+<link rel="import" href="t-itinerary-fare-rules.html" />
+<link rel="import" href="t-itinerary-baggage-policies.html" />
+<!--
+    t-itinerary is a polymer component that generates a itinerary component.
+
+    `<t-itinerary id="flightItinerary" show-twelve-hour-clock></t-itinerary> `    
+-->
+<dom-module id="t-itinerary">
+    <template>
+    <style include="iron-flex"></style>
+    <style include="travel-element-styles">
+    :host {
+        display: block;
+        font-family: var(--primary-font-family, 'Open Sans');
+    }
+    
+    .body {
+        width: 100%;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+    
+    .sectionHeader {
+        background: var(--grey-two, #eeeeee);
+    }
+    
+    .totalDuration,
+    .layoverText {
+        margin: 0 10px;
+    }
+    
+    .techStopStar {
+        vertical-align: text-top;
+        padding-right: 2px;
+    }
+    
+    .layover {
+        margin: 20px 0;
+    }
+    
+    .layover .flex {
+        height: 1px;
+        border-top: 1px dotted;
+        border-color: var(--grey-two, #eeeeee);
+    }
+    
+    .flightDetails {
+        line-height: 1;
+    }
+    
+    .flightDetails img {
+        width: 16px;
+        height: 16px;
+        margin-right: 5px;
+    }
+    
+    .operatedText {
+        margin: 2px 0;
+    }
+    
+    .hyphen {
+        color: var(--grey-three, #bbbbbb);
+        width: 20px;
+        height: 20px;
+    }
+    
+    .icon-section {
+        width: 90px;
+    }
+    
+    .timeCityCode,
+    .totalDuration {
+        white-space: nowrap;
+    }
+    
+    :host([is-trip-summary]) .note {
+        padding: 10px 0;
+    }
+    
+    :host([is-trip-summary]) .sectionHeader {
+        background: transparent;
+        padding: 5px 0;
+        margin: 0 10px;
+        border-bottom: 1px solid;
+        border-color: var(--grey-two, #eeeeee);
+    }
+    </style>
+        <div class="body primary-light-text font-12">
+            <template is="dom-repeat" items="[[flightData]]">
+                <div class="sectionHeader section layout horizontal center">
+                    <div class="font-12 font-semi">
+                        <span>[[item.departureLocation.cityName]]</span> - <span>[[item.arrivalLocation.cityName]]</span>
+                    </div>
+                    <div class="flex"></div>
+                    <div class="totalTime">[[_getFormattedTiming(item.totalJourneyDuration)]]</div>
+                </div>
+                <div class="section">
+                    <template is="dom-repeat" items="[[item.segments]]" as="segment">
+                        <div class="layout horizontal center layover" hidden$=[[_checklayover(segment.layoverInfo)]]>
+                            <span class="flex"></span>
+                            <span class="layoverText secondary-text">Layover:&nbsp;<span>[[_getFormattedTiming(segment.layoverInfo.Duration)]]</span><span class="techStopStar font-bold" hidden$=[[_checkTechStop(segment)]]>&nbsp;*</span></span>
+                            <span class="flex"></span>
+                        </div>
+                        <div class="flightDetails layout horizontal center secondary-text margin-bottom">
+                            <img src$="[[segment.airline.imageUrl]]" alt="">
+                            <div class="layout flex">
+                                <div class="layout horizontal flex">
+                                    <div class="flex">
+                                        <span>[[_getAirlineDetail(segment)]]</span>
+                                    </div>
+                                    <div class="end-justified" hidden$="[[_isNotChangeOfGauge(segment)]]">
+                                        <span>[[_getSegmentAirports(segment)]]</span>
+                                        <span>[[_getFormattedTiming(segment.flightDuration)]]</span>
+                                    </div>
+                                </div>
+                                <template is="dom-if" if="[[_checkOperated(segment)]]">
+                                    <div class="operatedText">Operated by <span>[[segment.operatingAirline.name]]</span>.</div>
+                                </template>
+                            </div>
+                        </div>
+                        <div class="layout horizontal">
+                            <div class="text-right flex">
+                                <div class="flex text-right timeCityCode font-16 font-semi">
+                                    <span>[[_getTime(segment.departureTime)]]</span>
+                                    <span class="font-normal">[[segment.departureAirport.code]]</span>
+                                </div>
+                                <div class="date flex secondary-text">[[_getDate(segment.departureTime.date)]]</div>
+                                <div class="secondary-text">[[segment.departureAirport.name]]</div>
+                            </div>
+                            <div class="icon-section">
+                                <div class="layout vertical center " hidden$="[[_isChangeOfGauge(segment)]]">
+                                    <span>
+                                    <iron-icon class="hyphen" icon="schedule"></iron-icon>
+                                </span>
+                                    <span class="flex"></span>
+                                    <span class="totalDuration secondary-text self-center">[[_getFormattedTiming(segment.flightDuration)]]</span>
+                                </div>
+                            </div>
+                            <div class="text-left flex ">
+                                <div class="flex timeCityCode font-16 font-semi">
+                                    <span class="font-normal">[[segment.arrivalAirport.code]]</span>
+                                    <span>[[_getTime(segment.arrivalTime)]]</span>
+                                </div>
+                                <div class="date flex text-left secondary-text">[[_getDate(segment.arrivalTime.date)]]</div>
+                                <div class="secondary-text">[[segment.arrivalAirport.name]]</div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+                <div id="note" class="note" hidden$=[[_checkNotes(item)]]>
+                    <div class="border-bottom"></div>
+                    <div class="secondary-text section-small">
+                        <!-- <div>[[_getFlightText(item)]]</div> -->
+                        <div hidden$="[[_hasNoTechStops(item)]]"><span class="techStopStar font-bold">*</span>Possible change of flight - connecting flight may depart from a different terminal.</div>
+                    </div>
+                </div>
+            </template>
+            <div class="border-bottom"></div>
+            <div class="layout horizontal center font-12 flex">
+                <template is="dom-if" if="[[showFareRules]]">
+                    <div class="section-small">
+                        <t-itinerary-fare-rules label="Fare Rules" api-relative-url="[[apiRelativeUrl]]" api-base-url="[[baseApiUrl]]" auth-token="[[authToken]]" search-id="[[searchId]]" inventory-id="[[inventoryId]]">
+                        </t-itinerary-fare-rules>
+                    </div>
+                </template>
+                <template is="dom-if" if="[[_checkBothRules(showFareRules,showBaggageRules)]]">
+                    <span>|</span>
+                </template>
+                <template is="dom-if" if="[[showBaggageRules]]">
+                    <div class="section-small">
+                        <t-itinerary-baggage-policies label="Baggage Information" api-base-url="[[baggageBaseUrl]]" auth-token="[[authToken]]" airline-codes="[[_setAirlineCodes(flightData)]]" baggage-url="[[baggageUrl]]">
+                        </t-itinerary-baggage-policies>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </template>
+</dom-module>
+<script>
+Polymer({
+
+    is: 't-itinerary',
+
+    properties: {
+
+        /*Itinerary is the API json object to pass in the component which will populate the data*/
+        flightData: {
+            type: Array,
+            value: function() {
+                return [];
+            },
+            notify: true
+        },
+
+        /**
+         * Search results id returned in listing response
+         */
+        searchId: {
+            type: String,
+            value: "",
+        },
+
+        /**
+         * Selected flight  id returned in search results response
+         */
+        inventoryId: {
+            type: String,
+            value: ""
+        },
+
+        /**
+         * Authentication token
+         */
+        authToken: String,
+
+        baseApiUrl: {
+            type: String,
+        },
+
+        /**
+         * airline codes required to fetch baggage policies
+         */
+        airlineCodes: Array,
+
+        /**
+         * Mandatory field if Baggage policies are required
+         */
+        baggageUrl: String,
+
+        /**
+         * Mandatory field if Baggage policies are required
+         */
+        baggageBaseUrl: String,
+
+
+        /*Pass true to switch to 12 hour clock*/
+        showTwelveHourClock: {
+            type: Boolean,
+            value: false
+        },
+
+        /*Pass true to show Fare rules*/
+        showFareRules: {
+            type: Boolean,
+            value: false
+        },
+
+        /*Pass true to show Baggage rules*/
+        showBaggageRules: {
+            type: Boolean,
+            value: false
+        },
+
+        _flightNumbers: {
+            type: Array
+        },
+
+        _operatingAirlines: {
+            type: Array
+        },
+
+        _checkOperated: {
+            type: Boolean,
+            value: false
+        },
+    },
+
+    _checkBothRules: function(showFareRules,showBaggageRules){
+        return showFareRules && showBaggageRules;
+    },
+
+    _setAirlineCodes: function(legs) {
+        var airlineCodes = [];
+        legs.forEach(function(leg) {
+            leg.segments.forEach(function(segment) {
+                if (airlineCodes.indexOf(segment.airline.code) == -1) {
+                    airlineCodes.push(segment.airline.code);
+                }
+            })
+        })
+        return airlineCodes;
+    },
+
+    _isChangeOfGauge: function(segment) {
+        return segment.id === -1 || segment.changeOfGaugeInfo != null;
+    },
+
+    _isNotChangeOfGauge: function(segment) {
+        return !(segment.id !== -1 && segment.changeOfGaugeInfo != null);
+    },
+
+    _getAirlineDetail: function(segment) {
+        var airline = segment.airline;
+        return airline.name + ' ' + airline.code + ' ' + segment.flightNumber + ' | ' + segment.cabinType;
+    },
+
+    _getSegmentAirports: function(segment) {
+        if (segment.changeOfGaugeInfo)
+            return segment.departureAirport.code + ' -> ' + segment.changeOfGaugeInfo.FinaleAirport.code;
+    },
+
+    _checklayover: function(layover) {
+        return layover == null;
+    },
+
+    _getDate: function(date) {
+
+        return date.slice(0, 11);
+    },
+
+    _get24HourTime: function(time) {
+        var hours = parseInt(time.substr(0, 2));
+        if (time.indexOf('AM') != -1) {
+            if (hours < 10)
+                time = '0' + time;
+            if (hours == 12)
+                time = time.replace('12', '00');
+        }
+        if (time.indexOf('PM') != -1 && hours < 12) {
+            time = time.replace(hours, (hours + 12));
+        }
+        return time.replace(/(AM|PM)/, '').trim();
+    },
+
+    _getTime: function(dateTime) {
+        var time = dateTime.time;
+        if (!this.showTwelveHourClock) {
+            time = this._get24HourTime(dateTime.time);
+        }
+        return time.trim().toLowerCase();
+    },
+
+    /*To check tech stops at a segment level*/
+    _checkTechStop: function(segment) {
+        return segment.id < 0 ? false : true;
+    },
+
+    _hasNoTechStops: function(item) {
+        var hasNoTechStops = true;
+        item.segments.forEach(function(segment) {
+            if (segment.id < 0)
+                hasNoTechStops = false;
+        });
+        return hasNoTechStops;
+    },
+
+    _checkNotes: function(item) {
+        var hasNote = false;
+        item.segments.forEach(function(segment) {
+            if (segment.id < 0) {
+                hasNote = true;
+            }
+        });
+        return (!hasNote);
+    },
+
+    _getFlightInformation: function(item) {
+        var component = this;
+        var response = {};
+        var _flightNumbers = [];
+        var _operatingAirlines = [];
+        item.segments.forEach(function(segment) {
+            if (segment.operatingAirline != null && segment.operatingAirline.code != segment.airline.code && segment.operatingAirline.name !== null) {
+                _flightNumbers.push(segment.flightNumber);
+                _operatingAirlines.push(segment.operatingAirline.name);
+            }
+        });
+
+        response.flightNumbers = _flightNumbers;
+        response.operatingAirlines = _operatingAirlines;
+        return response;
+    },
+
+    _checkOperated: function(item) {
+        if (item.operatingAirline && item.airline.code !== item.operatingAirline.code && item.operatingAirline.name) {
+            return true;
+        }
+        return false;
+    },
+
+    _getFormattedTiming: function(time) {
+        var t = "";
+        var day = time / (24 * 60);
+        var hour = (time % (24 * 60)) / 60;
+        var minute = (time % (24 * 60)) % 60;
+        if (parseInt(day) > 0)
+            t = t + parseInt(day) + "d ";
+        if (parseInt(hour) > 0)
+            t = t + parseInt(hour) + "h ";
+        if (parseInt(minute) > 0)
+            t = t + parseInt(minute) + "m ";
+        return t.trim();
+    },
+})
+</script>

@@ -1,0 +1,136 @@
+<link rel="import" href="../polymer/polymer.html" />
+<link rel="import" href="../iron-ajax/iron-ajax.html">
+<link rel="import" href="../t-shared-lib/t-provider-behavior.html" />
+<!--
+    <h3>Details:</h3>
+
+        `t-policy-provider` is api component which fetches policies from Api and returns them to view which using this component
+
+    <h3>Events:</h3>
+
+        following events are fired by this component
+
+            1. 'policy-success' - fired upon successful search call
+            2. 'policy-error' - fired if search call is failed
+
+    <h3>Example:</h3>
+
+        <t-policy-provider
+            api-relative-url="{{apiRelativeUrl}}" 
+            api-base-url="{{apiBaseUrl}}"
+            auth-token="{{authToken}}"
+            search-id="{{searchId}}"
+            inventory-id="{{inventoryId}}"
+            on-policy-success="{{_onPolicySuccessMethod}}"
+            on-policy-error="{{onPolicyErrorMethod}}">
+        </t-policy-provider>
+
+    @demo demo/index.html
+-->
+<dom-module id="t-policy-provider">
+    <template>
+        <iron-ajax id="ajaxCall" 
+            method="POST"            
+            content-type="application/json"
+            handle-as="json"
+            verbose>
+        </iron-ajax>
+    </template>
+</dom-module>
+<script>
+    Polymer({
+        is: 't-policy-provider',
+
+        properties: {
+
+            /**
+             * Search results id returned in listing response
+             * @type {String}
+             */
+            searchId: String,
+
+            /**
+             * Selected flight id returned in itinerary level
+             * @type {String}
+             */
+            inventoryId: String,
+
+            /**
+             * The ajax request object
+             * @type {Object}
+             */
+            ajaxCall: {
+                type: Object,
+                notify: true,
+                readOnly: true
+            }
+        },
+
+        behaviors: [TravelNxt.Behaviors.ProviderBehavior],
+
+        listeners: {
+            'ajaxCall.response': '_successCallback',
+            'ajaxCall.error': '_errorCallback',
+            'ajaxCall.request': '_requestCallback'
+        },
+
+        /**
+         * This method fetches polices.
+         * @return {[Void]}
+         */
+        getPolicies: function () {
+            var provider = this;
+
+            var buildReq = function (provider) {
+                var serviceModel = {
+                    itemInfos : [{
+                        "searchId": provider.searchId,
+                        "inventoryId": provider.inventoryId
+                    }]
+                };
+                return serviceModel;
+            }
+
+            //validate api data before initiating call
+            if (this._validateApiMeta()) {
+                this.$.ajaxCall.url = this._getUrl();
+                this.$.ajaxCall.body = JSON.stringify(buildReq(this));
+                this.$.ajaxCall.generateRequest();
+            }
+        },
+
+        /**
+         * This is callback method which listens to `ajaxCall.request`. It fires `policy-request` event
+         * @return {[Void]}
+         */
+        _requestCallback: function () {
+            this.fire('policy-request', this.$.ajaxCall.toRequestOptions(), { bubbles: false });
+        },
+
+        /**
+         * This is callback method which listens to `ajaxCall.response`. It fires `policy-error` and `policy-success` according to response received
+         * @param  {[Event]} event
+         * @return {[Void]}
+         */
+        _successCallback: function (event) {
+            if (!event.detail.response || !event.detail.response.status)
+                this.fire('policy-error', 'Operation error occured, please try again.', { bubbles: false });
+            else if (!event.detail.response.status.isSuccessful) {
+                this.fire('policy-error', event.detail.response.status.message, { bubbles: false });
+            }
+
+            else {
+                this.fire('policy-success', event.detail.response, { bubbles: false });
+            }
+        },
+
+        /**
+         * This is callback method which listens to `ajaxCall.error`. It fires `policy-error` event.
+         * @param  {[Event]} event
+         * @return {[Void]}
+         */
+        _errorCallback: function (event) {
+            this.fire('policy-error', 'Connection error occured, please try again.', { bubbles: false })
+        }
+    })
+</script>

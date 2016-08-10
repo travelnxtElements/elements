@@ -1,0 +1,343 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../t-image/t-image.html">
+<link rel="import" href="../t-button/t-button.html">
+<link rel="import" href="../t-text-container/travel-element-styles.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../t-shared-lib/t-fare-behavior.html">
+<link rel="import" href="../t-car-category-item/t-car-category-item.html">
+<!--
+    <h3>Details:</h3>
+
+        `t-car-result-item` is a view component used to display itenerary in result list set fetched.
+        `t-car-result-page` component integrates this component with api components
+
+    <h3>Events:</h3>
+
+        following events are fired by this component
+
+            1. `policy-click` - fired when policy link is clicked, itinerary id is provided with event.
+            2. `book-car-itinerary` - fired when user taps on Book button on itenerary
+
+    <h3>Observers:</h3>
+
+        1. `_onItineraryUpdate(itinerary)`
+    
+    <h3>Example:</h3>
+
+        <t-car-result-item 
+            car-icon="{{carIcon}}"
+            itinerary={{item}}
+            price={{minPrice}}
+            currency="{{currency}}">
+        </t-car-result-item>
+
+    @demo demo/index.html
+-->
+<dom-module id="t-car-result-item">
+    <template>
+        <style include="t-car-category-item"></style>
+        <style include="iron-flex"></style>
+        <style include="travel-element-styles">
+        :host {
+            display: block;
+            border: 0;
+            --t-button: {
+                padding: 7px;
+            }
+        }
+        .badge {
+            position: relative;
+            padding: 2px 5px;
+            background: #fd9a01;
+            color: #ffffff;
+        }
+        .badge::after,.badge::before{
+            content: "";
+            position: absolute;
+            right: 98%;
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+        }
+        .badge::before{
+            bottom: 0;
+            border-bottom: 10px solid  var(--badge-bg,#fd9a01);
+        }
+        .badge::after{
+            top: 0;
+            border-top: 10px solid  var(--badge-bg,#fd9a01);
+        }
+        .right-section {
+            margin-left: 10px;
+        }
+        .logo-area img {
+            max-height: 24px;
+        }
+        .icon-item{
+            min-width: 33px;
+        }
+        .icon-item [icon]{
+            margin: 0 auto;
+            display: block;
+        }
+        .icons-area .text{
+            margin: 0;
+            display: block;
+            text-align: center;
+        }
+        .devider{
+            margin: 0 var(--normal-spacing,10px);
+            border-bottom: 1px dashed var(--grey-two,#eeeeee);
+        }
+        .devider.last-border{
+            border-bottom: 1px solid var(--grey-two,#eeeeee);
+        }
+        .left-section .item{
+            margin-bottom: 5px;
+        }
+        .uppercase{
+        	text-transform: uppercase;
+        }
+        </style>
+        <template is="dom-if" if="[[isFirstItem]]">
+            <t-image loading-icon="[[carIcon]]" sizing="contain" class="imageArea" height="120" src="[[itinerary.heroImageUrl]]"></t-image>
+            <div class="font-12 category primary-light-text layout horizontal center border-bottom">
+                <span class="font-18 ">[[_checkNotSpecifiedCategory(itinerary.category)]]</span>
+                <span class="flex"></span>
+                <span>[[currency]]&nbsp;</span>
+                <span class="font-16">[[price]]</span>
+                <span>&nbsp;AVG PER DAY</span>
+            </div>
+        </template>
+        <div class="font-12 secondary-text">
+            <div class="section-small layout horizontal">
+                <div class="logo-area flex font-14">
+                    <template is="dom-if" if="[[itinerary.brand.logo]]">
+                        <img src$="[[itinerary.brand.logo]]" alt$="[[itinerary.brand.name]]" />
+                    </template>
+                    <template is="dom-if" if="[[!itinerary.brand.logo]]">
+                        <div class="font-semi uppercase">[[itinerary.brand.name]]</div>
+                    </template>
+                    <div>[[itinerary.name]]</div>
+                </div>
+                <template is="dom-if" if="[[itinerary.isPostPaid]]">
+                    <div class="right-section">
+                        <div class="badge font-10">BOOK NOW PAY LATER</div>
+                    </div>
+                </template>
+            </div>
+            <div class="devider"></div>
+            <div class="section-small layout horizontal">
+                <div class="icons-area flex layout horizontal">
+                    <template is="dom-if" if="[[_checkIfNotSpecified(itinerary.capacity)]]">
+	                    <div class="icon-item">
+	                        <iron-icon icon="car:seat"></iron-icon>
+	                        <span class="text">[[itinerary.capacity]]</span>
+	                    </div>
+					</template>
+                    <div class="icon-item">
+                        <iron-icon icon="car:luggage"></iron-icon>
+                        <span class="text">[[itinerary.baggage]]</span>
+                    </div>
+
+                    <div class="icon-item">
+                        <iron-icon icon="car:gear"></iron-icon>
+                        <span class="text">[[_checkIfAutomatic(itinerary.transmission)]]</span>
+                    </div>
+
+                    <template is="dom-if" if="[[_checkIfNotSpecified(itinerary.doors)]]">
+	                    <div class="icon-item">
+	                        <iron-icon icon="car:door"></iron-icon>
+	                        <span class="text">[[itinerary.doors]]</span>
+	                    </div>
+                    </template>
+                    <template is="dom-if" if="[[itinerary.airConditioning]]">
+                        <div class="icon-item">
+                            <iron-icon icon="car:ac"></iron-icon>
+                            <span class="text">AC</span>
+                        </div>
+                    </template>
+                </div>
+                <div class="right-section">
+                    <div class="text-right">
+                        <span class="font-14">[[currency]]</span>
+                        <span class="font-16 font-semi primary-text">[[_getDisplayFare(_displayPrice.money.amount)]]</span>
+                    </div>
+                    <div class="text-right">total</div>
+                </div>
+            </div>
+            <div class="devider"></div>
+            <div class="section-small layout horizontal">
+                <div class="left-section flex">
+                    <div class="item ellipsis-2">PICK-UP - [[itinerary.pickupInfo.address]]</div>
+                    <template is="dom-if" if="[[!_isSameString(itinerary.pickupInfo.address,itinerary.dropoffInfo.address)]]">
+                        <div class="item ellipsis-2">DROP-OFF - [[itinerary.dropoffInfo.address]]</div>
+                    </template>
+                    <template is="dom-if" if="[[_isSameString(itinerary.pickupInfo.address,itinerary.dropoffInfo.address)]]">
+                        <div class="item">DROP-OFF - Same as pick-up location</div>
+                    </template>
+                    <label id="policy-label" class="link-style font-12" on-tap="_policyClick">Policy</label>
+                </div>
+                <div class="right-section">
+                    <t-button id="search" class="primary" on-click="_bookCar" type="button" label="book" /></t-button>
+                </div>
+            </div>
+            <div class="devider last-border"></div>
+        </div>
+    </template>
+    <script>
+
+        (function() {
+
+            'use strict'
+
+            Polymer({
+                is: 't-car-result-item',
+
+                properties: {
+
+                    /**
+                     *  This is used to display itinerary image or not
+                     * @type {Boolean}
+                     */
+                    showImage: {
+                        type: Boolean,
+                        value: false
+                    },
+
+                    /**
+                     *  This is used to showcase the price of itinerary
+                     * @type {String}
+                     */
+                    price: {
+                        type: String,
+                        value: ''
+                    },
+
+                    /**
+                     *  This is used display currency
+                     * @type {String}
+                     */
+                    currency: {
+                        type: String,
+                        value: 'USD'
+                    },
+
+                    /**
+                     *  This is used to calculate the average fare of an itinerary(if required)
+                     * @type {Number}
+                     */
+                    bookPeriod: {
+                        type: Number
+                    },
+
+                    /**
+                     *  This the itenerary item to display
+                     * @type {Object}
+                     */
+                    itinerary: {
+                        type: Object,
+                        value: null
+                    }
+                },
+
+                behaviors: [TravelNxt.Behaviors.FareBehavior],
+
+                observers: [
+                    '_onItineraryUpdate(itinerary)'
+                ],
+
+                /**
+                 *  This method returns 'Auto' if transmission is 'Automatic', else the value passed
+                 * @param  {[String]} value This is value of itinerary transmission
+                 * @return {[String]}
+                 */
+                _checkIfAutomatic:  function(value){
+                    if(!value){
+                        return null;
+                    }
+                    if (value.toLowerCase() === 'automatic') {
+                        return 'Auto';
+                    }
+                    return value;
+                },
+
+                /**
+                 *  This method fires `policy-click` event and passes an argument object containing 'itineraryId'
+                 * @return {[void]}
+                 */
+                _policyClick: function () {
+                    this.fire('policy-click', { itineraryId: this.itinerary.id });
+                },
+
+                /**
+                 *  This method checks if capacity of itinerary is specified and returns boolean value accordingly
+                 * @param  {[String]} value This is string value of itinerary capacity
+                 * @return {[Boolean]}     
+                 */
+                _checkIfNotSpecified:  function(value){
+                    if(!value){
+                        return false;
+                    }
+                    if (value.toLowerCase() === 'notspecified') {
+                        return false;
+                    }
+                    return true;
+                },
+
+                /**
+                 *  This method Compares if both params are exactly equal (Strict check)
+                 * @param  {[String]}  val1 param 1
+                 * @param  {[String]}  val2 param 2
+                 * @return {[Boolean]}
+                 */
+                _isSameString: function(val1,val2){
+                    return val1 === val2;
+                },
+
+                /**
+                 *  This is an observer method which is called if there is change in `itinerary`
+                 * @return {[Void]}
+                 */
+                _onItineraryUpdate: function() {    
+                    if (this.itinerary && this.itinerary.fare) {
+                        this._components = this.itinerary.fare.components;
+                        this.isFirstItem = this.itinerary.isFirstItinerary;
+                    }
+                },
+
+                /**
+                 *  This method returns null if amount is not passed, else returns round figured amount
+                 * @param  {[Number]} amount This is Fare amount
+                 * @return {[Number]}
+                 */
+                _getDisplayFare: function(amount) {
+                    if (amount) {
+                        return Math.ceil(amount) ;
+                    }
+                    return null;
+                },
+
+                /**
+                 *  This method fires `book-car-itinerary` event with `itinerary` object in argument
+                 * @return {[Void]}
+                 */
+                _bookCar: function () {
+                    this.fire('book-car-itinerary', this.itinerary);
+                },
+
+                /**
+                 *  This method checks if 'category' of itinerary is 'notspecified' and returns 'other' else return the category as it is.
+                 * @param  {[String]} category This is category of given itenerary
+                 * @return {[String]}
+                 */
+                _checkNotSpecifiedCategory: function(category){
+                     return category.toLowerCase() === 'notspecified' 
+                                                    ? 'Other' 
+                                                    : category;
+                }
+            });
+        })();
+
+    </script>
+</dom-module>

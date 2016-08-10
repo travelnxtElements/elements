@@ -1,0 +1,370 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../t-sessionstorage/t-sessionstorage.html">
+<link rel="import" href="../t-shared-lib/t-date-behavior.html">
+<link rel="import" href="t-car-result-api.html">
+<link rel="import" href="t-car-category-item.html">
+<link rel="import" href="t-filter-api.html">
+<link rel="import" href="t-category-result-behavior.html">
+<link rel="import" href="../t-notify/t-notify.html">
+<link rel="import" href="../t-text-container/travel-element-styles.html">
+<link rel="import" href="../t-search-overlay/t-search-overlay.html">
+<!--
+A comment describing this element
+
+Example:
+
+    <my-elem></my-elem>
+
+Example:
+
+    <my-elem>
+      <h2>Hello my-elem</h2>
+    </my-elem>
+
+@demo demo/index.html
+-->
+<dom-module id="t-car-category-page">
+
+    <template>
+        <style include="travel-element-styles">
+            :host {
+                display: block;
+                font-family: var(--primary-font-family, 'Open sans');
+            }
+            .container {
+                background-color: #f2f2f2;
+                padding: var(--normal-spacing,10px);
+            }
+            .categoryItem {
+                margin-bottom: var(--normal-spacing,10px);
+            }
+            .categoryItem:last-of-type {
+                margin-bottom: 0;
+            }
+
+            .link {
+                color: var(--link-color,#0098ff);
+            }
+        </style>
+
+        <content select="t-header"></content>
+
+        <t-search-overlay icon="[[carIcon]]" id="loadingOverlay">
+            <div class="data">
+                <div class="font-12 text-center secondary-text overlayData">
+                    <div class="font-16">
+                        Pick-up from
+                    </div>
+                    <div>
+                        [[searchCriteria.pickupLocation.formattedAddress]]
+                    </div>
+                    <div class="margin-bottom-medium">[[_getDate(searchCriteria.pickupDate)]]&nbsp;[[searchCriteria.pickupTime]]</div>
+                    <div class="font-16">
+                        Drop-off to
+                    </div>
+                    <div>
+                        [[searchCriteria.dropoffLocation.formattedAddress]]
+                    </div>
+                    <div>[[_getDate(searchCriteria.dropoffDate)]]&nbsp;[[searchCriteria.dropoffTime]]</div>
+                </div>
+            </div>
+            <div class="footer">
+                <img src="[[siteLogoUrl]]" title="[[siteLogoUrl]]" alt="" style="width:232px;">
+            </div>
+        </t-search-overlay>
+
+        <template is="dom-if" if="[[!list.length]]">
+            <div class="error-message section-small font-12 secondary-text">
+                <div>We could not find any cars for your search.</div>
+                <div>
+                    <a class="link" on-click="_redirectToPage" >modify search</a>
+                </div>
+            </div>
+        </template>
+
+        <div class="container" hidden$="[[!list.length]]">
+            <template id="list" is="dom-repeat" items="[[list]]">
+                <t-car-category-item
+                    class="categoryItem" 
+                    on-tap="_itemSelected"
+                    category= "[[item.category]]"
+                    url="[[item.url]]"
+                    car-icon="[[carIcon]]"
+                    price="[[item.price]]"
+                    currency="[[currency]]"
+                    capacity-range="[[item.capacityRange]]"
+                    baggage-range="[[item.baggageRange]]"
+                    gear="[[item.gear]]"
+                    door-range="[[item.doorRange]]"
+                    air-conditioning="[[item.airConditioning]]">
+                </t-car-category-item>
+            </template>
+        </div>
+
+        <t-car-result-api
+            id="resultApi"
+            loading="{{loading}}"            
+            api-base-url="[[apiBaseUrl]]"
+            api-relative-url="api/Car/results/[[searchId]]"
+            auth-token="[[authToken]]"
+            on-t-car-result-api-success="_onResultSuccess"
+            on-t-car-result-api-error="_onResultError">
+        </t-car-result-api>
+
+        <t-filter-api
+            id="filterApi"
+            loading="{{loading}}"
+            api-base-url="[[apiBaseUrl]]"
+            api-relative-url="api/car/filter/[[searchId]]"
+            auth-token="[[authToken]]"
+            on-t-filter-api-success="_onFilterSuccess"
+            on-t-filter-api-error="onFilterError">
+        </t-filter-api>
+        
+        <t-sessionstorage
+            id="sessionStore"
+            key="Car_Category_Data"
+            api-url-format="[[apiUrlFormat]]"
+            on-t-sessionstorage-load-success="onSessionLoad">
+        </t-sessionstorage>
+    </template>
+
+    <script>
+
+        (function () {
+
+            'use strict'
+
+            Polymer({
+
+                is: 't-car-category-page',
+
+                behaviors: [
+                    TravelNxt.Behaviors.DateBehavior,
+                    TravelNxt.Behaviors.CategoryResultBehavior
+                ],
+
+                properties: {
+
+                    visible: {
+                        type: Boolean,
+                        value: false,
+                        notify: true
+                    },
+
+                    /*
+                     * <p>This string is query string containing token value</p>
+                     */
+                    authToken: String,
+
+                    /*
+                     * <p>This property holds the value of api base URL</p>
+                     */
+                    apiBaseUrl: String,
+
+
+                    /*
+                     * <p>This property holds the value of web api URL format</p>
+                     */
+                    apiUrlFormat: String,
+
+
+                    /*
+                     * <p>This property holds the value of currency</p>
+                     */
+                    currency: {
+                        type: String,
+                        value: 'USD'
+                    },
+
+                    /*
+                     * <p>This property holds the value of selected category</p>
+                     */
+                    selectedCategory: {
+                        type: String,
+                        notify: true
+                    },
+
+                    /*
+                     * <p>This property holds the value of minimum price for selected category</p>
+                     */
+                    minPrice: {
+                        type: String,
+                        notify: true
+                    },
+
+                    /*
+                     * <p>This property holds the value of minimum price for selected category</p>
+                     */
+                    searchId: {
+                        type: String,
+                        notify: true
+                    },
+
+                    list: {
+                        type: Array,
+                        value: [],
+                        observer: '_renderList'
+                    }
+                },
+
+                /*
+                 * <p>Event handler method called when `t-car-search-api-error` event is fired</p>
+                 */
+                observers: [
+                    '_visibleChange(visible)',
+                    '_onSearchIdUpdate(authToken, searchId)',
+                    '_processResultData(_categoryResult, _filterResult, searchCriteria)'
+                ],
+
+                _visibleChange: function (visible) {
+                    if (visible && (!this.searchId || !this.authToken)) {
+                        this.fire('go-to-search');
+                    }
+                },
+
+                /*
+                 * <p>Event handler method called when `t-car-search-api-error` event is fired</p>
+                 */
+                _onSearchIdUpdate: function (authToken, searchId) {
+                    if (!searchId || !authToken) {
+                        return;
+                    }
+                    this.$.sessionStore.load();
+
+                    //starting the overlay
+                    this.$.loadingOverlay.value = 0;
+                    this.$.loadingOverlay.active = true;
+
+                    this.$.resultApi.queryParams = [{
+                        '$select': 'Category,Capacity,Baggage,AirConditioning,Transmission,Doors,HeroImageUrl'
+                    }];
+                    this.$.resultApi.search();
+                    this.$.filterApi.getFilters();
+                },
+
+                /*
+                 * <p>Event handler method called when `t-car-search-api-success` event is fired</p>
+                 */
+                _onResultSuccess: function (e) {
+
+                    if (!e.detail) {
+                        this._categoryResult = [];
+                        return;
+                    }
+                    this._categoryResult = e.detail.inventories;
+                },
+
+                /*
+                 * <p>Event handler method called when `t-car-search-api-error` event is fired</p>
+                 */
+                _onResultError: function (e) {
+
+                    //ending the overlay
+                    this.$.loadingOverlay.value = 100;
+
+                    this.list = [];
+                    console.error(e.detail);
+                    this.fire('t-car-search-error', e.detail);
+                },
+
+                /*
+                 * <p>Event handler method called when `t-car-search-api-error` event is fired</p>
+                 */
+                _onFilterSuccess: function (e) {
+
+                    if (!e.detail) {
+
+                        //ending the overlay
+                        this.$.loadingOverlay.value = 100;
+
+                        console.error('something blew up!');
+                        return;
+                    }
+
+                    this._filterResult = e.detail.filters;
+                },
+
+                /*
+                 * <p>Event handler method called when `t-car-search-api-error` event is fired</p>
+                 */
+                onFilterError: function (e) {
+
+                    //ending the overlay
+                    this.$.loadingOverlay.value = 100;
+
+                    console.error(e.detail);
+                    this.fire('t-car-search-error', e.detail);
+                },
+
+
+
+                /*
+                 * <p>Event handler method called when `t-car-search-api-error` event is fired</p>
+                 */
+                _renderList: function () {
+                    //if (this.list && this.list.length) {
+                        this.$.list.render();
+                        //ending the overlay
+                        this.$.loadingOverlay.value = 100;
+                    //}
+                },
+
+                /*
+                 * <p>Event handler method called when `t-car-search-api-error` event is fired</p>
+                 */
+                _onSearchIdUpdate: function (searchId) {
+                    if (!searchId ) {
+                        return;
+                    }
+                    this.$.sessionStore.load();
+
+                    //starting the overlay
+                    this.$.loadingOverlay.value = 0;
+                    this.$.loadingOverlay.active = true;
+
+                    this.$.resultApi.queryParams = [{
+                        '$select': 'Category,Capacity,Baggage,AirConditioning,Transmission,Doors,HeroImageUrl'
+                    }];
+                    this.$.resultApi.search();
+                    this.$.filterApi.getFilters();
+                },
+
+                _itemSelected: function (e) {
+                    this.minPrice = e.currentTarget.price;
+                    this.selectedCategory = e.currentTarget.category;
+
+                    var sessionObject = this._getSessionObject();
+
+                    this.$.sessionStore.value = sessionObject;
+                    this.$.sessionStore.save();
+
+                    this.selectedCategory = sessionObject.selectedCategory;
+                    this.minPrice = sessionObject.minPrice;
+
+                    this.fire('car-category-select', sessionObject);
+                },
+
+                _redirectToPage: function() {
+                    this.fire('go-to-search');
+                },
+
+                onSessionLoad: function () {
+                    if (this.$.sessionStore.value) {
+                        this.selectedCategory = this.$.sessionStore.value.selectedCategory;
+                        this.minPrice = this.$.sessionStore.value.minPrice;
+                    }
+                },
+
+                _getSessionObject: function () {
+                    return {
+                        selectedCategory: this.selectedCategory,
+                        minPrice: this.minPrice
+                    };
+                }
+            });
+
+        })();
+    </script>
+
+</dom-module>

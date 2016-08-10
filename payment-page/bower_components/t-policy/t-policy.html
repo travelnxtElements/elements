@@ -1,0 +1,241 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../t-text-container/travel-element-styles.html" />
+<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html" />
+<link rel="import" href="../juicy-html/juicy-html.html">
+<link rel="import" href="../t-overlay/t-overlay.html">
+<link rel="import" href="../t-header/t-header.html">
+<link rel="import" href="../t-loader/t-loader.html">
+<link rel="import" href="t-policy-provider.html">
+<!--
+    <h3>Details:</h3>
+
+        `t-policy` is a view component used to display policies of selected itinerary.
+        Polices can be either fetched from apis or can be passed to this component.
+        This component provides a link, on tap of which policy view is triggered.
+        However there can be third party link which can trigger `initiatePolicyCall`.
+        It is integrated with the view compenent consisting an itinerary.
+        It consists of following compoenents:
+            1. `t-overlay`
+            2. `t-notify`
+            3. `t-policy-provider`
+
+    <h3>Example:</h3>
+
+        <t-policy id="policy"
+            external-link
+            label="{{'Policies'}}"
+            api-relative-url="{{apiRelativeUrl}}"
+            api-base-url="{{apiBaseUrl}}"
+            auth-token="{{authToken}}"
+            search-id="{{searchId}}">
+        </t-policy>
+
+    @demo demo/index.html
+-->
+<dom-module id="t-policy">
+    <template>
+        <style include="iron-flex"></style>
+        <style include="travel-element-styles">
+            :host {
+                display: block;
+                font-family: var(--primary-font-family, 'Open Sans');
+            }
+        </style>
+        <label class="link-style font-12" on-tap="initiatePolicyCall" hidden$="[[externalLink]]">[[label]]</label>
+        <t-overlay id="overlay" header="[[label]]">
+            <template is="dom-if" if="{{_policyLoading}}">
+                <div class="section font-14 text-center">
+                    Please wait, we are fetching [[label]] for your selected itinerary.
+                </div>
+                <div class="horizontal layout flex center-justified">
+                    <t-loader active></t-loader>
+                </div>
+            </template>
+            <template is="dom-if" if="{{_policyFailed}}">
+                <t-notify active message="Sorry we are having difficulties fetching [[label]]."></t-notify>
+            </template>
+            <div class="section">
+                <template is="dom-repeat" items="{{policies}}">
+                    <template is="dom-if" if="[[item.policies.length]]">
+                        <div class="font-16 border-bottom margin-bottom">[[item.type]]</div>
+                        <template is="dom-repeat" items="{{item.policies}}" as="policy">
+                            <div class="font-12 margin-bottom-medium">
+                                <template is="juicy-html" content$="[[policy]]" ></template>                        
+                            </div>
+                        </template>             
+                    </template>    
+                </template>
+            </div>
+        </t-overlay>
+        <t-policy-provider
+            id="PolicyProvider" 
+            api-relative-url="[[apiRelativeUrl]]" 
+            api-base-url="[[apiBaseUrl]]"
+            auth-token="[[authToken]]"
+            search-id="[[searchId]]"
+            inventory-id="[[inventoryId]]"
+            on-policy-success="_onPolicySuccess"
+            on-policy-error="onPolicyError">
+        </t-policy-provider>
+    </template>
+    
+        <script>
+        (function () {
+
+            'use strict'
+
+            Polymer({
+                is: 't-policy',
+
+                properties: {
+
+                    /**
+                     * This is label which is displayed on default link provided and in the header of view
+                     * @type {String}
+                     */
+                    label: String,
+
+                    /**
+                     * Stores inventory id of selected inventory
+                     * @type {String}
+                     */
+                    inventoryId: String,
+
+                    /**
+                     * Stores search id of recent search
+                     * @type {String}
+                     */
+                    searchId: String,
+
+                    /**
+                     * Stores auth token of apis
+                     * @type {String}
+                     */
+                    authToken: String,
+
+                    /**
+                     * Stores api Base Url
+                     * @type {[type]}
+                     */
+                    apiBaseUrl: String,
+
+                    /**
+                     * Stores relative url of api
+                     * @type {String}
+                     */
+                    apiRelativeUrl: String,
+
+                    /**
+                     * Made true when external link behavior is to be applied
+                     * @type {Boolean}
+                     */
+                    externalLink: {
+                        type: Boolean,
+                        value: false
+                    },
+
+                    /**
+                     * True when policy is loading
+                     * @type {Object}
+                     */
+                    _policyLoading: {
+                        type: Boolean,
+                        computed: '_computeIfPolicy(policies, _policyFailed)'
+                    },
+
+                    /**
+                     * True if policy call fails
+                     * @type {Boolean}
+                     */
+                    _policyFailed: {
+                        type: Boolean,
+                        value: false
+                    },
+
+                    /**
+                     * Array of policies
+                     * @type {Array}
+                     */
+                    policies: Array,
+
+                    /**
+                     * This is true if policies are provided by view itself. In that case no need to set `searchId`, `inventoryId`, `apiRelativeUrl`, `authToken`
+                     * @type {Object}
+                     */
+                    isDataProvidedByView: {
+                        type: Boolean,
+                        value: false
+                    }
+                },
+
+                /**
+                 * This is event driven method called when `policy-success` event is triggered
+                 * @param  {[event]} event
+                 * @return {[Void]}
+                 */
+                _onPolicySuccess: function (event) {
+                    if (!this.policies) {
+                        if (event.detail.addToCartItemResult && event.detail.addToCartItemResult.length && event.detail.addToCartItemResult[0].inventory && event.detail.addToCartItemResult[0].inventory.generalPolicies) {
+                            this.policies = event.detail.addToCartItemResult[0].inventory.generalPolicies;
+                        } else {
+                            this.onPolicyError();
+                        }
+                    }
+                    this._policyFailed = false;
+                },
+
+                /**
+                 * This method computes `policyLoading`
+                 * @param  {[Array]} policies
+                 * @param  {[Boolean]} _policyFailed
+                 * @return {[Boolean]}
+                 */
+                _computeIfPolicy: function (policies, _policyFailed) {
+                    if (policies) {
+                        return false;
+                    }
+                    if (_policyFailed) {
+                        return false;
+                    }
+                    return true;
+                },
+
+                /**
+                 * Called when policy fetch call fails. Can be call externally.
+                 * @return {[Void]}
+                 */
+                onPolicyError: function () {
+                    this._policyFailed = true;
+                },
+
+                /**
+                 * Called to initialize policy view. It hides the overlay initially
+                 * @return {[Void]}
+                 */
+                initiatePolicyView: function () {
+                    //hide overlay
+                    this.$.overlay.active = false;
+                },
+
+                /**
+                 * This method will initiate a call to Policies
+                 * @return {[Void]}
+                 */
+                initiatePolicyCall: function () {
+                    //active overlay
+                    this.$.overlay.active = true;
+
+                    if (!this.policies) {
+                        //make call to provider
+                        this._policyFailed = false;
+                        this.policies = null;
+                        if (!this.isDataProvidedByView) {
+                            this.$.PolicyProvider.getPolicies();
+                        }
+                    }
+                }
+            });
+        
+        })();
+        </script>
+</dom-module>

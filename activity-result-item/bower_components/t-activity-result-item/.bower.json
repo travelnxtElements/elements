@@ -1,0 +1,37 @@
+{
+  "name": "t-activity-result-item",
+  "authors": [
+    "Ganesh Ratnaparkhi <ganeshr43@gmail.com>"
+  ],
+  "description": "This component renders an activty item. The item is passed from page parent view who fetches results in multi avail call.",
+  "main": "t-activity-result-item.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.4.0",
+    "t-image": "atomelements/t-image#^1.2.1",
+    "t-sessionstorage": "travelnxtElements/t-sessionstorage#^1.0.0",
+    "t-notify": "atomelements/t-notify#^1.1.1",
+    "t-text-container": "travelnxtElements/t-text-container#^1.0.0",
+    "t-shared-lib": "travelnxtelements/t-shared-lib#^1.0.0",
+    "t-search-overlay": "travelnxtElements/t-search-overlay#^1.0.0",
+    "t-list": "atomelements/t-list#^1.1.3",
+    "t-behavior": "travelnxtelements/t-behavior#master"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.0.0",
+    "web-component-tester": "^4.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0",
+    "t-shared-components": "atomelements/t-shared-components#^1.0.5"
+  },
+  "homepage": "https://github.com/travelnxtelements/t-activity-result-item",
+  "_release": "9226e6a0cc",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "9226e6a0cc6d52b2cd46fdf17c3588c764335c4c"
+  },
+  "_source": "git://github.com/travelnxtelements/t-activity-result-item.git",
+  "_target": "master",
+  "_originalSource": "travelnxtelements/t-activity-result-item",
+  "_direct": true
+}

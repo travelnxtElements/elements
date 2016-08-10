@@ -1,0 +1,27 @@
+{
+    "name": "Car Itinerary Details",
+    "properties": [
+        {
+            "name": "Properties",
+            "fields": {
+                "isCollapsible": {
+                    "name": "isCollapsible",
+                    "type": "boolean",
+                    "value": false
+                },
+                "itinerary": {
+                    "name": "itinerary",
+                    "type": "object"
+                },
+                "searchCriteria": {
+                    "name": "searchCriteria",
+                    "type": "object"
+                },
+                "searchId": {
+                    "name": "searchId",
+                    "type": "string"
+                }
+            }
+        }
+    ]
+}

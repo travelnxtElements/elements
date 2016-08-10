@@ -1,0 +1,78 @@
+{
+    "name": "Points Payment",
+    "properties": [
+        {
+            "name": "Properties",
+            "fields": {
+                "currency": {
+                    "name": "currency",
+                    "type": "string",
+                    "value": ""
+                },
+                "errorMessage": {
+                    "name": "errorMessage",
+                    "type": "string",
+                    "value": ""
+                },
+                "farePoints": {
+                    "name": "farePoints",
+                    "type": "number",
+                    "value": 0
+                },
+                "isValidPoints": {
+                    "name": "isValidPoints",
+                    "type": "boolean",
+                    "value": false
+                },
+                "maxPoints": {
+                    "name": "maxPoints",
+                    "type": "number",
+                    "value": 0
+                },
+                "payableByCard": {
+                    "name": "payableByCard",
+                    "type": "number",
+                    "value": 0
+                },
+                "payableByPoints": {
+                    "name": "payableByPoints",
+                    "type": "number",
+                    "value": 0
+                },
+                "pointsFactor": {
+                    "name": "pointsFactor",
+                    "type": "number",
+                    "value": 0
+                },
+                "pointsToBeUsed": {
+                    "name": "pointsToBeUsed",
+                    "type": "number",
+                    "value": 0
+                },
+                "roomFare": {
+                    "name": "roomFare",
+                    "type": "object"
+                },
+                "showBreakup": {
+                    "name": "showBreakup",
+                    "type": "boolean",
+                    "value": false
+                },
+                "showPointsSection": {
+                    "name": "showPointsSection",
+                    "type": "boolean",
+                    "value": false
+                },
+                "totalFare": {
+                    "name": "totalFare",
+                    "type": "number",
+                    "value": 0
+                },
+                "userPoints": {
+                    "name": "userPoints",
+                    "type": "number"
+                }
+            }
+        }
+    ]
+}

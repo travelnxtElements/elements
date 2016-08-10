@@ -1,0 +1,37 @@
+{
+  "name": "t-points-payment",
+  "version": "1.0.9",
+  "authors": [
+    "Manoj Chalode <chalodem@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "keywords": [
+    "Polymer",
+    "Web",
+    "Components"
+  ],
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0",
+    "t-button": "atomelements/t-button#master",
+    "t-input": "atomelements/t-input#master",
+    "t-text-container": "travelnxtElements/t-text-container#master",
+    "t-shared-lib": "travelnxtelements/t-shared-lib",
+    "t-shared-components": "atomelements/t-shared-components#^1.0.5"
+  },
+  "devDependencies": {
+    "web-component-tester": "*",
+    "webcomponentsjs": "~0.7.14",
+    "iron-component-page": "PolymerElements/iron-component-page#~1.0.6"
+  }
+}

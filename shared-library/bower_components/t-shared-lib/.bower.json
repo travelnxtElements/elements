@@ -1,0 +1,41 @@
+{
+  "name": "t-shared-lib",
+  "authors": [
+    "Rahul Pilkhwal <rahul.pilkhwal@tavisca.com>",
+    "Shailesh Kumar Srivastava <ssrivastava@tavisca.com>",
+    "Sounak Pal <spal@tavisca.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "keywords": [
+    "Polymer",
+    "Web",
+    "Components"
+  ],
+  "homepage": "https://github.com/travelnxtelements/t-shared-lib",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "^1.6.1"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.6"
+  },
+  "_release": "c4ade7500c",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "c4ade7500ca933e29e4041cfcf885b6519c05e7a"
+  },
+  "_source": "git://github.com/travelnxtelements/t-shared-lib.git",
+  "_target": "master",
+  "_originalSource": "travelnxtelements/t-shared-lib",
+  "_direct": true
+}

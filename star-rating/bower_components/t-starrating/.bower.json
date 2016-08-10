@@ -1,0 +1,45 @@
+{
+  "name": "t-starrating",
+  "authors": [
+    "Rahul Pilkhwal <rahul.pilkhwal@tavisca.com>",
+    "Shailesh Kumar Srivastava <ssrivastava@tavisca.com>",
+    "Sounak Pal <spal@tavisca.com>",
+    "Ajinkya Tejankar <tejankarajinkya@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "keywords": [
+    "Polymer",
+    "Web",
+    "Components"
+  ],
+  "homepage": "https://github.com/travelnxtelements/t-starrating",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "iron-icons": "PolymerElements/iron-icons#^1.0.3",
+    "paper-icon-button": "PolymerElements/paper-icon-button#^1.0.3",
+    "polymer": "Polymer/polymer#^1.0.0"
+  },
+  "devDependencies": {
+    "webcomponentsjs": "^0.7.14",
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.6"
+  },
+  "_release": "0fb1176fb1",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "0fb1176fb1b3268e1f8364309ee99ac72f563339"
+  },
+  "_source": "git://github.com/travelnxtelements/t-starrating.git",
+  "_target": "master",
+  "_originalSource": "travelnxtelements/t-starrating",
+  "_direct": true
+}

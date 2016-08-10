@@ -1,0 +1,43 @@
+{
+  "name": "t-tabs-v2",
+  "version": "1.0.1",
+  "authors": [
+    "Sounak Pal <talk2sounak@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "keywords": [
+    "Polymer",
+    "Web",
+    "Components"
+  ],
+  "homepage": "https://github.com/atomelements/t-tabs-v2",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "paper-tabs": "PolymerElements/paper-tabs#^1.2.3",
+    "iron-flex-layout": "PolymerElements/iron-flex-layout#^1.0.0",
+    "polymer": "Polymer/polymer#^1.1.0"
+  },
+  "devDependencies": {
+    "web-component-tester": "*",
+    "webcomponentsjs": "~0.7.14",
+    "iron-component-page": "PolymerElements/iron-component-page#~1.0.6"
+  },
+  "_release": "1.0.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.0.1",
+    "commit": "38e209e6537321a740113b585c702878cf3b1126"
+  },
+  "_source": "git://github.com/atomelements/t-tabs-v2.git",
+  "_target": "^1.0.0",
+  "_originalSource": "atomelements/t-tabs-v2"
+}

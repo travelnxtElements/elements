@@ -1,0 +1,316 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../t-autosuggest/t-autosuggest.html">
+<link rel="import" href="../t-calendar/t-calendar.html">
+<link rel="import" href="../t-button/t-button.html">
+<link rel="import" href="../t-stepper/t-stepper.html">
+<link rel="import" href="../t-dropdown/t-dropdown.html">
+<link rel="import" href="../t-notify/t-notify.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../t-shared-lib/t-form-behavior.html" />
+<link rel="import" href="../t-text-container/t-search-form-styles.html" />
+<!--
+This component is a form that fires an event with search request object on successfull submission. 
+
+There are two  properties that are required to run this form which initialize the location autosuggest. These are
+`data-url`, `query-params`.
+
+This component triggers the event `t-hotel-search-validate` with an object containing values of all input fields in event details.
+Object created with the `t-hotel-search-validate`:
+
+    {
+        location: this.location,
+        checkIn: this.checkIn,
+        checkOut: this.checkOut,
+        adultCount: this.adultCount,
+        childCount: this.childCount,
+        childAges: this.childAges
+    }
+
+To preselect some value in the form pass the value of the property while initiating t-hotel-search.
+
+Example:
+
+    <t-hotel-search 
+        id="searchView" 
+        data-url="e.g BASEURL/api/content/autosuggest/" 
+        query-params="e.g token=[[authToken]]" 
+        on-t-hotel-search-validate="onSearch">
+    </t-hotel-search>
+
+Note:
+The form handles below mentioned scenarios on its own.
+
+1. You can't search for past dates.
+2. Minimum booking date difference is 1 day ie: user have to book hotel atleast for a day so check out date is always greater than check in.
+3. A minimum of 1 adult is required to book a hotel.
+4. Children are considered below 12yrs old.
+5. Child age is mandatory.
+
+-->
+<dom-module id="t-hotel-search">
+    <style include="t-search-form-styles"></style>
+    <style include="iron-flex">
+    .horizontal-margin-right:last-of-type {
+        margin-right: 0;
+    }
+    
+    .dropdown {
+        width: 33%;
+    }
+    </style>
+    <template>
+            <div class="horizontal flex layout row">
+                <t-autosuggest id="location" name="location" data-url="[[dataUrl]]" query-params="[[queryParams]]" required selected-item="{{location}}" class="flex" label="Search city, address, zip or landmark" token-param="formattedAddress" error-message="You missed this."></t-autosuggest>
+            </div>
+            <div class="horizontal layout row">
+                <t-calendar class="flex horizontal-margin-right" required label="Check-in" name="checkIn" id="checkIn" selected-date="{{checkIn}}" error-msg="You missed this." format="mm/dd/yyyy">
+                </t-calendar>
+                <!-- horizontal-margin-right is for margin right -->
+                <t-calendar class="flex" required label="Check-out" name="checkOut" id="checkOut" selected-date="{{checkOut}}" error-msg="You missed this." format="mm/dd/yyyy">
+                </t-calendar>
+            </div>
+            <div class="horizontal layout row">
+                <t-stepper class="flex" min="1" max="5" plural-label="Adults" singular-label="Adult" secondary-label="(12+ years)" count="{{adultCount}}" id="adultCount"></t-stepper>
+            </div>
+            <div class="horizontal layout row">
+                <t-stepper class="flex" min="0" max="3" secondary-label="(0-11 years)" plural-label="Children" singular-label="Child" count="{{childCount}}" id="childCount"></t-stepper>
+            </div>
+            <div class="horizontal layout row" hidden$="[[!_checkChild(childCount)]]">
+                <template is="dom-repeat" items="{{childAges}}" as="item">
+                    <t-dropdown class="dropdown horizontal-margin-right" error-message="Age missing!" label="{{_childAgeDropdownLabel(index)}}"  selected-item="{{item.age}}" required>
+                            <dropdown-item value="0">&lt;1 year</dropdown-item>
+                            <dropdown-item value="1">1 year</dropdown-item>
+                            <dropdown-item value="2">2 years</dropdown-item>
+                            <dropdown-item value="3">3 years</dropdown-item>
+                            <dropdown-item value="4">4 years</dropdown-item>
+                            <dropdown-item value="5">5 years</dropdown-item>
+                            <dropdown-item value="6">6 years</dropdown-item>
+                            <dropdown-item value="7">7 years</dropdown-item>
+                            <dropdown-item value="8">8 years</dropdown-item>
+                            <dropdown-item value="9">9 years</dropdown-item>
+                            <dropdown-item value="10">10 years</dropdown-item>
+                            <dropdown-item value="11">11 years</dropdown-item>
+                    </t-dropdown>
+                    <!-- <input value="{{age::input}}"> -->
+                </template>
+            </div>
+            <div class="horizontal layout row">
+                <t-button id="search" class="primary flex" noink label="Search Hotels" on-click="_initiateSearch"></t-button>
+            </div>
+        <div id="providerHolder">
+            <content select="#searchProvider"></content>
+        </div>
+    </template>
+</dom-module>
+<script>
+Polymer({
+
+    is: 't-hotel-search',
+
+    /*
+     * <p>Behaviour to validate forms and other.</p>
+     */
+    behaviors: [TravelNxt.Behaviors.FormBehavior],
+
+    properties: {
+        /**
+        * Fired when the search button is clicked and all fields are validated.
+        *
+        * @event t-hotel-search-validate
+        */ 
+
+
+        /* *
+         * The location to search for.
+         * Must be a value picked from location autosuggest or an object with location details.
+         * Location object's `formattedAddress` value is used for display in location text.
+         * e.g.:
+         *
+         * `{
+         *    "formattedAddress":"Las Vegas",
+         *    "code":"LAS"
+         * }`
+         */
+        location: Object,
+
+        /**
+         * This property should have the value of a compatible autosuggest api url.
+         * Autosuggest api should return valid options based on a GET call to this url after appending `'/{text entered in location field}?{queryParams}'`
+         * Suggestions are requested after 3 characters have been entered. 
+         */
+        dataUrl: String,
+
+        /**
+         * This property stores the value of autosuggest api query parameters. 
+         */
+        queryParams: String,
+
+        /**
+         * The date of checking in at the hotel. Date format used is dd/mm/yyyy
+         */
+        checkIn: {
+            type: String,
+            observer: '_checkInChanged'
+        },
+
+        /**
+         * The date of checking out from the hotel. Date format used is dd/mm/yyyy
+         */
+        checkOut: {
+            type: String,
+            observer: '_checkOutChanged'
+        },
+
+        /**
+         * The number of adult guests. Starting with 1 upto a max of 5.
+         */
+        adultCount: {
+            type: Number,
+            value: 1
+        },
+
+        /**
+         * Number of children upto a max of 3.
+         */
+        childCount: {
+            type: Number,
+            value: 0,
+            observer: '_childCountChanged'
+        },
+
+        /**
+         * This is an array of child ages which ranges from 0 to 11.
+         * Ages can be set by setting an array of objects containing a property age with value of children ages between 0 to 11. 
+         * e.g.:
+         *
+         * `[
+         *    {"age":5},
+         *    {"age":2}
+         * ]` 
+         *
+         * Ages dropdown is displayed when childCount is greater than 0.
+         **/
+        childAges: {
+            type: Array,
+            value: function() {
+                return [];
+            }
+        },
+
+        /**
+         * The product name to be used in the t-form-behavior
+         */
+        productName: {
+          type: String,
+          value: 'HOTEL'
+        }
+    },
+
+
+    attached: function() {
+        //this._checkAndSubscribeProvider();
+        this._checkInChanged();
+    },
+
+    /**
+     * Checks if child count is greater than 0.
+     */
+    _checkChild: function(number){
+        return number > 0; 
+    },
+
+    /**
+     * Utility function to construcut child age drop down label ex. Child 1
+     */
+    _childAgeDropdownLabel: function(index) {
+        return "Child " + (index + 1) + " age";
+    },
+
+    /**
+     * Observer to keep children count and childAges array in sync
+     */
+    _childCountChanged: function(newValue, oldValue) {
+        if (oldValue == undefined) //very first time on element instantiation oldValue will be undefined
+            oldValue = 0;
+
+        if (newValue > oldValue) {
+            for (var i = 0; i < (newValue - oldValue); i++) {
+                //https://github.com/Polymer/polymer/issues/1839 -  
+                //keeping above bug, pushing object instead of string/number
+                this.push('childAges', {
+                    age: ''
+                });
+            };
+        } else if (newValue < oldValue) {
+            for (var i = 0; i < (oldValue - newValue); i++) {
+                this.pop('childAges');
+            };
+        }
+    },
+
+    /* Observer to handle check in < check out by setting check out min value  */
+    _checkInChanged: function() {
+        setTimeout(function() {
+            if (this.checkIn !== '' || this.checkIn !== undefined) {
+                var nextDay = new Date(this.checkIn).setDate(new Date(this.checkIn).getDate() + 1);
+                var checkoutMaxDate = new Date(this.checkIn).setDate(new Date(this.checkIn).getDate() + 30);
+                if (this.$.checkOut.picker) {
+                    this.$.checkOut.picker.set('min', new Date(nextDay));
+                    this.$.checkOut.picker.set('max', new Date(checkoutMaxDate));
+                    //Patch ATOM 501 additional issue, the next months were not populating in Iphone
+                    setTimeout(function() {
+                        this.$.checkOut.picker.render(true);
+                    }.bind(this), 1100)
+                    if (new Date(nextDay) >= new Date(this.checkOut)) {
+                        this.$.checkOut._date = new Date(nextDay);
+                    }
+                }
+            }
+        }.bind(this), 10);
+    },
+
+    /* Observer to handle check out > check in by setting check in max value  */
+    _checkOutChanged: function() {
+        setTimeout(function() {
+            if (this.checkOut != '') {
+                var previousDay = new Date(this.checkOut).setDate(new Date(this.checkOut).getDate() - 1);
+                if (this.$.checkIn.picker) {
+                    this.$.checkIn.picker.set('max', false);
+                    //Patch ATOM 501 additional issue, the next months were not populating in Iphone
+                    setTimeout(function() {
+                        this.$.checkIn.picker.render(true);
+                    }.bind(this), 1100)
+                }
+            }
+        }.bind(this), 10);
+    },
+
+    /*This metthod is called when the search button is pressed*/
+    _initiateSearch: function() {
+        //validate controls
+        if (this.validate() == false)
+            return;
+
+        //initiate search    
+        var request = this._setUpProviderData();
+
+        this.fire('t-hotel-search-validate', request);
+        //show api call progress
+        //this._showProgress(true);
+    },
+
+    /*This function creates the form object to pass on the `search-validate` event*/
+    _setUpProviderData: function() {
+
+        return {
+            location: this.location,
+            checkIn: this.checkIn,
+            checkOut: this.checkOut,
+            adultCount: this.adultCount,
+            childCount: this.childCount,
+            childAges: this.childAges
+        }
+    }
+
+});
+</script>

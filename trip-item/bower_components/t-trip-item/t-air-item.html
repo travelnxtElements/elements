@@ -1,0 +1,90 @@
+<link rel="import" href="../polymer/polymer.html" />
+<link rel="import" href="dateBehavior.html">
+<link rel="import" href="t-trip-subitem-scaffold.html">
+<!--
+    `t-air-item` air product component.
+    This component shows information single air product.
+    -->
+<dom-module id="t-air-item">
+    <template>
+        <t-trip-subitem-scaffold icon="maps:flight" status="[[model.bookingStatus]]">
+
+            <div class="inventory-detail layout horizontal">
+                <template is="dom-if" if="{{!_isType('MultiCity',model)}}">
+                        [[model.searchCriteria.legs.0.departureLocation.code]]
+                            <iron-icon icon="{{_getIronIcon(model)}}"></iron-icon>
+                        [[model.searchCriteria.legs.0.arrivalLocation.code]]
+                </template>
+                <template is="dom-if" if="{{_isType('MultiCity',model)}}">
+                    <template is="dom-repeat" items="[[model.searchCriteria.legs]]">
+                        [[item.departureLocation.code]]
+                        <template is="dom-if" if="{{!_isLastLeg(index,model)}}">
+                            <iron-icon icon="trending-flat"></iron-icon>
+                         </template>
+                    </template>
+                </template>
+            </div>
+
+            <div class="inventory-description">
+
+                <template is="dom-repeat" items="[[model.searchCriteria.legs]]">
+                    [[_getDisplayDate(item.travelDate.date)]]
+                    <template is="dom-if" if="{{!_isLastLeg(index,model)}}">
+                         - 
+                    </template>                    
+                </template>
+
+            </div>
+        </t-trip-subitem-scaffold>
+    </template>
+</dom-module>
+<script>
+Polymer({
+    is: "t-air-item",
+    behaviors:[Polymer.TravelnxtDateBehaviour],
+    properties: {
+
+        /**
+         * air product model.
+         * This model is inventoriesInfo model of type 'Flight' sent in mystique order api response
+         * This is required field.
+         */
+        model: {
+            type: Object,
+            value: null,
+            observer:'_populateModel'
+        }
+    },
+
+    attached: function() {
+    },
+
+    _populateModel: function() {
+        if (!this.model || !this.model.inventory || this.model.inventory.type.toLowerCase() !== 'flight') {
+            return;
+        }
+    },
+
+    _isType:function (type,model) {
+        if(!model || !this._isFlight()){
+            return;
+        }
+        return model.searchCriteria.itineraryType.toLowerCase() === type.toLowerCase();
+    },
+
+    _isLastLeg:function (index,model) {
+        if(!model || !this._isFlight()){
+            return;
+        }
+        return model.searchCriteria.legs.length === (index + 1);
+    },
+
+    _isFlight:function () {
+        return this.model && this.model.inventory && this.model.inventory.type.toLowerCase() === 'flight'
+    },
+
+    _getIronIcon:function (model) {
+        return this._isType('OneWay', model) ? 'trending-flat' : 'swap-horiz';
+    }
+});
+</script>

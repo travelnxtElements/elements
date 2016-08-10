@@ -1,0 +1,401 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../t-notify/t-notify.html">
+<link rel="import" href="../t-button/t-button.html">
+<link rel="import" href="../t-policy/t-policy.html">
+<link rel="import" href="../t-image/t-image.html">
+<link rel="import" href="../t-shared-lib/t-date-behavior.html">
+<link rel="import" href="../t-sessionstorage/t-sessionstorage.html">
+<link rel="import" href="../t-car-result-item/t-car-result-item.html" />
+<link rel="import" href="t-activity-itinerary-details.html">
+<link rel="import" href="../t-car-itinerary-details/t-shopping-cart-add-item-api.html">
+<link rel="import" href="../t-car-itinerary-details/t-shopping-cart-remove-all-api.html">
+<link rel="import" href="../t-text-container/travel-element-styles.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html"/>
+<link rel="import" href="../t-behavior/t-page-behavior.html">
+<link rel="import" href="../t-behavior/t-activity-page-behavior.html">
+
+<!--
+    <h3>Details:</h3>
+
+        `t-activity-itinerary-details-page` displays details of selected activity  & option to be booked.
+
+        It uses following child components in it -
+            1. `t-notify`
+            2. `t-header`
+            3. `t-policy`
+            4. `t-shopping-cart-remove-all-api`
+            5. `t-shopping-cart-add-item-api`
+            6. `t-faredetails`
+            7. `t-activity-itinerary-details`
+            8. `t-button`
+            9. `t-sessionstorage`
+
+    <h3>Observers:</h3>
+
+            1. '_visibleChange(visible)',
+            2. '_addItemToCart(authToken, selectedOption, searchId)'
+
+    <h3>Events:</h3>
+
+        following events are fired by this component
+
+            1. 'pricing-success' - fired when reviewed itinerary is selected for booking.
+            3. `go-to-search` - fired when page is loaded without required page data.
+
+    <h3>Example:</h3>
+
+        <t-activity-itinerary-details-page
+            id="activityDetails"
+            api-base-url="[[apiBaseUrl]]"
+            auth-token="[[authToken]]"
+            api-url-format="[[apiUrlFormat]]"
+            search-criteria="[[searchCriteria]]"
+            search-id="[[searchId]]"
+            activity-icon="[[activityIcon]]"
+            itinerary="{{selectedItinerary}}"
+            option-id=[[optionId]]
+            passengers=[[passengers]]
+            on-pricing-success="_goToPassengerInfo">
+            <t-header icon="bgv:arrow-left" normal-heading label="Review Itinerary"  url="[[siteUrl]]activity/results">
+                <t-activity-search-recap data="[[searchCriteria]]"></t-activity-search-recap>
+            </t-header>
+        </t-activity-itinerary-details-page>
+
+    @demo demo/index.html
+-->
+
+<dom-module id="t-activity-itinerary-details-page">
+
+    <template>
+        <style include="iron-flex"></style>
+        <style include="travel-element-styles">
+            :host {
+                display: block;
+            }
+
+            .item{
+                padding: 10px 0;
+            }
+
+            #btnContinue{
+                display: block;
+                margin: var(--normal-spacing,10px);
+            }
+        </style>
+
+        <content select="t-header"></content>
+
+        <t-notify id="notify"></t-notify>
+
+        <t-policy id="policy"
+            external-link
+            label="Policies"
+            api-relative-url="api/ShoppingCart/add"
+            api-base-url="[[apiBaseUrl]]"
+            auth-token="[[authToken]]"
+            search-id="[[searchId]]"
+            inventory-id="[[itineraryId]]"
+            is-data-provided-by-view>
+        </t-policy>
+
+        <t-shopping-cart-remove-all-api
+            id="removeCartItemApi" 
+            loading={{loading}} 
+            api-base-url="[[apiBaseUrl]]" 
+            api-relative-url="api/ShoppingCart/remove/all" 
+            auth-token="[[authToken]]"
+            on-t-shopping-cart-remove-all-api-success="onRemoveCartSuccess"
+            on-t-shopping-cart-remove-all-api-error="onRemoveCartError">
+        </t-shopping-cart-remove-all-api>
+
+        <t-shopping-cart-add-item-api
+            id="addCartApi" 
+            loading={{loading}} 
+            api-base-url="[[apiBaseUrl]]"
+            api-relative-url="api/ShoppingCart/add" 
+            auth-token="[[authToken]]"
+            on-t-shopping-cart-add-item-api-success="onAddCartSuccess"
+            on-t-shopping-cart-add-item-api-error="onAddCartError">
+        </t-shopping-cart-add-item-api>
+
+        <t-activity-itinerary-details 
+            activity-icon="[[activityIcon]]" 
+            id="itineraryView">                
+        </t-activity-itinerary-details>
+
+        <t-faredetails 
+            id="fareDetails"
+            is-collapsible
+            passenger-details="[[passengers]]"
+            itinerary-fare-label="Selected Option Rate">
+            <div class="passenger-fare-components">
+                <template is="dom-repeat" items="[[_passengerFares]]">
+                    <div class="layout horizontal item border-bottom baseFare">
+                        <span class="secondary-text">[[item.label]]</span>
+                        <span class="flex"></span>
+                        <span>[[item.currency]] [[item.fare]]</span>
+                    </div>                    
+                </template>
+            </div>
+        </t-faredetails>
+
+        <t-button 
+            id="btnContinue" 
+            class="primary flex" 
+            label="continue" 
+            on-tap="onBtnContinueClick">                
+        </t-button>
+
+        <t-sessionstorage
+            id="sessionStore"
+            key="Activitie_Result_Data"
+            api-url-format="[[apiUrlFormat]]"
+            on-t-sessionstorage-load-success="onSessionLoad">
+        </t-sessionstorage>
+    </template>
+
+    <script>
+        (function () {
+
+            'use strict'
+
+            var paxCountMap = [];
+
+            Polymer({
+
+                is: 't-activity-itinerary-details-page',
+
+                behaviors: [
+                    TravelNxt.Behaviors.DateBehavior,
+                    TravelNxt.Behaviors.PageBehavior,
+                    TravelNxt.Behaviors.ActivityPageBehavior
+                ],
+
+                properties: {
+                    
+                },
+
+                observers: [
+                    '_visibleChange(visible)',
+                    '_addItemToCart(optionId, selectedDate, paxCount, apiBaseUrl)'
+                ],
+
+                listeners: {
+                    'policy-click': '_initiatePolicyCall'
+                },
+
+                /*
+                 * <p>event handler to reset policy view</p>
+                */
+                _initiatePolicyCall: function (event) {
+                    this.$.policy.initiatePolicyCall();
+                },
+
+                /*
+                 * <p>observer function for page `visible` property</p>
+                */
+                _visibleChange: function (visible) {
+                    if (visible && (!this.optionId || !this.selectedDate || !this.paxCount || !this.apiBaseUrl)) {
+                        this.fire('go-to-search');
+                    }
+
+                    //initiate policy component
+                    this.$.policy.initiatePolicyView();
+                },
+
+                /*
+                 * <p>observer function for page `optionId` property</p>
+                */
+                _addItemToCart: function (optionId, selectedDate, paxCount, apiBaseUrl) {
+                    if (!optionId || !selectedDate || !paxCount || !apiBaseUrl) {
+                        return;
+                    }
+
+                    this.$.fareDetails.data = null;
+                    this.$.fareDetails.$.loaderContainer.hidden = false;
+                    this.$.fareDetails.error = false;
+
+                    this.$.policy.policies = null;
+
+                    this.$.btnContinue.disabled = true;
+
+                    this.$.itineraryView.setDetails(this.itinerary, this.searchCriteria);
+
+                    this.$.removeCartItemApi.remove();
+                },
+
+                /*
+                 * <p>success callback handler for `t-shopping-cart-remove-all-api` component</p>
+                */
+                onRemoveCartSuccess: function (e) {
+
+                    var selectedOption = this.itinerary.options.find(function (item) {
+                        return item.id.toLowerCase() === this.optionId.toLowerCase();
+                    }, this);
+
+                    var addToCartRequest = {
+                            itemInfos: [{
+                            searchId: this.searchId,
+                            inventoryId: this.optionId,
+                            selectedOption : {
+                                id: this.optionId,
+                                selectedDate: selectedOption.selectedDateTime,
+                                passengers: this._getPaxDetails(selectedOption)
+                            }
+                        }]
+                    };
+
+                    this.$.addCartApi.add(addToCartRequest);
+                },
+
+                /*
+                 * <p>error callback handler for `t-shopping-cart-remove-all-api` component</p>
+                */
+                onRemoveCartError: function (e) {
+                    this.$.fareDetails.error = true;
+                    this.$.policy.onPolicyError();
+                },
+
+                /*
+                 * <p>success callback handler for `t-shopping-cart-add-item-api` component</p>
+                */
+                onAddCartSuccess: function (e) {
+                    if (!e.detail.addToCartItemResult || !e.detail.addToCartItemResult.length) {
+                        this.$.fareDetails.error = true;
+                        throw Error('failed to add itinerary in the cart!');
+                    }
+
+                    this.itinerary.fare = e.detail.addToCartItemResult[0].inventory.fare;
+
+                    //set policies
+                    this.$.policy.policies = this.itinerary.generalPolicies;
+
+                    this.$.sessionStore.value = this.itinerary;
+
+                    this.$.sessionStore.save();
+
+                    if (this.itinerary) {
+                        this.$.itineraryView.itinerary = this.itinerary;
+                        this._setFareDetails();
+                    }
+
+                    this.$.btnContinue.disabled = false;
+                },
+
+                /*
+                 * <p>error callback handler for `t-shopping-cart-add-item-api` component</p>
+                */
+                onAddCartError: function (e) {
+                    this.$.fareDetails.error = true;
+                    this.$.policy.onPolicyError();
+                },
+
+                /*
+                 * <p>continue button tap event handler</p>
+                */
+                onBtnContinueClick: function () {
+                    if (this.$.btnContinue.disabled) {
+                        return;
+                    }
+                    this.fire('pricing-success');
+                },
+
+                _getPaxDetails: function (selectedOption) {
+
+                    paxCountMap = [];
+
+                    for (var i = 0; i < selectedOption.passengerTypesInfo.length; i++) {
+                        var passenger = selectedOption.passengerTypesInfo[i];
+                        paxCountMap.push({
+                            type: passenger.passengerType,
+                            count: passenger.quantity
+                        });
+                    }
+
+                    return paxCountMap;
+                },
+
+                /*
+                 * <p>translator method to set view components data</p>
+                */
+                _setFareDetails: function () {
+                    if (!this.itinerary || !this.searchCriteria) {
+                        return;
+                    }
+
+                    if (this.itinerary.fare && this.itinerary.fare.components) {
+                        this.$.fareDetails.data = this.itinerary.fare.components.filter(function (item) {
+                            return item.type.toLowerCase() !== 'basefare';
+                        });
+
+                        this._buildFareComponents();
+                    }
+                },
+
+                /*
+                 * <p>Builds fare components to include passenger-wise prices as per passenger counts provided while pricing</p>
+                */
+                _buildFareComponents: function () {
+                    if (!this.itinerary.options || !this.itinerary.options.length) {
+                        return;
+                    }
+
+                    this._passengerFares = [];
+
+                    var selectedOption = this.itinerary.options.find(function (item) {
+                        return item.id.toLowerCase() === this.optionId.toLowerCase();
+                    }, this);
+
+                    var paxInfo = selectedOption.passengerTypesInfo;
+
+                    var passengerFares = [];
+
+                    for (var i = 0; i < paxInfo.length; i++) {
+
+                        if (paxInfo[i].passengerType.toLowerCase() === 'youth') {
+                            continue;
+                        }
+
+                        var baseFare = paxInfo[i].fare.components.find(function (item) {
+                            return item.type.toLowerCase() === 'basefare';
+                        });
+
+                        if (!baseFare || !paxCountMap || !paxCountMap.length) {
+                            continue;
+                        }
+
+                        var passenger = paxCountMap.find(function (item) {
+                            return item.type.toLowerCase() === paxInfo[i].passengerType.toLowerCase();
+                        });
+
+                        if (!passenger || !passenger.count) {
+                            continue;
+                        }
+
+                        passenger = parseInt(passenger.count);
+
+                        if (passenger) {
+                            passengerFares.push({
+                                label: paxInfo[i].multiplePassengerType + ' x ' + passenger,
+                                fare: (baseFare.money.amount * passenger).toFixed(2),
+                                currency: baseFare.money.currency
+                            });
+                        }
+                    }
+
+                    this._passengerFares = passengerFares;
+                },
+
+                /*
+                 * <p>`t-sessionstorage` load success callback handler</p>
+                */
+                onSessionLoad: function () {
+                    if (this.$.sessionStore.value) {
+                        this.itinerary = this.$.sessionStore.value.itinerary;
+                    }
+                }
+            });
+
+        })();
+    </script>
+</dom-module>

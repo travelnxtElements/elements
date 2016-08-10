@@ -1,0 +1,57 @@
+{
+  "name": "t-hotel-search",
+  "authors": [
+    "Rahul Pilkhwal <rahul.pilkhwal@tavisca.com>",
+    "Shailesh Kumar Srivastava <ssrivastava@tavisca.com>",
+    "Sounak Pal <spal@tavisca.com>",
+    "Ajinkya Tejankar <tejankarajinkya@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "keywords": [
+    "Polymer",
+    "Web",
+    "Components"
+  ],
+  "homepage": "https://github.com/travelnxtelements/t-hotel-search",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0",
+    "t-shared-lib": "travelnxtelements/t-shared-lib#^1.0.2",
+    "t-input": "atomelements/t-input#^1.2.6",
+    "t-button": "atomelements/t-button#^1.1.1",
+    "t-shared-components": "atomelements/t-shared-components#^1.0.5",
+    "t-text-container": "travelnxtelements/t-text-container#^1.1.0",
+    "t-checkbox": "atomelements/t-checkbox#^1.1.2",
+    "t-autosuggest": "atomelements/t-autosuggest#^1.2.0",
+    "t-calendar": "atomelements/t-calendar#^1.2.0",
+    "t-sessionstorage": "travelnxtElements/t-sessionstorage#^1.0.0",
+    "t-notify": "atomelements/t-notify#^1.1.1",
+    "t-dropdown": "atomelements/t-dropdown#^2.0.1",
+    "t-stepper": "atomelements/t-stepper#^1.0.0"
+  },
+  "devDependencies": {
+    "t-mystique-auth": "travelnxtelements/t-mystique-auth#^1.0.0",
+    "web-component-tester": "*",
+    "webcomponentsjs": "~0.7.14",
+    "iron-component-page": "PolymerElements/iron-component-page#~1.0.6"
+  },
+  "_release": "e4a168b895",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "e4a168b895a359bcb300e5512e6648f059b4d397"
+  },
+  "_source": "git://github.com/travelnxtelements/t-hotel-search.git",
+  "_target": "master",
+  "_originalSource": "travelnxtelements/t-hotel-search",
+  "_direct": true
+}

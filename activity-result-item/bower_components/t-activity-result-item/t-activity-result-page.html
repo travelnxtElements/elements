@@ -1,0 +1,247 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../t-sessionstorage/t-sessionstorage.html">
+<link rel="import" href="../t-list/t-list.html">
+<link rel="import" href="../t-notify/t-notify.html">
+<link rel="import" href="../iron-icons/places-icons.html" />
+<link rel="import" href="../t-search-overlay/t-search-overlay.html">
+<link rel="import" href="../t-header/t-header-search-recap.html">
+<link rel="import" href="../t-text-container/travel-element-styles.html">
+<link rel="import" href="../t-behavior/t-page-behavior.html">
+<link rel="import" href="../t-behavior/t-activity-page-behavior.html">
+<link rel="import" href="t-activity-result-item.html">
+
+<dom-module id="t-activity-result-page">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+        </style>
+
+        <t-notify id="notify"></t-notify>
+
+        <content></content>        
+
+        <t-search-overlay icon="[[activityIcon]]" id="loadingOverlay">
+            <div class="data">
+                <div class="font-12 text-center secondary-text overlayData">
+                    <t-header-search-recap recap-data="{{activityRecapData}}"></t-header-search-recap>
+                </div>
+            </div>
+            <div class="footer">
+                <img src="[[siteLogoUrl]]" title="[[siteLogoUrl]]" alt="" style="width:232px;">
+            </div>
+        </t-search-overlay>
+
+        <div class="layout vertical flex">
+            <t-list
+                id="list"
+                data-api="[[apiBaseUrl]]api/activity/results/[[searchId]]/rates?$top=20&token=[[authToken]]&$select=Name,Category,MinFare,Id,Fare,HeroImageUrl,IsPostPaid,IsCancellable"
+                filter-api="[[apiBaseUrl]]api/activity/filter/[[searchId]]/rates?token=[[authToken]]"
+                filter-results-api="[[apiBaseUrl]]api/activity/results/filter/[[searchId]]/rates?$top=20&token=[[authToken]]&$select=Name,Category,MinFare,Id,Fare,HeroImageUrl,IsPostPaid,IsCancellable"
+                with-filter
+                with-sorting
+                filter-search-label="[[filterSearchLabel]]"
+                filter-display-settings="[[filterDisplaySettings]]"
+                search-icon="[[searchIcon]]"
+                filter-icon="[[filterIcon]]"
+                disable-filter-icon="[[disableFilterIcon]]"
+                token-param="inventories"
+                sort-params="[[sortParams]]"
+                redirect-link="[[redirectLink]]"
+                currency="[[currency]]"
+                on-list-population="_listPopulation"
+                no-results-found-message="[[noResultsFoundMessage]]"
+                no-results-filtered-message="[[noResultsFilteredMessage]]">
+                <template>
+                <div>
+                    <t-activity-result-item 
+                        itinerary=[[item]]
+                        price=[[minPrice]]
+                        currency="[[currency]]">
+                    </t-activity-result-item>
+                </div>
+                </template>
+            </t-list>
+        </div>
+
+        <t-sessionstorage
+            id="sessionStore"
+            key="Activitie_Result_Data"
+            api-url-format="[[apiUrlFormat]]"
+            on-t-sessionstorage-load-success="_onSessionLoad">
+        </t-sessionstorage>
+    </template>
+    <script>
+    (function() {
+
+        'use strict'
+
+        Polymer({
+
+            is: 't-activity-result-page',
+
+            behaviors: [
+                TravelNxt.Behaviors.PageBehavior,
+                TravelNxt.Behaviors.ActivityPageBehavior
+            ],
+
+            properties: {
+
+                /*
+                 * <p>This property holds the value of selected itinerary</p>
+                 * <p>It overrides behavior property</p>
+                 */
+                itinerary: {
+                    type: Object,
+                    notify: true
+                },
+
+                /**
+                 * No results found message
+                 * @type {String}
+                 */
+                noResultsFoundMessage: {
+                    type: String,
+                    value: "We could not find any activities for your search."
+                },
+
+                /**
+                 * No results found after applying filters message
+                 * @type {String}
+                 */
+                noResultsFilteredMessage: {
+                    type: String,
+                    value: 'We could not find any activities for the filters you have applied.'
+                },
+
+                /**
+                 * This is used to display label in placeholder of search filter
+                 * @type {String}
+                 */
+                filterSearchLabel: {
+                    type: String,
+                    value: 'Search activity name'
+                },
+
+                /**
+                 * This property defines the sort params
+                 * @type {Array}
+                 */
+                sortParams: {
+                    type: Array,
+                    value: function () {
+                        return [{ 
+                            "key": "Name", 
+                            "value": "$orderby=Name" 
+                        }, { 
+                            "key": "Price", 
+                            "value": "$orderby=MinFare/Fare/Amount", 
+                            "default": true
+                        }];
+                    }
+                },
+
+                /**
+                 * This property sets the filter custom icon
+                 * @type {String}
+                 */
+                filterIcon: String,
+
+                /**
+                 * This Property sets search custom icon
+                 * @type {String}
+                 */
+                searchIcon: String,
+
+                /**
+                 * Redirection Link is link to redirect after clicking book button
+                 * @type {String}
+                 */
+                redirectLink: {
+                    type: String
+                },
+
+
+                filterDisplaySettings: {
+                    type: Array,
+                    value: ['showCategoryCount']
+                }
+            },
+
+            observers: [
+                '_visibleChange(visible)',
+                '_updateActivityResults(authToken, searchId, apiBaseUrl)'
+            ],
+
+            listeners: {
+                'book-activity-itinerary': '_onBookItinerary'
+            },
+
+            /**
+             * This is observer method and executed every time `visible` changes
+             * @param  {[Boolean]} visible Describes whether to display view or not
+             * @return {[Void]}
+             */
+            _visibleChange: function (visible) {
+                if (visible && (!this.authToken || !this.searchId || !this.apiBaseUrl)) {
+                    this.fire('go-to-search');
+                }
+            },
+
+            /**
+             * This is observer method and executed every time `authToken` or `searchId` changes
+             * @param  {String} authToken
+             * @param  {String} searchId
+             * @return {Void}
+             */
+            _updateActivityResults: function (authToken, searchId, apiBaseUrl) {
+                if (!authToken || !searchId || !apiBaseUrl) {
+                    return;
+                }
+
+                this.$.loadingOverlay.active = true;
+                this.$.loadingOverlay.value = 0;
+                this.$.list.generateList();
+                this.$.list.$.filter.generateFilter();
+            },
+
+            _listPopulation: function (argument) {
+                //ending the overlay
+                this.$.loadingOverlay.value = 100;
+            },
+
+            /**
+             * This is Event driven method, called when `book-car-itinerary` event is fired. This method fires `car-select` event and also saves the selected itinerary in sessionStore
+             * @param  {[event]} e
+             * @return {[Void]}
+             */
+            _onBookItinerary: function (e) {
+                if (!e || !e.detail) {
+                    return;
+                }
+
+                if (!this.itinerary || (this.itinerary.id !== e.detail.id)) {
+                    this.itinerary = e.detail;
+                    this.$.sessionStore.value = this.itinerary;
+                    this.$.sessionStore.save();
+                }
+
+                this.fire('activity-select');
+            },
+
+            /**
+             * This is Event driven method, called when `t-sessionstorage-load-success` event is triggered. It restores the itinerary value from session
+             * @return {[Void]}
+             */
+            _onSessionLoad: function () {
+                if (this.$.sessionStore.value) {
+                    this.itinerary = this.$.sessionStore.value.itinerary;
+                }
+            }
+
+        })
+    })();
+    </script>
+
+</dom-module>

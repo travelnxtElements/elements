@@ -1,0 +1,153 @@
+<link rel="import" href="../polymer/polymer.html" />
+<link rel="import" href="../t-notify/t-notify.html" />
+<link rel="import" href="../t-hotel-search/t-hotel-search.html" />
+<link rel="import" href="../t-hotel-search/t-hotel-search-provider.html" />
+<link rel="import" href="../t-sessionstorage/t-sessionstorage.html" />
+<!--
+    `<t-hotel-home-page>` is a polymer component that generates page component handling all required resources of Hotel search home page
+
+
+    Basic usage
+    `<t-hotel-home-page 
+	        api-base-url="http://qa-mystiquecode.tavisca.com/" 
+	        auth-token="{{token.authenticationToken}}"
+	        on-search-success="demoSuccessFunction"
+        ></t-hotel-home-page>`
+-->
+<dom-module id="t-hotel-home-page">
+    <template>
+        <t-notify id="notify" message="No results found." type="warn"></t-notify>
+        <t-hotel-search id="searchComponent">
+            <t-hotel-search-provider 
+	            id="searchProvider"
+	            on-success="_onSearchSuccess"
+	            on-error="_onSearchFailure"
+	            on-request="_onSearchInitiate"
+	            auth-token="[[authToken]]"
+        		api-base-url="[[apiBaseUrl]]"
+	            api-relative-url="[[searchRelativeUrl]]">
+	        </t-hotel-search-provider>
+        </t-hotel-search>
+        <template is="dom-if" if="[[criteriaInProgress]]">
+            <t-fullpage-loader active>
+                <div>Please wait...</div>
+            </t-fullpage-loader>
+        </template>
+        <t-sessionstorage 
+	        id="sessionStorage" 
+	        key="Eva_Hotel_SearchCriteria" 
+	        in-progress="{{criteriaInProgress}}" 
+	        api-url-format="[[sessionApiUrlFormat]]" 
+	        auto 
+	        on-t-sessionstorage-save-success="_onSessionCriteriaSave">
+	    </t-sessionstorage>
+    </template>
+</dom-module>
+<script>
+Polymer({
+    is: "t-hotel-home-page",
+
+    /**
+     * Fired when succesfuly gets the response from search.
+     * Passing the search id with the event
+     *
+     * @event search-success
+     */
+
+    properties: {
+
+    	/*The session api Url format to be provided*/
+    	sessionApiUrlFormat:String,
+
+    	/*The auth token to be provided*/
+    	authToken:String,
+
+    	/*The api Base Url*/
+    	apiBaseUrl:String,
+
+    	/*The search api relative url*/
+    	searchRelativeUrl:{
+    		type:String,
+    		value:'api/hotel/search'
+    	},
+
+    	/*The search api relative url*/
+    	autosuggestRelativeUrl:{
+    		type:String,
+    		value: 'api/content/autosuggest/'
+    	},
+
+    	_criteria: {
+    		type: Object,
+    		value: null
+    	}
+    },
+    observers: [
+    	'_setUpPrerequisites(authToken)'
+    ],
+    attached: function(){
+    	this._setUpPrerequisites();
+    	this.loadCriteria();
+    },
+	
+	_onSessionCriteriaSave: function(){
+        //fire an event of searchSuccess
+  		this.fire('search-success', this.$.sessionStorage.value.searchId, {bubbles: false});
+	},
+
+    _setUpPrerequisites: function () {    
+        this.$.searchComponent.querySelector('#location').dataUrl = this.apiBaseUrl + this.autosuggestRelativeUrl;
+        this.$.searchComponent.querySelector('#location').queryParams = 'token=' + this.authToken;
+    },
+
+    _onSearchInitiate: function (event) {
+        if (event.srcElement == this.$.searchProvider) {
+            this._criteria = event.detail.body;
+        }
+    },
+
+
+    _onSearchFailure: function (event) {
+        if (event.srcElement == this.$.searchProvider) {
+            //add error handling if required       
+        }
+    },
+
+    _onSearchSuccess: function (event) {
+        if (event.srcElement == this.$.searchProvider && event.detail.searchId) {
+            if(this._criteria){
+                this.$.sessionStorage.value = {criteria: this._criteria, searchId: event.detail.searchId};
+                this.$.sessionStorage.save();
+            }
+        }
+    },
+
+    /**
+     * Function to run in stamp template ideally
+     * */
+    loadCriteria: function () {
+        /*if(!this.$.sessionStorage.loaded){
+            setTimeout(this.loadCriteria, 200);
+        }*/
+
+        //do data binding
+        var criteria = null;        
+        if(this.$.sessionStorage && this.$.sessionStorage.value && this.$.sessionStorage.value.criteria){
+            var criteria = JSON.parse(this.$.sessionStorage.value.criteria);
+            
+            this.$.searchComponent.location = criteria.destination;
+            this.$.searchComponent.checkIn = criteria.checkInDate.date;
+            this.$.searchComponent.checkOut = criteria.checkOutDate.date;
+            this.$.searchComponent.adultCount = criteria.rooms[0].adults.quantity;
+            this.$.searchComponent.childCount = criteria.rooms[0].children.quantity;
+            this.$.searchComponent.childAges = [];
+
+            var childAges = []
+            for (var i = 0; i < criteria.rooms[0].children.ages.length; i++) {
+                childAges.push({ age: criteria.rooms[0].children.ages[i] });
+            }
+            this.$.searchComponent.childAges = childAges;
+        }
+    }
+});
+</script>

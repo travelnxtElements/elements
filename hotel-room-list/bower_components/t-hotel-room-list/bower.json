@@ -1,0 +1,46 @@
+{
+  "name": "t-hotel-room-list",
+  "version": "1.0.12",
+  "authors": [
+    "Rahul Pilkhwal <rahul.pilkhwal@tavisca.com>",
+    "Shailesh Kumar Srivastava <ssrivastava@tavisca.com>",
+    "Sounak Pal <spal@tavisca.com>",
+    "Ajinkya Tejankar <tejankarajinkya@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "keywords": [
+    "Polymer",
+    "Web",
+    "Components"
+  ],
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "iron-ajax": "PolymerElements/iron-ajax#^1.0.0",
+    "iron-list": "PolymerElements/iron-list#^1.0.0",
+    "iron-flex-layout": "PolymerElements/iron-flex-layout#^1.0.0",
+    "t-button": "atomelements/t-button#^1.0.0",
+    "t-notify": "atomelements/t-notify#^1.0.0",
+    "t-loader": "atomelements/t-loader#^1.0.0",
+    "t-overlay": "atomelements/t-overlay#^1.0.0",
+    "t-badge": "travelnxtElements/t-badge#^1.0.0",
+    "t-text-container": "travelnxtElements/t-text-container#^1.0.0",
+    "t-shared-lib": "travelnxtElements/t-shared-lib#^1.0.0",
+    "polymer": "Polymer/polymer#^1.0.0",
+    "juicy-html": "Juicy/juicy-html#^1.0.2"
+  },
+  "devDependencies": {
+    "webcomponentsjs": "~0.7.14",
+    "iron-component-page": "PolymerElements/iron-component-page#~1.0.6",
+    "t-shared-components": "atomelements/t-shared-components#^1.0.5"
+  }
+}

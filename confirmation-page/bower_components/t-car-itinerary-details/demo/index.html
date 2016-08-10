@@ -1,0 +1,399 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>t-car-itinerary-details demo</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="../t-car-itinerary-details-page.html">
+    <link rel="import" href="../../t-shared-components/theme.html">
+    <link rel="import" href="../../t-header/t-car-search-recap.html">
+    <link rel="import" href="../../t-header/t-header.html">
+
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+
+        t-header .body.t-header {
+            background: #0099cc;
+            height: 48px;
+        }
+    </style>
+</head>
+
+<body>
+    <template is="dom-bind" id="domBindTemplate">
+        <t-car-itinerary-details-page id="carItineraryDetails"
+            api-base-url="http://qa-mystiquecode.tavisca.com/"
+            auth-token="z44ewaphlrsfpc505ityabig"
+            car-icon="maps:directions-car"
+            search-id="fe1b7fd8-f535-4b4c-b0ff-ec926e0b2034">
+            <t-header icon="arrow-back" normal-heading label="Review Itinerary"  url="#">
+                <t-car-search-recap id="searchCriteriaRecap"></t-car-search-recap>
+            </t-header>
+        </t-car-itinerary-details-page>
+    </template>
+</body>
+
+    <script type="text/javascript">
+        (function () {
+
+            window.addEventListener('WebComponentsReady', function(e) {
+                var itinerary = {
+                                    "type": "Car",
+                                    "brand": {
+                                        "code": "ET",
+                                        "name": "Enterprise",
+                                        "logo": "http://d1o2mbjkynteqw.cloudfront.net/CarCompanies/36x36/ET.JPG"
+                                    },
+                                    "heroImageUrl": "https://assets.enterprise.com/content/enterprise/data/vehicle/bookingCountries/US/CARS/CCAR.doi.320.high.imageLargeThreeQuarterNodePath.png/1423755550651.png",
+                                    "optionalEquipment": [],
+                                    "fareType": null,
+                                    "airConditioning": "Yes",
+                                    "capacity": "FourToFive",
+                                    "category": "Compact",
+                                    "baggage": 1,
+                                    "doors": "NotSpecified",
+                                    "driveType": "NotSpecified",
+                                    "fuelType": "NotSpecified",
+                                    "transmission": "Automatic",
+                                    "vehicleType": "Car",
+                                    "generalPolicies": [{
+                                        "type": "Additional Driver",
+                                        "policies": ["Additional drivers must meet same rental qualifications as the renter, except spouse or domestic partner. Additional drivers must appear at the rental counter with the primary renter. There will be an additional charge of $10 per day for each additional authorized driver other than a spouse or domestic partner, unless other contractual conditions apply. A spouse or domestic partner is the only permitted additional driver on non-credit card deposit. Additional drivers must be 21 or older.\n"]
+                                    }, {
+                                        "type": "Age Requirements",
+                                        "policies": ["All drivers must be 21 years of age or older. Renters 21 through 24 years of age may only rent Economy through Fullsize cars.\n"]
+                                    }, {
+                                        "type": "Damage Waiver",
+                                        "policies": ["DAMAGE WAIVER, DW, FOR THIS BRANCH WILL NOT BE SOLD FOR MORE THAN 24.99 USD PER DAY. DW IS OFFERED AT THE TIME OF RENTAL FOR AN ADDITIONAL DAILY CHARGE. IF THE RENTER ACCEPTS DW, ENTERPRISE WAIVES OR REDUCES THE RENTERS RESPONSIBILITY FOR LOSS OF, OR DAMAGE TO, THE RENTAL VEHICLE -INCLUDING BUT NOT LIMITED TO TOWING, STORAGE, LOSS OF USE, ADMINISTRATIVE FEES AND, OR, DIMINISHMENT OF VALUE- SUBJECT TO THE TERMS AND CONDITIONS OF THE RENTAL AGREEMENT AND APPLICABLE LAWS. DW IS NOT INSURANCE. THE PURCHASE OF DW IS OPTIONAL AND NOT REQUIRED TO RENT A CAR. THE PROTECTION PROVIDED BY DW MAY DUPLICATE THE RENTERS EXISTING COVERAGE. ENTERPRISE IS NOT QUALIFIED TO EVALUATE THE ADEQUACY OF THE RENTERS EXISTING COVERAGE. THEREFORE THE RENTER SHOULD EXAMINE HIS OR HER CREDIT CARD PROTECTIONS, AUTOMOBILE INSURANCE POLICIES OR OTHER SOURCES OF COVERAGE THAT MAY DUPLICATE THE PROTECTION PROVIDED BY DW.\n"]
+                                    }, {
+                                        "type": "Debit Card Policy",
+                                        "policies": ["Please see Renter Requirements policy for debit card information.\n"]
+                                    }, {
+                                        "type": "Exclusive Policy",
+                                        "policies": ["Pricing does not include damage waiver. Additional surcharges, local taxes, etc. May apply.\n"]
+                                    }, {
+                                        "type": "Personal Accident Insurance",
+                                        "policies": ["PERSONAL ACCIDENT INSURANCE (PAI) FOR THIS BRANCH RANGES BETWEEN $3.00 AND $7.00 PER DAY. - PERSONAL ACCIDENT INSURANCE (PAI) IS OFFERED AT THE TIME OF RENTAL FOR AN ADDITIONAL DAILY CHARGE. IF ACCEPTED, PAI PROVIDES THE RENTER AND PASSENGERS WITH ACCIDENT MEDICAL EXPENSE, ACCIDENTAL DEATH AND AMBULANCE EXPENSE BENEFITS. BENEFITS ARE PAYABLE IN ADDITION TO ANY OTHER INSURANCE COVERAGE THE RENTER OR PASSENGERS MAY HAVE. THIS IS A SUMMARY ONLY. PAI IS SUBJECT TO THE PROVISIONS, LIMITATIONS AND EXCLUSIONS OF THE PAI POLICY UNDERWRITTEN BY EMPIRE FIRE AND MARINE INSURANCE COMPANY. THE PURCHASE OF PAI IS OPTIONAL AND NOT REQUIRED TO RENT A CAR. THE COVERAGE PROVIDED BY PAI MAY DUPLICATE THE RENTER'S EXISTING COVERAGE. ENTERPRISE IS NOT QUALIFIED TO EVALUATE THE ADEQUACY OF THE RENTER'S EXISTING COVERAGE; THEREFORE THE RENTER SHOULD EXAMINE HIS OR HER PERSONAL INSURANCE OR OTHER SOURCES OF COVERAGE THAT MAY DUPLICATE THE COVERAGE PROVIDED BY PAI."]
+                                    }, {
+                                        "type": "Forms of Payment",
+                                        "policies": ["The following forms of payment are accepted at the end of the rental.\n\nVISA®\nMasterCard®\nAmerican Express®\nDiscover Network®\nDebit Card\nTraveler's Check\nMoney Order\n\nAdditional authorizations from your account will be obtained to cover the cost of the rental charges. Enterprise is not responsible for any overdraft fees incurred.\n"]
+                                    }, {
+                                        "type": "Roadside Protection",
+                                        "policies": ["Enterprise offers roadside assistance protection at select locations. Rap allows Enterprise customers to waive financial responsibility for chargeable roadside incidents such as lost keys, lockouts, and fuel outages. Rap can be added for $3.99 per day.  Road side assistance protection offers these services--flat tire, jump start, lockout service, fuel delivery, and key replacement. Note- in NY, CA, NV, and KS the cost of the key will not be covered, only the service to deliver the key or perform the lockout service.  Roadside assistance protection is void and of no effect if, at the time of the incident necessitating roadside assistance, you or any authorized driver were in violation of the rental agreement, including, without limitation, the prohibited uses and violations set forth therein. In such cases, roadside assistance will be available, but standard charges may apply.\n"]
+                                    }, {
+                                        "type": "Renter Requirements",
+                                        "policies": ["All renters and additional drivers must be 21 or older, have a valid driver's license and a major credit card in their name. Driver's licenses are accepted from any USA state or territory, from a Canadian province or from an international country. Licenses from outside the USA or Canada also may require an international driver's permit. International driver's permits are valid only if presented with the original local license. International renters require a valid passport; the name on the passport must match the name on the driver's license. Individuals with learner's permits are not eligible to rent. U.S. government employees ages 18 or older will not incur a young driver surcharge when renting for authorized government travel.  \n\nAGE – \n\nThe underage surcharge for drivers between the ages of 21 and 24 is 15 USD per day. Renters between the ages of 21 and 24 may rent the following vehicle classes: Economy through Full Size cars and Minivans. \n\nNON CREDIT CARD DEPOSITS – \n\nDebit cards and money orders are accepted at the time of rental with current copies of any two of the following (dated within the last 30 days and with no past due balances): telephone bill, electric bill, gas bill, sewer bill, water bill, or proof of employment in the renter's name, with his or her current address. The renter's name and address must match their driver's license, and their driver's license must have been issued from the local area of the renting branch. \n\nDebit cards are also accepted at the time of rental with a roundtrip travel ticket, e-ticket, or travel itinerary that shows the renter's name and discloses a return date and port of entry. \n\nRenters using a debit card or money order as a deposit may rent the following vehicle classes: Economy through Full Size cars and Minivans. \n\nDEPOSIT AMOUNT – \n\nA deposit of either an additional 100 USD more than the cost of the rental or 300 USD total, whichever is greater, will be taken at the time of rental pickup. The deposit funds will not be available for use until after the vehicle has been returned. Cash and prepaid cards are not an acceptable forms of rental deposit. Enterprise is not responsible for any overdraft fees incurred.\n"]
+                                    }, {
+                                        "type": "Supplemental Liability Protection",
+                                        "policies": ["Supplemental Liability Protection (SLP) for this branch is 14.99 USD per day. Supplemental Liability Protection is offered at the time of rental for an additional daily charge. If accepted, SLP provides the renter and authorized drivers with up to 1,000,000 USD combined single limit for third party liability claims. If the renter accepts SLP, Enterprise provides third party liability protection up to the applicable minimum financial responsibility limit and Empire Fire And Marine Insurance Company provides excess third party liability insurance coverage from the applicable minimum financial responsibility limit to 1,000,000 USD. This is a summary only. SLP is subject to the terms, conditions, provisions, limitations and exclusions in the supplemental rental liability insurance excess policy underwritten by Empire Fire And Marine Insurance Company. The purchase of SLP is optional and not required to rent a car. The coverage provided by SLP may duplicate the renter's existing coverage. Enterprise is not qualified to evaluate the adequacy of the renter's existing coverage, therefore the renter should examine his or her personal insurance policies or other sources of coverage that may duplicate the coverage provided by SLP.\n"]
+                                    }, {
+                                        "type": "Toll Pass Convenience Charge",
+                                        "policies": ["The Toll Pass Program offered in Northern California, Colorado, Florida, North Carolina, Texas, Washington and British Columbia, Canada, is a service that allows the customer to drive through a designated toll express lane and pay electronically. When the rental vehicle passes through a designated express toll lane and generates an unpaid toll, the toll and any applicable TollPass Convenience Charge will be charged to the same credit or debit card that is used to rent the vehicle. The TollPass Convenience Charge is $3.95 for each day you use a toll express lane on roadways covered by our TollPass provider, up to a maximum of $19.75 per rental, plus the cost of all unpaid tolls.\n"]
+                                    }, {
+                                        "type": "Rental Rules",
+                                        "policies": ["Your car rental base rate is guaranteed and payable upon pick-up at the counter.", "The rate is guaranteed for the time frame between the stated pick-up and return times. Vehicles returned outside of these times may be subject to additional rental fees.", "A valid driver’s license and major credit card are required in order to pick-up the car. Taxes and surcharges are estimated and payable at the rental counter. ", "Drivers under the age of 25 may be denied the rental. Please make sure your rental provider is aware of drivers under the age of 25. Where applicable, additional fees may apply for drivers under 25 years of age, additional drivers, debit card usage or optional services."]
+                                    }],
+                                    "mileage": {
+                                        "allowedUnits": null,
+                                        "isUnlimited": false,
+                                        "rateType": null,
+                                        "extraMileageCharges": null
+                                    },
+                                    "pickupInfo": {
+                                        "address": "3801 LAS VEGAS BLVD S LAS VEGAS NV 89109-4325 US",
+                                        "completeAddress": {
+                                            "addressLine1": "3801 LAS VEGAS BLVD S",
+                                            "addressLine2": "",
+                                            "completeAddress": "3801 LAS VEGAS BLVD S LAS VEGAS NV 89109-4325 US",
+                                            "phoneNumber": "7028624507",
+                                            "zipCode": "89109-4325",
+                                            "city": "LAS VEGAS",
+                                            "country": "US",
+                                            "state": "NV"
+                                        },
+                                        "atAirport": false,
+                                        "startTime": "",
+                                        "endTime": "",
+                                        "inTerminal": false,
+                                        "shuttleInfo": "NoInformation",
+                                        "type": "Corporate",
+                                        "distance": {
+                                            "amount": 0.76,
+                                            "from": "City",
+                                            "unit": "Mile",
+                                            "displayAmount": "0.00km"
+                                        }
+                                    },
+                                    "dropoffInfo": {
+                                        "address": "3801 LAS VEGAS BLVD S LAS VEGAS NV 89109-4325 US",
+                                        "completeAddress": {
+                                            "addressLine1": "3801 LAS VEGAS BLVD S",
+                                            "addressLine2": "",
+                                            "completeAddress": "3801 LAS VEGAS BLVD S LAS VEGAS NV 89109-4325 US",
+                                            "phoneNumber": "7028624507",
+                                            "zipCode": "89109-4325",
+                                            "city": "LAS VEGAS",
+                                            "country": "US",
+                                            "state": "NV"
+                                        },
+                                        "atAirport": false,
+                                        "startTime": "",
+                                        "endTime": "",
+                                        "inTerminal": false,
+                                        "shuttleInfo": "NoInformation",
+                                        "type": "Corporate",
+                                        "distance": {
+                                            "amount": 0.76,
+                                            "from": "City",
+                                            "unit": "Mile",
+                                            "displayAmount": "0.00km"
+                                        }
+                                    },
+                                    "policies": [{
+                                        "description": "Please cancel your reservation online under my reservations. You may also call Travel Services at 800-459-1597 to cancel or modify your reservation.",
+                                        "isQuantifiable": false,
+                                        "window": null,
+                                        "penalty": null,
+                                        "type": "BlanketCancellation"
+                                    }],
+                                    "minFare": {
+                                        "areRatesAvailable": true,
+                                        "fare": {
+                                            "amount": 57.54,
+                                            "currency": "USD",
+                                            "displayAmount": "$57.54",
+                                            "type": "USD"
+                                        },
+                                        "equivalentFares": [],
+                                        "equivalents": null
+                                    },
+                                    "guaranteeText": null,
+                                    "phoneNumber": "866/677-4019",
+                                    "isCancellable": true,
+                                    "allPassengersInfoRequired": false,
+                                    "isGuaranteeRequired": false,
+                                    "id": "NF9fZmUxYjdmZDgtZjUzNS00YjRjLWIwZmYtZWM5MjZlMGIyMDM0",
+                                    "name": "FIESTA OR SIMILAR",
+                                    "fare": {
+                                        "type": "Published",
+                                        "code": "EHCN1",
+                                        "isRefundable": false,
+                                        "components": [{
+                                            "money": {
+                                                "amount": 57.54,
+                                                "currency": "USD",
+                                                "displayAmount": "$57.54",
+                                                "type": "USD"
+                                            },
+                                            "components": [],
+                                            "type": "BaseFare",
+                                            "properties": []
+                                        }, {
+                                            "money": {
+                                                "amount": 7.88,
+                                                "currency": "USD",
+                                                "displayAmount": "$7.88",
+                                                "type": "USD"
+                                            },
+                                            "components": [],
+                                            "type": "Saving",
+                                            "properties": [{
+                                                "key": "Type",
+                                                "value": "Savings"
+                                            }]
+                                        }, {
+                                            "money": {
+                                                "amount": 57.54,
+                                                "currency": "USD",
+                                                "displayAmount": "$57.54",
+                                                "type": "USD"
+                                            },
+                                            "components": [],
+                                            "type": "TotalFare",
+                                            "properties": []
+                                        }, {
+                                            "money": {
+                                                "amount": 0,
+                                                "currency": "USD",
+                                                "displayAmount": "$0.00",
+                                                "type": "USD"
+                                            },
+                                            "components": [],
+                                            "type": "TotalFee",
+                                            "properties": []
+                                        }, {
+                                            "money": {
+                                                "amount": 0,
+                                                "currency": "USD",
+                                                "displayAmount": "$0.00",
+                                                "type": "USD"
+                                            },
+                                            "components": [],
+                                            "type": "TotalTax",
+                                            "properties": []
+                                        }, {
+                                            "money": {
+                                                "amount": 0,
+                                                "currency": "USD",
+                                                "displayAmount": "$0.00",
+                                                "type": "USD"
+                                            },
+                                            "components": [],
+                                            "type": "TotalDiscount",
+                                            "properties": []
+                                        }, {
+                                            "money": {
+                                                "amount": 7.88,
+                                                "currency": null,
+                                                "displayAmount": "$7.88",
+                                                "type": null
+                                            },
+                                            "components": [],
+                                            "type": "TotalSaving",
+                                            "properties": []
+                                        }],
+                                        "equivalents": null
+                                    },
+                                    "fareWithAddOns": {
+                                        "type": "Published",
+                                        "code": "EHCN1",
+                                        "isRefundable": false,
+                                        "components": [{
+                                            "money": {
+                                                "amount": 57.54,
+                                                "currency": "USD",
+                                                "displayAmount": "$57.54",
+                                                "type": "USD"
+                                            },
+                                            "components": [],
+                                            "type": "BaseFare",
+                                            "properties": []
+                                        }, {
+                                            "money": {
+                                                "amount": 7.88,
+                                                "currency": "USD",
+                                                "displayAmount": "$7.88",
+                                                "type": "USD"
+                                            },
+                                            "components": [],
+                                            "type": "Saving",
+                                            "properties": [{
+                                                "key": "Type",
+                                                "value": "Savings"
+                                            }]
+                                        }, {
+                                            "money": {
+                                                "amount": 57.54,
+                                                "currency": "USD",
+                                                "displayAmount": "$57.54",
+                                                "type": "USD"
+                                            },
+                                            "components": [],
+                                            "type": "TotalFare",
+                                            "properties": []
+                                        }, {
+                                            "money": {
+                                                "amount": 0,
+                                                "currency": "USD",
+                                                "displayAmount": "$0.00",
+                                                "type": "USD"
+                                            },
+                                            "components": [],
+                                            "type": "TotalFee",
+                                            "properties": []
+                                        }, {
+                                            "money": {
+                                                "amount": 0,
+                                                "currency": "USD",
+                                                "displayAmount": "$0.00",
+                                                "type": "USD"
+                                            },
+                                            "components": [],
+                                            "type": "TotalTax",
+                                            "properties": []
+                                        }, {
+                                            "money": {
+                                                "amount": 0,
+                                                "currency": "USD",
+                                                "displayAmount": "$0.00",
+                                                "type": "USD"
+                                            },
+                                            "components": [],
+                                            "type": "TotalDiscount",
+                                            "properties": []
+                                        }, {
+                                            "money": {
+                                                "amount": 7.88,
+                                                "currency": null,
+                                                "displayAmount": "$7.88",
+                                                "type": null
+                                            },
+                                            "components": [],
+                                            "type": "TotalSaving",
+                                            "properties": []
+                                        }],
+                                        "equivalents": null
+                                    },
+                                    "isPostPaid": true,
+                                    "isSoldOut": false,
+                                    "isPreferred": false,
+                                    "addOns": null,
+                                    "preferredSortOrder": 0,
+                                    "source": {
+                                        "inventoryId": "NF9fZmUxYjdmZDgtZjUzNS00YjRjLWIwZmYtZWM5MjZlMGIyMDM0",
+                                        "id": 20036,
+                                        "name": "Enterprise_Uat"
+                                    },
+                                    "restrictions": null
+                                }
+                var searchCriteria = {
+                                    "pickupLocation": {
+                                        "code": "LAS",
+                                        "name": "McCarran International Airport",
+                                        "cityName": "Las Vegas",
+                                        "countryCode": "US",
+                                        "countryName": "United States",
+                                        "geoCode": "36.0854,-115.15",
+                                        "id": 2102,
+                                        "stateCode": "NV",
+                                        "stateName": "Nevada",
+                                        "type": "Airport",
+                                        "additionalInfo": null,
+                                        "formattedAddress": "Las Vegas, NV, United States - McCarran International Airport (LAS)"
+                                    },
+                                    "pickupDate": "08/30/2016",
+                                    "dropoffLocation": {
+                                        "code": "LAS",
+                                        "name": "McCarran International Airport",
+                                        "cityName": "Las Vegas",
+                                        "countryCode": "US",
+                                        "countryName": "United States",
+                                        "geoCode": "36.0854,-115.15",
+                                        "id": 2102,
+                                        "stateCode": "NV",
+                                        "stateName": "Nevada",
+                                        "type": "Airport",
+                                        "additionalInfo": null,
+                                        "formattedAddress": "Las Vegas, NV, United States - McCarran International Airport (LAS)"
+                                    },
+                                    "dropoffDate": "09/06/2016",
+                                    "isDropoffLocationSame": true,
+                                    "pickupTime": "11:00 AM",
+                                    "dropoffTime": "11:00 AM"
+                                };
+                var template = document.getElementById('domBindTemplate');
+                template.$.carItineraryDetails.searchCriteria = searchCriteria;
+                template.$.carItineraryDetails.itinerary = itinerary;
+                template.$.carItineraryDetails.itineraryId = itinerary.id;
+                template.$.searchCriteriaRecap.data = searchCriteria;
+                // template.visible = true;
+            });
+
+        })();
+    </script>
+</html>

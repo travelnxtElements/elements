@@ -1,0 +1,101 @@
+<link rel="import" href="../polymer/polymer.html" />
+<link rel="import" href="../t-section-header/t-section-header.html" />
+<link rel="import" href="t-passenger-segment.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html" />
+
+<dom-module id="t-passenger-info-list">
+    <template> 
+    <style include="iron-flex">
+        :host {
+            width: 100%;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+        
+        .vertical-margin {
+            margin-bottom: 10px;
+        }
+        
+        .vertical-margin t-input {
+            margin-right: 5px;
+        }
+        
+        .vertical-margin t-input:last-child {
+            margin-right: 0;
+        }
+        
+        .suffix {
+            width: 20%;
+        }
+        
+        .calendar {
+            margin-right: 5px;
+        }
+        
+        :host::content input {
+            text-transform: capitalize;
+        }
+        
+        .section {
+            padding: 0 10px;
+        }
+        </style>       
+        <t-notify hidden$="{{!errorBlock}}" type="error" id="notify" message="{{errorMessage}}"></t-notify>
+        <div class="layout vertical">
+            <template is="dom-repeat" items="{{data}}" as="passenger">
+                <t-section-header label="{{_getHeaderText(passenger.type)}}"></t-section-header>
+                <t-passenger-segment first-name="{{passenger.firstName}}" middle-name="{{passenger.middleName}}" last-name="{{passenger.lastName}}" gender="{{passenger.gender}}" suffix="{{passenger.suffix}}" date-of-birth="{{passenger.dateOfBirth}}" type="{{passenger.type}}" 
+                hide-middle-name="[[passenger.hideMiddleName]]" hide-suffix="[[passenger.hideSuffix]]" hide-date-of-birth="[[passenger.hideDateOfBirth]]" hide-gender="[[passenger.hideGender]]"></t-passenger-segment>
+            </template>
+        </div>        
+        </div>
+    </template>
+</dom-module>
+<script>
+(function() {
+
+    var adultIndex = 0,
+        childIndex = 0,
+        infantIndex = 0,
+        seniorIndex = 0;
+
+    Polymer({
+        is: 't-passenger-info-list',
+
+        properties: {
+            data: {
+                type: Array,                
+                notify: true,
+                value: []
+            }
+        },
+
+        _getDisplayIndex: function(type) {
+            switch (type.toLowerCase()) {
+                case 'adult':
+                    adultIndex++;
+                    return adultIndex;
+                case 'child':
+                    childIndex++;
+                    return childIndex;
+                case 'senior':
+                    seniorIndex++;
+                    return seniorIndex;
+                case 'infant':
+                    infantIndex++;
+                    return infantIndex;
+            }
+        },
+
+        _getHeaderText: function(type) {            
+            return type + " " + this._getDisplayIndex(type);
+        },
+
+        _onDataChange: function(){
+            debugger;
+        }
+        
+    });
+})();
+</script>

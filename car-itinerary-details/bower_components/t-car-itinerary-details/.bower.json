@@ -1,0 +1,53 @@
+{
+  "name": "t-car-itinerary-details",
+  "authors": [
+    "Manoj Chalode <chalodem@gmail.com>"
+  ],
+  "description": "This component provides details of selected car itinerary from car result view.",
+  "main": "t-car-itinerary-details.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.4.0",
+    "t-notify": "atomelements/t-notify#^1.1.1",
+    "t-policy": "travelnxtElements/t-policy#^1.0.0",
+    "t-shared-lib": "travelnxtelements/t-shared-lib#^1.0.2",
+    "t-image": "atomelements/t-image#^1.2.1",
+    "t-button": "atomelements/t-button#^1.0.0",
+    "t-sessionstorage": "travelnxtElements/t-sessionstorage#^1.0.0",
+    "iron-flex-layout": "PolymerElements/iron-flex-layout#^1.2.1",
+    "t-text-container": "travelnxtelements/t-text-container#^1.1.1",
+    "juicy-html": "Juicy/juicy-html#^1.0.2",
+    "t-car-result-item": "travelnxtElements/t-car-result-item#^1.0.0",
+    "iron-collapse": "PolymerElements/iron-collapse#^1.2.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "t-faredetails": "travelnxtelements/t-faredetails#^1.1.0",
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.0.0",
+    "web-component-tester": "^4.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0",
+    "t-text-container": "travelnxtelements/t-text-container#^1.1.0",
+    "t-shared-components": "atomelements/t-shared-components#^1.0.5",
+    "t-header": "travelnxtElements/t-header#^1.0.0"
+  },
+  "resolutions": {
+    "t-shared-lib": "^1.0.0",
+    "t-notify": "^1.1.1",
+    "iron-flex-layout": "^1.3.1",
+    "t-header": "^1.0.0",
+    "t-text-container": "^1.1.1",
+    "iron-icons": "^1.0.5",
+    "t-button": "^1.2.0",
+    "t-loader": "^1.0.0"
+  },
+  "homepage": "https://github.com/travelnxtelements/t-car-itinerary-details",
+  "_release": "0b25a550ff",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "0b25a550ff6ed2ecdb430bb97182a62500b8c5eb"
+  },
+  "_source": "git://github.com/travelnxtelements/t-car-itinerary-details.git",
+  "_target": "master",
+  "_originalSource": "travelnxtelements/t-car-itinerary-details",
+  "_direct": true
+}

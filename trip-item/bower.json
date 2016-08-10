@@ -1,0 +1,36 @@
+{
+  "name": "t-trip-item",
+  "version": "1.1.4",
+  "authors": [
+    "Manoj Chalode <chalodem@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "keywords": [
+    "Polymer",
+    "Web",
+    "Components"
+  ],
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0",
+    "t-text-container": "travelnxtelements/t-text-container#^1.0.0",
+    "t-list": "atomelements/t-list#^1.0.0",
+    "paper-menu-button": "PolymerElements/paper-menu-button#^1.0.4",
+    "t-filter": "atomelements/t-filter#^1.0.0"
+  },
+  "devDependencies": {
+    "web-component-tester": "*",
+    "webcomponentsjs": "~0.7.14",
+    "iron-component-page": "PolymerElements/iron-component-page#~1.0.6"
+  }
+}

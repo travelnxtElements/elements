@@ -1,0 +1,136 @@
+<link rel="import" href="../polymer/polymer.html" />
+<link rel="import" href="../iron-list/iron-list.html" />
+<link rel="import" href="../t-overlay/t-overlay.html" />
+<link rel="import" href="../t-text-container/travel-element-styles.html" />
+<link rel="import" href="t-hotel-room-item.html" />
+<link rel="import" href="t-hotel-room-policy-list.html" />
+<!--
+    `<t-hotel-room-list>` is a polymer component that generates a list of t-hotel-room-item in Details page of the app.
+
+    Basic usage
+    `
+    <t-hotel-room-list itinerary="{{selectedHotel}}">    
+        <t-hotel-room-list-provider id="roomProvider">
+        </t-hotel-room-list-provider>
+        <t-hotel-room-policy-provider id="policyProvider">
+        </t-hotel-room-policy-provider>     
+    </t-hotel-room-list> 
+    `
+-->
+<dom-module id="t-hotel-room-list">
+<template>
+    <style include="iron-flex"></style>
+    <style include="travel-element-styles">
+	</style>
+	<div>
+		<template is="dom-if" if="{{_roomsLoading}}">
+	        <div class="section font-16 text-center">Please wait, we are getting available rooms and rates for your selected itinerary.</div>
+	        <div class="horizontal section-small layout flex center-justified">
+                <t-loader active></t-loader>
+            </div>            
+	    </template>
+	    <template is="dom-if" if="{{_roomsFailed}}">
+	    	<t-notify active message="Sorry we are having difficulties confirming the availability of your selected itinerary. Please go back and select another."></t-notify>
+	    </template>
+	    <t-overlay header="Policies" id="overlay">  
+		    <t-hotel-room-policy-list>
+		    	<content select="#policyProvider"></content>     
+		    </t-hotel-room-policy-list>    
+	    </t-overlay>
+	    <iron-list items="{{rooms}}">        
+			<template>
+				<t-hotel-room-item room="[[item]]" itinerary="[[itinerary]]" class="border-bottom">
+				</t-hotel-room-item>
+			</template>
+	    </iron-list> 
+	    <content select="#roomProvider" ></content>
+	</div>               
+</template>
+</dom-module>
+
+<script>
+	Polymer({
+		is: "t-hotel-room-list",
+
+		properties: {
+
+			/**
+		     * Provide the array of all room type objects.
+		     */ 
+			rooms: Array,
+
+			/**
+		     * Set to true to automatically make a call for room types/ run the method for showRooms.
+		     */ 
+			auto: Boolean,
+
+			/**
+		     * Provide the Hotel details object. Ideally the One provided by the Mystique api.
+		     */ 
+			itinerary: Object
+		},
+
+		_roomProvider: null,    
+
+		_roomsLoading: false,
+
+		_roomsFailed: false,
+
+		listeners: {
+			'room-policy': '_showRoomPolicy',
+		},
+		
+
+		attached: function(){
+			if(this.auto){
+				this.showRooms();
+			}
+		},
+
+		/**
+	     * make a call for room types and populate data in the list.
+	     */  
+		showRooms: function(){
+			this._checkAndSubscribeProvider();	
+			this._roomProvider.singleAvail();	
+			this._roomsLoading = true;
+		},
+
+		/**
+	     * search provider 
+	     */    
+	    _checkAndSubscribeProvider: function(){    
+	        this.set('_roomProvider', Polymer.dom(this).queryDistributedElements('#roomProvider')[0]);
+	        if(!this._roomProvider){
+	            console.error('no room list provider resolved with id #roomProvider');
+	        }
+	        if(typeof this._roomProvider.singleAvail != 'function'){
+	            console.error('no "singleAvail" function is present in given room list provider');
+	        }        
+	        this._roomProvider.addEventListener('success', this._successCallback.bind(this));
+	        this._roomProvider.addEventListener('error', this._errorCallback.bind(this));
+	    },
+
+	    _successCallback: function(event){
+	    	if(!event.detail || !event.detail.length){
+	    		this._errorCallback(event)
+	    		return;
+	    	}
+	    	
+	    	this.rooms = event.detail;
+	    	this._roomsLoading = false;
+	    },
+
+	    _errorCallback: function(event){
+	    	this._roomsLoading = false;
+	    	this._roomsFailed = true
+	    },
+
+	    _showRoomPolicy: function(event){
+	    	this.$.overlay.active = true;	    
+	    	Polymer.dom(this.root).querySelector('t-hotel-room-policy-list').querySelector('#policyProvider').inventoryId = event.detail.id;	    	
+	    	Polymer.dom(this.root).querySelector('t-hotel-room-policy-list').showPolicies();	    	
+	    },
+
+	});	
+</script>

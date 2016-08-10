@@ -1,0 +1,38 @@
+{
+  "name": "t-policy",
+  "version": "1.0.2",
+  "authors": [
+    "Ganesh Ratnaparkhi <ganeshr43@gmail.com>",
+    "Manoj Chalode <chalodem@gmail.com>"
+  ],
+  "description": "This component provides a customised link. It accepts inputs such as label, inventory id, search id, api base url, relative url. On clicking on link, overlay will be opened and in background ajax call will be placed. The resonse from call will be displayed on overlay.",
+  "main": "t-policy.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.4.0",
+    "iron-flex-layout": "PolymerElements/iron-flex-layout#^1.2.1",
+    "iron-ajax": "PolymerElements/iron-ajax#^1.1.0",
+    "t-notify": "atomelements/t-notify#^1.1.1",
+    "t-loader": "atomelements/t-loader#^1.0.0",
+    "t-overlay": "atomelements/t-overlay#^1.0.0",
+    "t-text-container": "travelnxtElements/t-text-container#^1.0.0",
+    "t-shared-lib": "travelnxtElements/t-shared-lib#^1.0.0",
+    "juicy-html": "Juicy/juicy-html#^1.0.2"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.0.0",
+    "web-component-tester": "^4.0.0",
+    "t-shared-components": "atomelements/t-shared-components#^1.0.5",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
+  },
+  "homepage": "https://github.com/travelnxtElements/t-policy",
+  "_release": "1.0.2",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.0.2",
+    "commit": "b5b55e1a1d6e693aaa831accf871dc7bc8d07a1a"
+  },
+  "_source": "git://github.com/travelnxtElements/t-policy.git",
+  "_target": "^1.0.0",
+  "_originalSource": "travelnxtElements/t-policy"
+}

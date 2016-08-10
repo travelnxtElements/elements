@@ -1,0 +1,117 @@
+<link rel="import" href="../polymer/polymer.html">
+<!--
+    The decorator component basically takes an input, observes it and gives away an output with its notify on.
+    `<t-hotel-search-api-decorator>` is a polymer component that generates the  msytique request for hotel.
+    Basic usage
+    
+        `<t-hotel-search-api-decorator 
+            input="[[something]]"
+            output="{{searchCriteria}}">
+        </t-hotel-search-api-decorator>`
+
+    Example input object:
+
+            {
+                location: this.location,
+                checkIn: this.checkIn,
+                checkOut: this.checkOut,
+                adultCount: this.adultCount,
+                childCount: this.childCount,
+                childAges: this.childAges
+            }
+
+    TODO: 
+
+    1. We are going to expose an error property to show error.
+    2. We are going to expose a property for build function to be able to handle the build request from outside.
+-->
+<dom-module id="t-hotel-search-api-decorator">
+</dom-module>
+<script>
+Polymer({
+
+    is: 't-hotel-search-api-decorator',
+    observers: [
+        '_buildData(input)'
+    ],
+
+    properties: {
+
+        /**
+         * Pass input of the decorator
+         * @type {Object}
+         */
+        input: {
+            type: Object
+        },
+
+        /**
+         * Stores output of the decorator with notify on.
+         * @type {Object}
+         */
+        output: {
+            type: Object,
+            notify: true
+        },
+        prop:{
+            type:Array,
+            value: []
+        }
+    },
+
+    //the function to create the object and assign it to the output object
+    _buildData: function(detail) {
+        var query = {
+            "destination": detail.location,
+            "checkInDate": {
+                "date": detail.checkIn,
+                "systemDateTime": this._toSystemDateTimeFormat(new Date(detail.checkIn)) //if detail.checkIn is not mm/dd/yyyy or en-US culture, parse string according to culture / globalization                     
+            },
+            "checkOutDate": {
+                "date": detail.checkOut,
+                "systemDateTime": this._toSystemDateTimeFormat(new Date(detail.checkOut)) //if detail.checkOut is not mm/dd/yyyy or en-US culture, parse string according to culture / globalization                     
+            },
+            "rooms": [{
+                "children": {
+                    "quantity": detail.childCount,
+                    "ages": [],
+                    "type": 'Child',
+                },
+                "adults": {
+                    "quantity": detail.adultCount,
+                    "type": 'Adult',
+                    "ages": [],
+                }
+            }],
+            'responseContentType': 'rates',
+            "type": 'Hotel'
+        };
+        //default adult age setup
+        if (detail.adultCount) {
+            for (var i = 0; i < detail.adultCount; i++) {
+                query.rooms[0].adults.ages.push(25); //TODO: give provision for adult ages also in component api
+            };
+        }
+
+        if (detail.childAges) {
+            for (var i = 0; i < detail.childAges.length; i++) {
+                query.rooms[0].children.ages.push(detail.childAges[i].age);
+            };
+        }
+        this.output = query;
+    },
+
+    //Mystique specific logic to convert display date to system date (YYYY-MM-DDTHH:MM:SS)
+    //TODO: remove if any date parse/format plugin is setup application 
+    _toSystemDateTimeFormat: function(dateToFormat) {
+        if (!dateToFormat)
+            return dateToFormat;
+
+        var systemDateTime = dateToFormat.getFullYear() + '-';
+        systemDateTime += (((dateToFormat.getMonth() + '').length == 1) ? '0' + (dateToFormat.getMonth() + 1) : (dateToFormat.getMonth() + 1)) + '-';
+        systemDateTime += (((dateToFormat.getDate() + '').length == 1) ? '0' + dateToFormat.getDate() : dateToFormat.getDate());
+        return systemDateTime + 'T00:00:00'
+    }
+
+});
+</script>

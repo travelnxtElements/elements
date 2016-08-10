@@ -1,0 +1,33 @@
+{
+  "name": "t-bestprice",
+  "version": "1.0.2",
+  "homepage": "https://github.com/travelnxtElements/t-bestprice",
+  "authors": [
+    "Sounak Pal <talk2sounak@gmail.com>"
+  ],
+  "description": "Best price guarantee component is used to select the best price for user",
+  "main": "",
+  "moduleType": [],
+  "keywords": [
+    "bestprice",
+    "guarantee"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "t-checkbox": "atomElements/t-checkbox#^1.0.0",
+    "t-section-header": "atomelements/t-section-header#^1.0.0",
+    "iron-flex-layout": "PolymerElements/iron-flex-layout#^1.0.0",
+    "polymer": "Polymer/polymer#^1.0.0"
+  },
+  "devDependencies": {
+    "webcomponentsjs": "~0.7.14",
+    "iron-component-page": "PolymerElements/iron-component-page#~1.0.6"
+  }
+}

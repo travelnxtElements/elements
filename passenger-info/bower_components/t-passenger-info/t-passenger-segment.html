@@ -1,0 +1,307 @@
+<link rel="import" href="../polymer/polymer.html" />
+<link rel="import" href="../t-calendar/t-calendar.html">
+<link rel="import" href="../t-input/t-input.html">
+<link rel="import" href="../t-dropdown-menu/t-dropdown-menu.html">
+<link rel="import" href="../t-radio-group/t-radio-group.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html" />
+<!--
+    t-passenger-segment is a polymer component that generates a passenger details form.
+    The comoponent includes properties to hide all the input fields except first name and last name.
+    You can set and get values of each field with exposed list of properties
+    `<t-passenger-segment first-name="{{passenger.FirstName}}" middle-name="{{passenger.MiddleName}}" last-name="{{passenger.LastName}}" type="{{_getType(passenger.Type)}}"  gender="{{passenger.GenderString}}" suffix="{{passenger.Suffix}}" date-of-birth="{{passenger.DOB}}"></t-passenger-segment>`    
+-->
+<dom-module id="t-passenger-segment">
+    <template>    
+    <style include="iron-flex">
+        :host {
+            width: 100%;
+            display: block;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+        
+        .vertical-margin {
+            margin-bottom: 15px;
+        }
+        
+        .vertical-margin t-input:not(.suffix) , #title,.calendar {
+            margin-right: var(--normal-spacing,10px);
+        }
+        
+        .vertical-margin t-input:last-child {
+            margin-right: 0;
+        }
+        
+        .suffix , #title{
+            width: 20%;
+            min-width: 75px;
+        }
+        
+        
+        :host::content input {
+            text-transform: capitalize;
+        }
+        
+        .section {
+            padding: var(--normal-spacing,10px);
+        }
+        </style>   
+        <div class="section">
+            <div class="vertical-margin layout horizontal start">
+                <template is="dom-if" if=[[!hideTitle]]>
+                    <t-dropdown  id="title" class="title" label="Title" error-message="Select title" selected-item="{{title}}"  dropdown-array="{{_listTitles(type)}}" required>
+                    </t-dropdown>
+                </template>
+                <t-input id="firstName" class="flex" label="First Name" pattern="^[a-zA-Z\d.' ]+" error-message="You missed this." required auto-validate value="{{firstName}}"></t-input>
+            </div>
+            <template is="dom-if" if=[[!hideMiddleName]]>
+                <div class="vertical-margin layout horizontal center">
+                    <t-input id="middleName" class="flex" label="Middle Name"pattern="^[a-zA-Z\d.' ]+" auto-validate value="{{middleName}}"></t-input>
+                </div>
+            </template>
+            <div class="vertical-margin layout horizontal center">
+                <t-input id="lastName" class="flex" label="Last Name" error-message="You missed this." pattern="^[a-zA-Z\d.' ]+" required auto-validate value="{{lastName}}"></t-input>
+                <template is="dom-if" if=[[!hideSuffix]]>
+                    <t-input id="suffix" class="suffix" label="Suffix" value="{{suffix}}"></t-input>
+                </template>
+            </div>
+            <div class="vertical-margin layout horizontal center center-justified">
+                <template is="dom-if" if=[[!hideDateOfBirth]]>
+                    <t-calendar id="dateOfBirth" class="flex calendar" is-dob required label="Date of birth" min="{{_getMinDate(type)}}" max="{{_getMaxDate(type)}}" format="mm/dd/yyyy" submit-format="mm/dd/yyyy" selected-date="{{dateOfBirth}}" error-message="Enter date of birth"></t-calendar>
+                </template>
+                <template is="dom-if" if=[[!hideGender]]>
+                    <t-radio-group id="gender" pill-button selected-item="{{gender}}" data='["Male","Female"]'></t-radio-group>
+                </template>
+            </div>
+        </div>
+    </template>
+</dom-module>
+<script>
+    (function () {
+        Polymer({
+
+            is: 't-passenger-segment',
+
+            properties: {
+
+                /**
+                 * Set or get the firstName of the form.
+                 */
+                firstName: {
+                    type: String,
+                    notify: true
+                },
+
+                /**
+                 * Set or get the middleName of the form.
+                 */
+                middleName: {
+                    type: String,
+                    notify: true
+                },
+
+                /**
+                 * Set or get the lastName of the form.
+                 */
+                lastName: {
+                    type: String,
+                    notify: true
+                },
+
+                /**
+                 * Set or get the suffix of the form.
+                 */
+                suffix: {
+                    type: String,
+                    notify: true
+                },
+
+                /**
+                 * Set or get the dateOfBirth of the form.
+                 */
+                dateOfBirth: {
+                    type: String,
+                    notify: true
+                },
+
+                /**
+                 * Set or get the title of the form.
+                 */
+                title: {
+                    type: String,
+                    notify: true,
+                    observer: '_setGender'
+                },
+
+                /**
+                 * Set or get the gender of the form.
+                 * allowed types(case sensitive): Male/Female 
+                 */
+                gender: {
+                    type: String,
+                    value: 'Male',
+                    notify: true
+                },
+
+                /**
+                 * Response object of the form for frequent flyers details.
+                 * allowed types(case sensitive): Adult/Child/Infant/Senior
+                 */
+                type: {
+                    type: String,
+                    notify: true
+                },
+
+                /**
+                 * Pass true to hide MiddleName
+                 */
+                hideMiddleName: {
+                    type: Boolean,
+                    value: false
+                },
+
+                /**
+                 * Pass true to hide Suffix
+                 */
+                hideSuffix: {
+                    type: Boolean,
+                    value: false
+                },
+
+                /**
+                 * Pass true to hide Title
+                 */
+                hideTitle: {
+                    type: Boolean,
+                    value: false
+                },
+
+                /**
+                 * Pass true to hide DateOfBirth
+                 */
+                hideDateOfBirth: {
+                    type: Boolean,
+                    value: false
+                },
+
+                /**
+                 * Pass true to hide Gender
+                 */
+                hideGender: {
+                    type: Boolean,
+                    value: false
+                },
+
+                /**
+                 * Provide the departure date object of the journey to the component
+                 */
+                departureDate: {
+                    type: Object,
+                    notify: true,
+                    value: function () {
+                        return new Date();
+                    }
+                },
+
+                /**
+                 * Minimum age of passenger
+                 */
+                minAge: {
+                    type: Number
+                },
+
+                /**
+                 * Maximum age of passenger
+                 */
+                maxAge: {
+                    type: Number
+                }
+            },
+
+            ready: function () {
+                this._setCalendar();
+            },
+
+            attached: function () {
+                this.hideMiddleName = !(!this.hideMiddleName);
+                this.hideSuffix = !(!this.hideSuffix);
+                this.hideDateOfBirth = !(!this.hideDateOfBirth);
+                this.hideGender = !(!this.hideGender);
+            },
+
+            _setCalendar: function () {
+                var calArr = Polymer.dom(this.root).querySelectorAll('t-calendar');
+            },
+
+            _getMinDate: function (type) {
+                var date = new Date(this.departureDate) || new Date();
+                switch (type.toLowerCase()) {
+                    case 'child':
+                        var minDate = new Date(date.setFullYear(date.getFullYear() - (this.maxAge || 12)));
+                        minDate = minDate.setDate(minDate.getDate() + 1);
+                        return new Date(minDate);
+                    case 'infant':
+                        return new Date(date.setFullYear(date.getFullYear() - (this.maxAge || 2)));
+
+                }
+            },
+
+            _getMaxDate: function (type) {
+                var date = new Date(this.departureDate) || new Date();
+                switch (type.toLowerCase()) {
+                    case 'adult':
+                        if (!this.minAge && this.minAge !== 0) {
+                            this.minAge = 12;
+                        }
+                        return new Date(date.setFullYear(date.getFullYear() - this.minAge));
+                    case 'child':
+                        if (!this.minAge && this.minAge !== 0) {
+                            this.minAge = 2;
+                        }
+                        var minDate = new Date(date.setFullYear(date.getFullYear() - this.minAge));
+                        minDate = minDate.setDate(minDate.getDate() - 1);
+                        return new Date(minDate);
+                    default:
+                        return new Date();
+
+                }
+            },
+
+            _listTitles: function (type) {
+                switch (type.toLowerCase()) {
+                    case 'adult':
+                        return ["Mr", "Ms", "Mrs"];
+                    case 'child':
+                        return ["Master", "Miss"];
+                    default:
+                        return ["Master", "Miss"];
+
+                }
+            },
+
+            _setGender:function () {
+                if (this.hideGender && this.title) {
+                    var maleTitles = ["Mr", "Master"];
+                    if (maleTitles && maleTitles.length && maleTitles.indexOf(this.title) >= 0) {
+                        this.gender = 'Male'
+                    }else{
+                        this.gender = 'Female';
+                    }
+                }
+            },
+
+            /**
+             * This methods validates all required fields of the component
+             */
+            validate: function () {
+                var all = Polymer.dom(this.root).querySelectorAll('[required]'),
+                isValid = true;
+                all.forEach(function (element, index) {
+                    isValid = element.validate() && isValid;
+                });
+                return isValid;
+            }
+        });
+    })();
+</script>

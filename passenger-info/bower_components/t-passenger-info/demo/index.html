@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>t-car-itinerary-details demo</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="../t-passenger-info-page.html">
+    <link rel="import" href="../../t-shared-components/theme.html">
+    <link rel="import" href="../../t-header/t-header.html">
+    <link rel="import" href="../../t-text-container/travel-element-styles.html">
+    <style is="custom-style" include="travel-element-styles"></style>    
+</head>
+
+<body>
+    <template is="dom-bind" id="templatizer">
+
+        <t-passenger-info-page
+            id="passengerInfo"
+            name="paxInfo"
+            product="car"
+            primary-header="Primary Guest"
+            api-url-format="[[apiUrlFormat]]"
+            passenger-info="{{passengerInfo}}"
+            hide-gender
+            hide-suffix
+            hide-middle-name
+            hide-date-of-birth
+            adult-count="1"
+            child-count="1"
+            infant-count="1">
+            <t-header
+                icon="arrow-back"
+                 url="[[siteUrl]]car/details"
+                label="Guest Info"
+                normal-heading>
+            </t-header>
+        </t-passenger-info-page>
+        
+    </template>
+</body>
+
+<script>
+    (function () {
+        'use strict'
+        window.addEventListener('WebComponentsReady', function(e) {
+            var templatizer = document.getElementById('templatizer');            
+            templatizer.$.passengerInfo.ageMappings = {
+                adult : {
+                    minAge: 20,
+                    maxAge: 100
+                },
+                child:{
+                    minAge: 10,
+                    maxAge: 20
+                },
+                infant:{
+                    minAge: 0,
+                    maxAge: 10
+                }
+            };
+            templatizer.$.passengerInfo.departureDate = new Date("07/31/2016");
+            templatizer.$.passengerInfo.visible = true;
+        });
+    })();
+</script>
+
+</html>

@@ -1,0 +1,148 @@
+<link rel='import' href='../polymer/polymer.html'>
+<link rel="import" href="../t-button/t-button.html" />
+<link rel="import" href="../t-autosuggest/t-autosuggest.html" />
+<link rel="import" href="../t-calendar/t-calendar.html" />
+<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html" />
+<link rel="import" href="../t-shared-lib/t-form-behavior.html" />
+<link rel="import" href="../t-text-container/t-search-form-styles.html" />
+<!--
+This component is a form that allows a user to search for Activity.
+It exposes certain prperties which allow control over different aspects
+of searching.
+
+There are fundamentally three types of properties that form the public
+api of this component.
+
+__User input__: Properties like `Location`, `travel Dates` etc. reflect the user input
+necessary for searching
+
+-->
+<dom-module id='t-activity-search'>
+    <template>
+        <style include="t-search-form-styles"></style>
+        <style include="iron-flex">
+        t-autosuggest,
+        t-calendar{
+            outline: 0;
+        }
+        </style>
+            <div class="form flex">
+                <div class="row">
+                    <t-autosuggest id="location" name="location" required selected-item="{{location}}" query-params="token={{authToken}}" label="Origin" token-param="formattedAddress" data-url="{{autosuggestApi}}" error-message="You missed this."></t-autosuggest>
+                </div>
+                <div class="row layout horizontal">
+                    <t-calendar class="flex horizontal-margin-right" id="fromDate" required selected-date="{{fromDate}}" label="From Date" name="fromDate" format="mm/dd/yyyy" submit-format="mm/dd/yyyy" error-message="You missed this."></t-calendar>
+                    <t-calendar class="flex" id="toDate" required selected-date="{{toDate}}" label="To Date" name="toDate" format="mm/dd/yyyy" submit-format="mm/dd/yyyy" error-message="You missed this."></t-calendar>
+                </div>
+                <t-button id="search" class="primary row" on-click="searchActivity" type="button" label="Search Activities" /></t-button>
+            </div>
+    </template>
+</dom-module>
+<script>
+Polymer({
+    is: 't-activity-search',
+    
+    /*
+     * <p>Behaviour to validate forms and other.</p>
+     */
+    behaviors: [TravelNxt.Behaviors.FormBehavior],
+
+    properties: {
+
+        /**
+         * The location to search from.
+         * Must be a value picked from suggested locations?.
+         */
+        location: Object,
+
+        /**
+         * The date of departure.
+         */
+        fromDate: {
+            type: String,
+            value: '',
+            notify: true,
+            observer: '_travelDateChanged'
+        },
+
+        /**
+         * The date of returning back to the departure location
+         * __if__ the type of trip is _Round Trip_
+         */
+        toDate: {
+            type: String,
+            value: '',
+            notify: true
+        },
+
+       
+        /**
+         * The api url that returns suggestions (auto suggest) shown in
+         * departure and arrival airport fields
+         */
+        autosuggestApi: String,
+
+        /**
+         * The error message that will be shown to the user
+         */
+        error: {
+            type: String,
+            value: ''
+        },
+
+         /**
+         * Pass the minimum date difference to start booking from
+         *///
+        bookDateDifference: {
+            type: Number,
+            value: 3
+        }
+    },
+
+    attached: function() {
+        var component = this;
+        this.async(function() {
+            // access sibling or parent elements here
+            var fromDate = new Date();
+            fromDate.setDate(fromDate.getDate() + this.bookDateDifference);
+            this.$.fromDate.picker.set('min', fromDate);
+        });
+        this.addEventListener('on-form-submit', function(event) {
+            component.search(event.detail);
+        });
+    },
+
+    _travelDateChanged: function() {
+        if (this.fromDate != '') {
+            this.$.toDate.picker.set('min', new Date(this.fromDate));
+            if (this.fromDate > this.toDate) {
+                this.toDate = null;
+            }
+        }
+    },
+
+    /*
+     * <p>Builds search request</p>
+    */
+    _buildSearchRequest: function() {
+        return {
+            location: this.location,
+            fromDate: this.fromDate,
+            toDate: this.toDate
+        };
+    },
+
+    /**
+     * The method to fire the search function
+     */
+    searchActivity: function(searchParams) {
+        if (!this.validate()) {
+            return;
+        }
+
+        var request = this._buildSearchRequest();
+
+        this.fire('t-activity-search-validate', request);
+    }
+});
+</script>

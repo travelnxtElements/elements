@@ -1,0 +1,156 @@
+{
+    "rules": [{
+        "description": "We understand that sometimes your travel plans change. We do not charge a change or cancel fee. However, this property (Oasis at Gold Spike) imposes the following penalty to its customers that we are required to pass on: Cancellations or changes made after 3:00 PM ((GMT-08:00) Pacific Time (US &amp; Canada); Tijuana) on Mar 18, 2016, or no-shows, are subject to a 1 Night Room &amp; Tax penalty.  ",
+        "isQuantifiable": true,
+        "window": {
+            "start": {
+                "date": "Tue, 09 Feb, 2016",
+                "time": "5:10 PM",
+                "systemDateTime": "2016-02-09T17:10:54.3124118+05:30"
+            },
+            "end": {
+                "date": "Fri, 18 Mar, 2016",
+                "time": "3:00 PM",
+                "systemDateTime": "2016-03-18T15:00:00"
+            }
+        },
+        "penalty": {
+            "components": [{
+                "money": {
+                    "amount": 0.0,
+                    "currency": "USD",
+                    "displayAmount": "$0.00",
+                    "type": "USD"
+                },
+                "components": null,
+                "type": "BaseFare",
+                "properties": []
+            }, {
+                "money": {
+                    "amount": 0.0,
+                    "currency": "USD",
+                    "displayAmount": "$0.00",
+                    "type": "USD"
+                },
+                "components": null,
+                "type": "TotalFare",
+                "properties": []
+            }],
+            "additionalInfo": null
+        },
+        "type": "FreeCancellation"
+    }, {
+        "description": "",
+        "isQuantifiable": true,
+        "window": {
+            "start": {
+                "date": "Fri, 18 Mar, 2016",
+                "time": "3:01 PM",
+                "systemDateTime": "2016-03-18T15:01:00"
+            },
+            "end": {
+                "date": "Sun, 20 Mar, 2016",
+                "time": "3:00 PM",
+                "systemDateTime": "2016-03-20T15:00:00"
+            }
+        },
+        "penalty": {
+            "components": [{
+                "money": {
+                    "amount": 36.52,
+                    "currency": "USD",
+                    "displayAmount": "$36.52",
+                    "type": "USD"
+                },
+                "components": null,
+                "type": "BaseFare",
+                "properties": []
+            }, {
+                "money": {
+                    "amount": 36.52,
+                    "currency": "USD",
+                    "displayAmount": "$36.52",
+                    "type": "USD"
+                },
+                "components": null,
+                "type": "TotalFare",
+                "properties": []
+            }],
+            "additionalInfo": null
+        },
+        "type": "Cancellation"
+    }, {
+        "description": "<p><b>Know Before You Go</b> <br /><ul>  <li>The property allows pets in specific rooms only and has other pet restrictions (surcharges apply and can be found in the Fees section). Guests can arrange to bring pets by contacting the property directly, using the contact information on the booking confirmation. </li>  </ul></p><p><b>Fees</b> <br /><p>The following fees and deposits are charged by the property at time of service, check-in, or check-out. </p> <ul> <li>Breakfast fee: USD 13 per person (approximately)</li> <li>Fee for in-room wireless Internet: USD 0.00 per night (rates may vary)</li>  <li>Fee for wireless Internet in public areas: USD 0.00 per stay (rates may vary)</li>      <li>Pet fee: USD 50 per accommodation, per stay</li>         </ul> <p>The above list may not be comprehensive. Fees and deposits may not include tax and are subject to change. </p></p><p><b>Mandatory Fees and Taxes</b> <br /><p>You'll be asked to pay the following charges at the hotel:</p> <ul><li>Deposit: USD 50 per night</li><li>Resort fee: USD 22.40 per accommodation, per night</li></ul> The hotel resort fee includes:<ul><li>Pool access</li><li>Fitness center access</li><li>Business center/computer access</li><li>Internet access</li><li>Newspaper</li><li>Phone calls</li><li>Faxes</li><li>Self parking</li><li>Lending library access</li></ul> <p>We have included all charges provided to us by the property. However, charges can vary, for example, based on length of stay or the room you book. </p></p>",
+        "isQuantifiable": false,
+        "window": null,
+        "penalty": null,
+        "type": "CheckInInstructions"
+    }, {
+        "description": "We understand that sometimes your travel plans change. We do not charge a change or cancel fee. However, this property (Oasis at Gold Spike) imposes the following penalty to its customers that we are required to pass on: Cancellations or changes made after 3:00 PM ((GMT-08:00) Pacific Time (US &amp; Canada); Tijuana) on Mar 18, 2016, or no-shows, are subject to a 1 Night Room &amp; Tax penalty.  ",
+        "isQuantifiable": false,
+        "window": null,
+        "penalty": null,
+        "type": "Cancellation"
+    }, {
+        "description": "By proceeding with this reservation, you agree to all terms and conditions, which include the Cancellation Policy and all terms and conditions contained in the User Agreement.  You agree to pay the cost of your reservation. If you do not pay this debt and it is collected through the use of a collection agency, an attorney, or through other legal proceedings, you agree to pay all reasonable costs or fees, including attorney fees and court costs, incurred in connection with such collection effort.",
+        "isQuantifiable": false,
+        "window": null,
+        "penalty": null,
+        "type": "Disclaimer"
+    }, {
+        "description": "Total amount will be charged by the ean after the booking.",
+        "isQuantifiable": false,
+        "window": null,
+        "penalty": null,
+        "type": "Charging"
+    }, {
+        "description": "For HotelFees - ResortFee of 22.4 USD   will be collected at the hotel.",
+        "isQuantifiable": false,
+        "window": null,
+        "penalty": null,
+        "type": "Disclaimer"
+    }, {
+        "description": "<p><b>Know Before You Go</b> <br /><ul>  <li>The property allows pets in specific rooms only and has other pet restrictions (surcharges apply and can be found in the Fees section). Guests can arrange to bring pets by contacting the property directly, using the contact information on the booking confirmation. </li>  </ul></p><p><b>Fees</b> <br /><p>The following fees and deposits are charged by the property at time of service, check-in, or check-out. </p> <ul> <li>Breakfast fee: USD 13 per person (approximately)</li> <li>Fee for in-room wireless Internet: USD 0.00 per night (rates may vary)</li>  <li>Fee for wireless Internet in public areas: USD 0.00 per stay (rates may vary)</li>      <li>Pet fee: USD 50 per accommodation, per stay</li>         </ul> <p>The above list may not be comprehensive. Fees and deposits may not include tax and are subject to change. </p></p><p><b>Mandatory Fees and Taxes</b> <br /><p>You'll be asked to pay the following charges at the hotel:</p> <ul><li>Deposit: USD 50 per night</li><li>Resort fee: USD 22.40 per accommodation, per night</li></ul> The hotel resort fee includes:<ul><li>Pool access</li><li>Fitness center access</li><li>Business center/computer access</li><li>Internet access</li><li>Newspaper</li><li>Phone calls</li><li>Faxes</li><li>Self parking</li><li>Lending library access</li></ul> <p>We have included all charges provided to us by the property. However, charges can vary, for example, based on length of stay or the room you book. </p></p>",
+        "isQuantifiable": false,
+        "window": null,
+        "penalty": null,
+        "type": "CheckInInstructions"
+    }, {
+        "description": "Know before you go the property allows pets in specific rooms only and has other pet restrictions (surcharges apply and can be found in the fees section). Guests can arrange to bring pets by contacting the property directly, using the contact information on the booking confirmation. Fees the following fees and deposits are charged by the property at time of service, check-in, or check-out. Pet fee: usd 50 per accommodation, per stay deposit: usd 50 per night the above list may not be comprehensive. Fees and deposits may not include tax and are subject to change. Mandatory fees and taxes you’ll be asked to pay the following charges at the hotel: resort fee: usd 20 per accommodation, per night the hotel resort fee includes:pool accessfitness center accessbusiness center/computer accessinternet accessnewspaperphone callsfaxesself parkinglending library access   we have included all charges provided to us by the property. However, charges can vary, for example, based on length of stay or the room you book.",
+        "isQuantifiable": false,
+        "window": null,
+        "penalty": null,
+        "type": "General"
+    }, {
+        "description": "Know before you go the property allows pets in specific rooms only and has other pet restrictions (surcharges apply and can be found in the fees section). Guests can arrange to bring pets by contacting the property directly, using the contact information on the booking confirmation. Fees the following fees and deposits are charged by the property at time of service, check-in, or check-out. Pet fee: usd 50 per accommodation, per stay deposit: usd 50 per night the above list may not be comprehensive. Fees and deposits may not include tax and are subject to change. Mandatory fees and taxes you'll be asked to pay the following charges at the hotel: resort fee: usd 20 per accommodation, per night the hotel resort fee includes:pool accessfitness center accessbusiness center/computer accessinternet accessnewspaperphone callsfaxesself parkinglending library access   we have included all charges provided to us by the property. However, charges can vary, for example, based on length of stay or the room you book.",
+        "isQuantifiable": false,
+        "window": null,
+        "penalty": null,
+        "type": "General"
+    }, {
+        "description": "Cancellation policy date and time is provided in local time of destination",
+        "isQuantifiable": false,
+        "window": null,
+        "penalty": null,
+        "type": "Cancellation Policy Timezone"
+    }, {
+        "description": "Know before you go the property allows pets in specific rooms only and has other pet restrictions (surcharges apply and can be found in the fees section). Guests can arrange to bring pets by contacting the property directly, using the contact information on the booking confirmation. Fees the following fees and deposits are charged by the property at time of service, check-in, or check-out. Pet fee: usd 50 per accommodation, per stay deposit: usd 50 per night the above list may not be comprehensive. Fees and deposits may not include tax and are subject to change. Mandatory fees and taxes you’ll be asked to pay the following charges at the hotel: resort fee: usd 20 per accommodation, per night the hotel resort fee includes:pool accessfitness center accessbusiness center/computer accessinternet accessnewspaperphone callsfaxesself parkinglending library access   we have included all charges provided to us by the property. However, charges can vary, for example, based on length of stay or the room you book.",
+        "isQuantifiable": false,
+        "window": null,
+        "penalty": null,
+        "type": "General"
+    }, {
+        "description": "Know before you go the property allows pets in specific rooms only and has other pet restrictions (surcharges apply and can be found in the fees section). Guests can arrange to bring pets by contacting the property directly, using the contact information on the booking confirmation. Fees the following fees and deposits are charged by the property at time of service, check-in, or check-out. Pet fee: usd 50 per accommodation, per stay deposit: usd 50 per night the above list may not be comprehensive. Fees and deposits may not include tax and are subject to change. Mandatory fees and taxes you'll be asked to pay the following charges at the hotel: resort fee: usd 20 per accommodation, per night the hotel resort fee includes:pool accessfitness center accessbusiness center/computer accessinternet accessnewspaperphone callsfaxesself parkinglending library access   we have included all charges provided to us by the property. However, charges can vary, for example, based on length of stay or the room you book.",
+        "isQuantifiable": false,
+        "window": null,
+        "penalty": null,
+        "type": "General"
+    }],
+    "status": {
+        "isSuccessful": true,
+        "code": 200,
+        "message": "Successful",
+        "referenceId": "2b3c43d8-4546-4fe7-8712-0fd94defebba",
+        "additionalMessages": []
+    }
+}

@@ -1,0 +1,706 @@
+<!doctype html>
+<html>
+<head>
+
+  <title>
+  
+    Home Header | travelnxt elements
+  
+</title>
+
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+<link rel="shortcut icon" href="/elements/favicon.ico?v=x12">
+
+<!-- bower_components is deleted after vulcanization so files that should be
+  retained must be added to excludes array in `removeBowerComponents` function -->
+<script src="/elements/bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+<link rel="stylesheet" href="/elements/styles/custom.css" media="all" async type="text/css">
+<link rel="import" href="/elements/components/elements.html">
+
+
+<!--[if lt IE 10 ]>
+  <script type='text/javascript'>
+    alert( 'Your IE is Old' );
+
+    // or set a flag or something
+
+    var oldIE = true;
+  </script>
+<![endif]-->
+
+
+</head>
+<body class="layout horizontal center center-justified">
+
+  <div class="overlay"></div>
+
+  <t-scaffold id="scaff" scaffold-type="atom">
+    <nav-toolbar>
+      <div class="product-logo" >
+        <a href="/elements/">
+          <img src="/elements/assets/logo.png" id="prod_brand" />
+        </a>
+      </div>
+    </nav-toolbar>
+
+    <header-toolbar style="width:100%">
+      <div class="horizontal layout center">
+        
+          <span id="selectedComponent">Home Header</span>
+          
+        
+        <!-- 
+          <span class="badge-alpha-testing">Alpha</span>
+         -->
+      </div>
+    </header-toolbar>
+
+    <nav-content>
+      <paper-menu class="nav-panel">
+        <paper-submenu opened>
+          <paper-item class="top menu-trigger iron-selected">
+            <span class="label">Elements</span>
+            <iron-icon icon="hardware:keyboard-arrow-down"></iron-icon>
+          </paper-item>
+          <paper-menu class="menu-content">
+          
+            <paper-submenu  opened >
+              <paper-item class="menu-trigger  iron-selected ">
+                <span class="label">General</span>
+                <iron-icon icon="hardware:keyboard-arrow-down"></iron-icon>
+              </paper-item>
+              <paper-menu class="menu-content" selected="3">
+                
+                  <paper-item
+                    class="component-link "
+                    
+                    data-component="t-badge"
+                    onclick="redirect('/elements/badge/')"
+                    data-category="general">
+
+                    Badge
+                    
+                      <span class="badge-alpha-testing">Alpha</span>
+                    
+                  </paper-item>
+                
+                  <paper-item
+                    class="component-link "
+                    
+                    data-component="t-header"
+                    onclick="redirect('/elements/header/')"
+                    data-category="general">
+
+                    Header
+                    
+                      <span class="badge-alpha-testing">Alpha</span>
+                    
+                  </paper-item>
+                
+                  <paper-item
+                    class="component-link "
+                    
+                    data-component="t-faredetails"
+                    onclick="redirect('/elements/fare-details/')"
+                    data-category="general">
+
+                    Fare Details
+                    
+                      <span class="badge-alpha-testing">Alpha</span>
+                    
+                  </paper-item>
+                
+                  <paper-item
+                    class="component-link  iron-selected "
+                     active 
+                    data-component="t-home-header"
+                    onclick="redirect('/elements/home-header/')"
+                    data-category="general">
+
+                    Home Header
+                    
+                      <span class="badge-alpha-testing">Alpha</span>
+                    
+                  </paper-item>
+                
+                  <paper-item
+                    class="component-link "
+                    
+                    data-component="t-mystique-auth"
+                    onclick="redirect('/elements/mystique-auth/')"
+                    data-category="general">
+
+                    Mystique Auth
+                    
+                      <span class="badge-alpha-testing">Alpha</span>
+                    
+                  </paper-item>
+                
+                  <paper-item
+                    class="component-link "
+                    
+                    data-component="t-starrating"
+                    onclick="redirect('/elements/star-rating/')"
+                    data-category="general">
+
+                    Star Rating
+                    
+                      <span class="badge-alpha-testing">Alpha</span>
+                    
+                  </paper-item>
+                
+                  <paper-item
+                    class="component-link "
+                    
+                    data-component="t-passenger-info"
+                    onclick="redirect('/elements/passenger-info/')"
+                    data-category="general">
+
+                    Passenger Info
+                    
+                      <span class="badge-alpha-testing">Alpha</span>
+                    
+                  </paper-item>
+                
+                  <paper-item
+                    class="component-link "
+                    
+                    data-component="t-policy"
+                    onclick="redirect('/elements/policy/')"
+                    data-category="general">
+
+                    Policy
+                    
+                      <span class="badge-alpha-testing">Alpha</span>
+                    
+                  </paper-item>
+                
+                  <paper-item
+                    class="component-link "
+                    
+                    data-component="t-payment-page"
+                    onclick="redirect('/elements/payment-page/')"
+                    data-category="general">
+
+                    Payment Page
+                    
+                      <span class="badge-alpha-testing">Alpha</span>
+                    
+                  </paper-item>
+                
+                  <paper-item
+                    class="component-link "
+                    
+                    data-component="t-confirmation-page"
+                    onclick="redirect('/elements/confirmation-page/')"
+                    data-category="general">
+
+                    Confirmation Page
+                    
+                      <span class="badge-alpha-testing">Alpha</span>
+                    
+                  </paper-item>
+                
+              </paper-menu>
+            </paper-submenu>
+          
+            <paper-submenu >
+              <paper-item class="menu-trigger ">
+                <span class="label">Flight</span>
+                <iron-icon icon="hardware:keyboard-arrow-down"></iron-icon>
+              </paper-item>
+              <paper-menu class="menu-content" selected="3">
+                
+                  <paper-item
+                    class="component-link "
+                    
+                    data-component="t-air-search"
+                    onclick="redirect('/elements/air-search/')"
+                    data-category="flight">
+
+                    Air Search
+                    
+                      <span class="badge-alpha-testing">Alpha</span>
+                    
+                  </paper-item>
+                
+                  <paper-item
+                    class="component-link "
+                    
+                    data-component="t-bestprice"
+                    onclick="redirect('/elements/best-price/')"
+                    data-category="flight">
+
+                    Best Price
+                    
+                      <span class="badge-alpha-testing">Alpha</span>
+                    
+                  </paper-item>
+                
+                  <paper-item
+                    class="component-link "
+                    
+                    data-component="t-itinerary"
+                    onclick="redirect('/elements/itinerary/')"
+                    data-category="flight">
+
+                    Itinerary
+                    
+                      <span class="badge-alpha-testing">Alpha</span>
+                    
+                  </paper-item>
+                
+                  <paper-item
+                    class="component-link "
+                    
+                    data-component="t-result-item"
+                    onclick="redirect('/elements/result-item/')"
+                    data-category="flight">
+
+                    Result Item
+                    
+                      <span class="badge-alpha-testing">Alpha</span>
+                    
+                  </paper-item>
+                
+                  <paper-item
+                    class="component-link "
+                    
+                    data-component="t-insurance"
+                    onclick="redirect('/elements/insurance/')"
+                    data-category="flight">
+
+                    Insurance
+                    
+                      <span class="badge-alpha-testing">Alpha</span>
+                    
+                  </paper-item>
+                
+              </paper-menu>
+            </paper-submenu>
+          
+            <paper-submenu >
+              <paper-item class="menu-trigger ">
+                <span class="label">Hotel</span>
+                <iron-icon icon="hardware:keyboard-arrow-down"></iron-icon>
+              </paper-item>
+              <paper-menu class="menu-content" selected="3">
+                
+                  <paper-item
+                    class="component-link "
+                    
+                    data-component="t-hotel-search"
+                    onclick="redirect('/elements/hotel-search/')"
+                    data-category="hotel">
+
+                    Hotel Search
+                    
+                      <span class="badge-alpha-testing">Alpha</span>
+                    
+                  </paper-item>
+                
+                  <paper-item
+                    class="component-link "
+                    
+                    data-component="t-hotel-room-list"
+                    onclick="redirect('/elements/hotel-room-list/')"
+                    data-category="hotel">
+
+                    Hotel Room List
+                    
+                      <span class="badge-alpha-testing">Alpha</span>
+                    
+                  </paper-item>
+                
+                  <paper-item
+                    class="component-link "
+                    
+                    data-component="t-hotel-result-item"
+                    onclick="redirect('/elements/hotel-result-item/')"
+                    data-category="hotel">
+
+                    Hotel Result item
+                    
+                      <span class="badge-alpha-testing">Alpha</span>
+                    
+                  </paper-item>
+                
+                  <paper-item
+                    class="component-link "
+                    
+                    data-component="t-points-payment"
+                    onclick="redirect('/elements/points-payment/')"
+                    data-category="hotel">
+
+                    Points Payment
+                    
+                      <span class="badge-alpha-testing">Alpha</span>
+                    
+                  </paper-item>
+                
+                  <paper-item
+                    class="component-link "
+                    
+                    data-component="t-hotel-pages"
+                    onclick="redirect('/elements/hotel-pages/')"
+                    data-category="hotel">
+
+                    Hotel Pages
+                    
+                      <span class="badge-alpha-testing">Alpha</span>
+                    
+                  </paper-item>
+                
+              </paper-menu>
+            </paper-submenu>
+          
+            <paper-submenu >
+              <paper-item class="menu-trigger ">
+                <span class="label">Car</span>
+                <iron-icon icon="hardware:keyboard-arrow-down"></iron-icon>
+              </paper-item>
+              <paper-menu class="menu-content" selected="3">
+                
+                  <paper-item
+                    class="component-link "
+                    
+                    data-component="t-car-search"
+                    onclick="redirect('/elements/car-search/')"
+                    data-category="car">
+
+                    Car Search
+                    
+                      <span class="badge-alpha-testing">Alpha</span>
+                    
+                  </paper-item>
+                
+                  <paper-item
+                    class="component-link "
+                    
+                    data-component="t-car-itinerary-details"
+                    onclick="redirect('/elements/car-itinerary-details/')"
+                    data-category="car">
+
+                    Car Itinerary Details
+                    
+                      <span class="badge-alpha-testing">Alpha</span>
+                    
+                  </paper-item>
+                
+                  <paper-item
+                    class="component-link "
+                    
+                    data-component="t-car-result-item"
+                    onclick="redirect('/elements/car-result-item/')"
+                    data-category="car">
+
+                    Car Result Item
+                    
+                      <span class="badge-alpha-testing">Alpha</span>
+                    
+                  </paper-item>
+                
+                  <paper-item
+                    class="component-link "
+                    
+                    data-component="t-car-category-item"
+                    onclick="redirect('/elements/car-category-item/')"
+                    data-category="car">
+
+                    Car Category Item
+                    
+                      <span class="badge-alpha-testing">Alpha</span>
+                    
+                  </paper-item>
+                
+              </paper-menu>
+            </paper-submenu>
+          
+            <paper-submenu >
+              <paper-item class="menu-trigger ">
+                <span class="label">Activity</span>
+                <iron-icon icon="hardware:keyboard-arrow-down"></iron-icon>
+              </paper-item>
+              <paper-menu class="menu-content" selected="3">
+                
+                  <paper-item
+                    class="component-link "
+                    
+                    data-component="t-activity-search"
+                    onclick="redirect('/elements/activity-search/')"
+                    data-category="activity">
+
+                    Activity Search
+                    
+                      <span class="badge-alpha-testing">Alpha</span>
+                    
+                  </paper-item>
+                
+                  <paper-item
+                    class="component-link "
+                    
+                    data-component="t-activity-result-item"
+                    onclick="redirect('/elements/activity-result-item/')"
+                    data-category="activity">
+
+                    Activity Result Item
+                    
+                      <span class="badge-alpha-testing">Alpha</span>
+                    
+                  </paper-item>
+                
+                  <paper-item
+                    class="component-link "
+                    
+                    data-component="t-activity-itinerary-details"
+                    onclick="redirect('/elements/activity-itinerary-details/')"
+                    data-category="activity">
+
+                    Activity Itinerary Details
+                    
+                      <span class="badge-alpha-testing">Alpha</span>
+                    
+                  </paper-item>
+                
+                  <paper-item
+                    class="component-link "
+                    
+                    data-component="t-activity-option-list"
+                    onclick="redirect('/elements/activity-option-list/')"
+                    data-category="activity">
+
+                    Activity Option List
+                    
+                      <span class="badge-alpha-testing">Alpha</span>
+                    
+                  </paper-item>
+                
+              </paper-menu>
+            </paper-submenu>
+          
+            <paper-submenu >
+              <paper-item class="menu-trigger ">
+                <span class="label">Trip</span>
+                <iron-icon icon="hardware:keyboard-arrow-down"></iron-icon>
+              </paper-item>
+              <paper-menu class="menu-content" selected="3">
+                
+                  <paper-item
+                    class="component-link "
+                    
+                    data-component="t-trip-item"
+                    onclick="redirect('/elements/trip-item/')"
+                    data-category="trip">
+
+                    Trip Item
+                    
+                      <span class="badge-alpha-testing">Alpha</span>
+                    
+                  </paper-item>
+                
+              </paper-menu>
+            </paper-submenu>
+          
+            <paper-submenu >
+              <paper-item class="menu-trigger ">
+                <span class="label">Behaviors</span>
+                <iron-icon icon="hardware:keyboard-arrow-down"></iron-icon>
+              </paper-item>
+              <paper-menu class="menu-content" selected="3">
+                
+                  <paper-item
+                    class="component-link "
+                    
+                    data-component="t-shared-lib"
+                    onclick="redirect('/elements/shared-library/')"
+                    data-category="behaviors">
+
+                    Shared Library
+                    
+                      <span class="badge-alpha-testing">Alpha</span>
+                    
+                  </paper-item>
+                
+              </paper-menu>
+            </paper-submenu>
+          
+
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+          
+            
+              <paper-item
+                class="component-link "
+                
+                data-component="demo-tester"
+                onclick="redirect('/elements/demo-tester/')">
+
+                Demo Tester
+                
+              </paper-item>
+            
+          
+          </paper-menu>
+        </paper-submenu>
+
+        
+          <paper-item
+            class="top "
+            onClick="redirect('/elements/about/')">
+
+            About
+          </paper-item>
+        
+          <paper-item
+            class="top "
+            onClick="redirect('/elements/settings/')">
+
+            Settings
+          </paper-item>
+        
+      </paper-menu>
+    </nav-content>
+
+    <footer>
+      <p>travelnxt elements</p>
+    </footer>
+
+    <build-status
+      total="30"
+      element-ids-file-path="/elements/element-ids.json">
+    </build-status>
+
+    
+<div id="elementContent" class="content layout vertical fit content-component">
+  <div id="tabBar" class="layout horizontal center-justified">
+    <paper-tabs noink  selected="2" >
+      <paper-tab>Design Considerations</paper-tab>
+      <paper-tab>Dev Zone</paper-tab>
+      
+        <paper-tab>Demo</paper-tab>
+      
+    </paper-tabs>
+  </div>
+  <iron-pages selected="2" class="flex" style="position:relative">
+    <div class="fit designTabWrapper">
+      <div class="designTab">
+        <marked-element>
+          <div class="markdown-html"></div>
+          <script type="text/markdown">
+						
+
+          </script>
+        </marked-element>
+      </div>
+    </div>
+    <div class="fit">
+      <iframe id="idIframe" src="/elements/home-header/bower_components/t-home-header/" width="100%"></iframe>
+    </div>
+    
+      <div class="fit">
+        <t-demo-atom
+          demo-file="/elements/home-header/bower_components/t-home-header/demo/atom.html"
+          properties-file="/elements/home-header/bower_components/t-home-header/property.json"
+          el-name="t-home-header"
+          el-disp-name="home-header"
+          el-dependencies='[{"relPath":"webcomponentsjs/webcomponents-lite.js","install":"webcomponentsjs#~0.7.14","type":"script"},{"relPath":"t-shared-components/theme.html","install":"atomelements/t-shared-components","type":"link"},{"relPath":"t-home-header/t-home-header.html","install":"travelnxtelements/t-home-header#master","type":"link"}]'
+          absolute-baseurl='https://travelnxtelements.github.io/elements/'
+          baseurl='/elements'>
+          <template></template>
+        </t-demo-atom>
+      </div>
+    
+  </iron-pages>
+</div>
+
+<script type="text/javascript">
+  (function() {
+    var pages = document.querySelector('iron-pages');
+    var tabs = document.querySelector('paper-tabs');
+
+    tabs.addEventListener('iron-select', function () {
+      pages.selected = tabs.selected;
+    });
+  })();
+</script>
+
+  </t-scaffold>
+
+  <script>
+    window.addEventListener('WebComponentsReady', function (e) {
+      var overlay = document.querySelector('.overlay');
+
+      if (overlay) {
+        overlay.style.display = 'none';
+      }
+    });
+
+    //this is __BAD__, first of all it shouldn't be global function
+    //second if this function doesn't do much apart from simple plain
+    //redirection then it should be handled using anchor tags
+    function redirect(url) {
+      window.location = url;
+    }
+  </script>
+</body>
+</html>

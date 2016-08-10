@@ -1,0 +1,327 @@
+<script>
+(function() {
+
+    var numberMapping = {
+        'One': 1,
+        'Two': 2,
+        'Three': 3,
+        'Four': 4,
+        'Five': 5,
+        'Six': 6,
+        'Seven': 7,
+        'Eight': 8,
+        'Nine': 9,
+        'Ten': 10
+    };
+
+    var TravelNxt = window.TravelNxt || {};
+    TravelNxt.Behaviors = TravelNxt.Behaviors || {};
+    TravelNxt.Behaviors.CategoryResultBehavior = {
+        properties: {
+
+            /**
+             * Array of car results, following is sample array
+             *     `[{
+                    "heroImageUrl": "https://cdn.cartrawler.com/otaimages/toyota/rav_4_nologo.jpg",
+                    "doors": "Five",
+                    "transmission": "Automatic",
+                    "airConditioning": "Yes",
+                    "baggage": 3,
+                    "capacity": "FourToFive",
+                    "category": "Intermediate"
+                    }]`
+             */
+            _categoryResult: {
+                type: Array,
+                value: []
+            },
+
+            /**
+             * Array of filter items, sample:
+             * [{
+                    "category": "Location",
+                    "type": "Options",
+                    "label": "Location",
+                    "items": [{
+                        "group": "Location",
+                        "name": "At airport",
+                        "label": "At airport",
+                        "displayValue": null,
+                        "value": "163.57",
+                        "selectedValue": null,
+                        "additionalInfo": [{
+                            "key": "Count",
+                            "value": "120"
+                        }]
+                    }, {
+                        "group": "Location",
+                        "name": "In terminal",
+                        "label": "In terminal",
+                        "displayValue": null,
+                        "value": "163.57",
+                        "selectedValue": null,
+                        "additionalInfo": [{
+                            "key": "Count",
+                            "value": "85"
+                        }]
+                    }],
+                    "settings": null
+                }]
+             */
+            _filterResult: {
+                type: Array,
+                value: []
+            },
+
+            /**
+             * Summary of items present in a car category
+             * Sample array object:
+             * [{
+                    "category": "Compact",
+                    "doorRange": "3 - 5",
+                    "baggageRange": "0 - 3",
+                    "capacityRange": "4 - 5",
+                    "url": "https://cdn.cartrawler.com/otaimages/nissan/versa_nologo.jpg",
+                    "price": 28,
+                    "airConditioning": true,
+                    "gear": "Auto"
+                }]
+             */
+            _listSummary: {
+                type: Array,
+                value: []
+            },
+
+            /**
+             * Search criteria object
+             * sample object
+             * {
+                    "pickupLocation": {
+                        "code": "LAS",
+                        "name": "McCarran International Airport",
+                        "cityName": "Las Vegas",
+                        "countryCode": "US",
+                        "countryName": "United States",
+                        "geoCode": "36.0854,-115.15",
+                        "id": 2102,
+                        "stateCode": "NV",
+                        "stateName": "Nevada",
+                        "type": "Airport",
+                        "additionalInfo": null,
+                        "formattedAddress": "Las Vegas, NV, United States - McCarran International Airport (LAS)"
+                    },
+                    "pickupDate": "08/31/2016",
+                    "dropoffLocation": {
+                        "code": "LAS",
+                        "name": "McCarran International Airport",
+                        "cityName": "Las Vegas",
+                        "countryCode": "US",
+                        "countryName": "United States",
+                        "geoCode": "36.0854,-115.15",
+                        "id": 2102,
+                        "stateCode": "NV",
+                        "stateName": "Nevada",
+                        "type": "Airport",
+                        "additionalInfo": null,
+                        "formattedAddress": "Las Vegas, NV, United States - McCarran International Airport (LAS)"
+                    },
+                    "dropoffDate": "09/06/2016",
+                    "isDropoffLocationSame": true,
+                    "pickupTime": "11:00 AM",
+                    "dropoffTime": "11:00 AM"
+                }
+             */
+            searchCriteria: {
+                type: Object,
+                value: null
+            }
+
+        },
+
+
+        /*
+         * <p>Observer method, called when any of `_categoryResult`, `_filterResult`, `searchCriteria` changes</p>
+         */
+        _processResultData: function() {
+
+            if (!this._categoryResult.length || !this._filterResult.length || !this.searchCriteria) {
+                return;
+            }
+
+            this._listSummary = [];
+
+            this._translateCategoryResult();
+            this.list = this._listSummary;
+
+            this._categoryResult = [];
+            this._filterResult = [];
+        },
+
+        /*
+         * <p>Translates api results to required form to show category listing. Called every time `_processResultData` is called</p>
+         */
+        _translateCategoryResult: function() {
+
+            if (!this._filterResult || !this._filterResult.length) {
+                return [];
+            }
+            var categoryFilter = this._filterResult.find(function(item, index, array) {
+                return item.category === 'Category';
+            });
+
+            var noOfDays = this._dateDiff(this.searchCriteria.pickupDate, this.searchCriteria.dropoffDate);
+            var noOfHours = this._getTimeDiff(this.searchCriteria.pickupTime, this.searchCriteria.dropoffTime);
+
+            for (var i = 0; i < categoryFilter.items.length; i++) {
+                this._groupCategoryItems(categoryFilter.items[i].name, this._getAvgPrice(categoryFilter.items[i].value, noOfDays, noOfHours));
+            }
+
+            if (this._listSummary && this._listSummary.length) {
+                this._listSummary.sort(function (a, b) {
+                    return a.price - b.price;
+                });
+            }
+        },
+
+        /*
+         * <p>Returns Average price per days</p>
+         */
+        _getAvgPrice: function(price, noOfDays, noOfHours) {
+            if (noOfHours > 0) {
+                noOfDays += 1;
+            }
+            price = price / noOfDays;
+            return Math.ceil(price);
+        },
+
+        /*
+         * <p>Returns a group of category item</p>
+         */
+        _groupCategoryItems: function(categoryName, minPrice) {
+
+            var perCategoryResult = this._categoryResult.filter(function(item, index, array) {
+                return item.category.toLowerCase() === categoryName.toLowerCase();
+            }, this);
+
+            if (perCategoryResult && perCategoryResult.length) {
+                this._buildCategoryListItem(perCategoryResult, minPrice);
+            }
+        },
+
+        /*
+         * <p>builds car category summary item</p>
+         */
+        _buildCategoryListItem: function(perCategoryResult, minPrice) {
+
+            var doorList = [];
+            var baggageList = [];
+            var capacityList = [];
+            var url = perCategoryResult[0].heroImageUrl;
+            var categoryName = perCategoryResult[0].category;
+            var isAutomatic = false;
+            var isManual = false;
+            var airConditioning = false;
+
+            for (var i = 0; i < perCategoryResult.length; i++) {
+                doorList.push(perCategoryResult[i].doors);
+                baggageList.push(perCategoryResult[i].baggage);
+                capacityList.push(perCategoryResult[i].capacity);
+                isAutomatic = isAutomatic || perCategoryResult[i].transmission.toLowerCase() === 'automatic';
+                isManual = isManual || perCategoryResult[i].transmission.toLowerCase() === 'manual';
+                airConditioning = airConditioning || perCategoryResult[i].airConditioning.toLowerCase() === 'yes';
+            }
+
+            doorList = this._parseCount(this._getUniqueItems(doorList));
+            baggageList = this._getUniqueItems(baggageList);
+            capacityList = this._parseCount(this._convertCapacity(this._getUniqueItems(capacityList)));
+
+            var doorRange = this._getFeaureRange(doorList);
+            var baggageRange = this._getFeaureRange(baggageList);
+            var capacityRange = this._getFeaureRange(capacityList);
+            var gear = this._getGear(isAutomatic, isManual);
+            this._listSummary.push({
+                category: categoryName,
+                doorRange: doorRange,
+                baggageRange: baggageRange,
+                capacityRange: capacityRange,
+                url: url,
+                price: minPrice,
+                airConditioning: airConditioning,
+                gear: gear
+            });
+        },
+
+        /*
+         * <p>Returns whether transmission is Auto or Manual</p>
+         */
+        _getGear: function(isAutomatic,isManual){
+                if(isAutomatic && isManual){
+                    return 'Manual/Auto'
+                }else if(isAutomatic){
+                    return 'Auto'
+                }
+                return 'Manual'
+        },
+
+        /*
+         * <p>Returns maximum and minimum value of a car category feature</p>
+         */
+        _getFeaureRange: function(feature) {
+            if (!feature || !feature.length) {
+                return '';
+            }
+            var minValue = Math.min.apply(null, feature);
+            var maxValue = Math.max.apply(null, feature);
+            if (minValue === maxValue) {
+                return minValue;
+            } else {
+                return minValue + ' - ' + maxValue;
+            }
+        },
+
+        /*
+         * <p>Converts car capacity into required form</p>
+         */
+        _convertCapacity: function(capacityList) {
+            var list = [];
+            for (var i = 0; i < capacityList.length; i++) {
+                if (capacityList[i].indexOf('To') > -1) {
+                    var splitCapacity = capacityList[i].split('To');
+                    list.push(splitCapacity[0], splitCapacity[1]);
+                }
+            }
+            return this._getUniqueItems(list);
+        },
+
+        /*
+         * <p>Maps count into its equivalent number</p>
+         */
+        _parseCount: function(array) {
+            var updatedArray = [];
+            for (var i = 0; i < array.length; i++) {
+                if (numberMapping[array[i]]) {
+                    updatedArray.push(numberMapping[array[i]]);
+                }
+            }
+            return updatedArray;
+        },
+
+        /*
+         * <p>Returns unique items from an Array</p>
+         */
+        _getUniqueItems: function(array) {
+            var u = {},
+                a = [];
+            for (var i = 0, l = array.length; i < l; ++i) {
+                if (u.hasOwnProperty(array[i])) {
+                    continue;
+                }
+                a.push(array[i]);
+                u[array[i]] = 1;
+            }
+            return a;
+        }
+    };
+
+})();
+</script>

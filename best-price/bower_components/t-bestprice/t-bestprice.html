@@ -1,0 +1,137 @@
+<!-- We are still creating this components. -->
+<link rel="import" href="../polymer/polymer.html" />
+<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html" />
+<link rel="import" href="../t-section-header/t-section-header.html" />
+<link rel="import" href="../t-checkbox/t-checkbox.html" />
+<!--
+    `t-bestprice` is BAF specific component to allow usage of a best price module supported by suppliers of book air fare.
+    -->
+<dom-module id="t-bestprice">
+    <template>
+        <style include="iron-flex">
+        :host{
+            display: block;
+        }
+        .price{
+            min-width: 80px;
+            text-align: right;
+        }
+        .semibold{
+            font-size:var(--font-16,16px);
+            font-weight: 600;
+        }
+        .currency{
+            font-size: var(font-12,12px);
+            color: var(--grey-three,#bbbbbb);
+        }
+        .layout{
+            padding: 10px 0;
+        }
+        .img {
+        	min-width: 45px;
+        }
+        .checkbox {
+        	min-width: 25px;
+        }
+        .img img{
+            width: 40px;
+            padding-right: 5px;
+        }
+        #toggleSection{
+            display: none;
+        }
+        :host([expanded]) #toggleSection{
+            display: inline;
+        }
+        t-checkbox{
+            margin: 5px 5px 0 0;
+        }
+        .description{
+            font-size: var(font-12,12px);
+        }
+        #toggle {
+            text-decoration: none;
+            color: var(--link-color, #147be1);
+        }
+
+        </style>
+        <div class="layout horizontal center">
+            <div class="img">
+                <img src="{{imgUrl}}" alt="best price">
+            </div>
+            <div class="semibold ">
+                Customer Satisfication and Best Price Guarantee
+            </div>
+            <span class="flex"></span>
+            <div class="price">
+                <span class="currency">{{currency}}</span>
+                <span class="semibold">{{price}}</span>
+            </div>
+        </div>
+        <div class="layout horizontal start-justified description">
+                <t-checkbox checked="{{bestPrice}}" ><div hidden>something</div></t-checkbox>
+            <div class="flex">
+                Selection of this option will allow you to cancel your booking for any reason within the same day without any penalty.<span id="toggleSection">
+                 In addition to this you can rebook your ticket if the price drops within the same day. <br/>
+                This service applies only to flights and a fee of <span>{{currency}}</span> <span>{{price}}</span> will be charged per seat.
+                </span>
+                <span>
+                    <a id="toggle" on-click="_toggle">more</a>
+                </span>
+            </div>
+        </div>
+    </template>
+</dom-module>
+<script>
+    Polymer({
+        is: 't-bestprice',
+        properties: {
+
+            /*This is the image url of the best price guarantee*/
+            imgUrl:{
+                type:String,
+                value:''
+            },
+
+            /*this is the currency*/
+            currency:{
+                type:String,
+                value:'USD'
+            },
+
+            /*Price of the BPG*/
+            price:{
+                type:String,
+                value:'14'
+            },
+
+            /*Whether the toggle is expanded or not*/
+            expanded:{
+                type:Boolean,
+                reflectToAttribute:true,
+                value:false
+            },
+
+            /*The final boolean to send from the component // or the value whether the BPG is selected or not..*/
+            bestPrice:{
+                type:Boolean,
+                reflectToAttribute:true,
+                value:false,
+                notify:true,
+                obeserver:'_changeBestPrice'
+            }
+        
+        },
+
+        /*The toggle function of show more and less*/
+        _toggle: function () {
+            this.expanded = !this.expanded;
+            this.$.toggle.innerHTML = this.expanded?'less':'more';
+        },
+
+        /*Fire event when added or removed*/
+        _changeBestPrice:function(){
+             this.fire('bestPriceChanged');
+        }
+    });
+</script>

@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+  <head>
+    <title>t-activity-option-list-page demo</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+
+    <link rel="import" href="../t-activity-option-list-page.html">
+
+    <style is="custom-style" include="demo-pages-shared-styles">
+    </style>
+  </head>
+  <body>
+
+    <template is="dom-bind" id="template">
+        <t-activity-option-list-page 
+            id="activityOptionPage"
+            api-base-url="http://qa-mystiquecode.tavisca.com/"
+            auth-token="h3w4o2ulrnkkseys02jyzwno"
+            search-id="83bfd827-19f6-4db6-8e90-a9146dfe1b8d"
+            itinerary-id="SIC.2916PAR">
+            <t-header icon="arrow-back" url="#">
+                <t-activity-search-recap id="searchCriteriaRecap">
+                </t-activity-search-recap>
+            </t-header>
+        </t-activity-option-list-page>
+    </template>
+
+  </body>
+</html>

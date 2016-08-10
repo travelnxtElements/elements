@@ -1,0 +1,230 @@
+<script>
+(function() {
+
+    var numberMapping = {
+        'One': 1,
+        'Two': 2,
+        'Three': 3,
+        'Four': 4,
+        'Five': 5,
+        'Six': 6,
+        'Seven': 7,
+        'Eight': 8,
+        'Nine': 9,
+        'Ten': 10
+    };
+
+    var TravelNxt = window.TravelNxt || {};
+    TravelNxt.Behaviors = TravelNxt.Behaviors || {};
+    TravelNxt.Behaviors.CategoryResultBehavior = {
+        properties: {
+
+            _categoryResult: {
+                type: Array,
+                value: []
+            },
+
+            _filterResult: {
+                type: Array,
+                value: []
+            },
+
+            _listSummary: {
+                type: Array,
+                value: []
+            },
+
+            searchCriteria: {
+                type: Object,
+                value: null
+            }
+
+        },
+
+
+        /*
+         * <p>Event handler method called when `t-car-search-api-error` event is fired</p>
+         */
+        _processResultData: function() {
+
+            if (!this._categoryResult.length || !this._filterResult.length || !this.searchCriteria) {
+                return;
+            }
+
+            this._listSummary = [];
+
+            this._translateCategoryResult();
+            this.list = this._listSummary;
+
+            this._categoryResult = [];
+            this._filterResult = [];
+        },
+
+        /*
+         * <p>Event handler method called when `t-car-search-api-error` event is fired</p>
+         */
+        _translateCategoryResult: function() {
+
+            if (!this._filterResult || !this._filterResult.length) {
+                return [];
+            }
+            var categoryFilter = this._filterResult.find(function(item, index, array) {
+                return item.category === 'Category';
+            });
+
+            var noOfDays = this._dateDiff(this.searchCriteria.pickupDate, this.searchCriteria.dropoffDate);
+            var noOfHours = this._getTimeDiff(this.searchCriteria.pickupTime, this.searchCriteria.dropoffTime);
+
+            for (var i = 0; i < categoryFilter.items.length; i++) {
+                this._groupCategoryItems(categoryFilter.items[i].name, this._getAvgPrice(categoryFilter.items[i].value, noOfDays, noOfHours));
+            }
+
+            if (this._listSummary && this._listSummary.length) {
+                this._listSummary.sort(function (a, b) {
+                    return a.price - b.price;
+                });
+            }
+        },
+
+        /*
+         * <p>Event handler method called when `t-car-search-api-error` event is fired</p>
+         */
+        _getAvgPrice: function(price, noOfDays, noOfHours) {
+            if (noOfHours > 0) {
+                noOfDays += 1;
+            }
+            price = price / noOfDays;
+            return Math.ceil(price);
+        },
+
+        /*
+         * <p>Event handler method called when `t-car-search-api-error` event is fired</p>
+         */
+        _groupCategoryItems: function(categoryName, minPrice) {
+
+            var perCategoryResult = this._categoryResult.filter(function(item, index, array) {
+                return item.category.toLowerCase() === categoryName.toLowerCase();
+            }, this);
+
+            if (perCategoryResult && perCategoryResult.length) {
+                this._buildCategoryListItem(perCategoryResult, minPrice);
+            }
+        },
+
+        /*
+         * <p>Event handler method called when `t-car-search-api-error` event is fired</p>
+         */
+        _buildCategoryListItem: function(perCategoryResult, minPrice) {
+
+            var doorList = [];
+            var baggageList = [];
+            var capacityList = [];
+            var url = perCategoryResult[0].heroImageUrl;
+            var categoryName = perCategoryResult[0].category;
+            var isAutomatic = false;
+            var isManual = false;
+            var airConditioning = false;
+
+            for (var i = 0; i < perCategoryResult.length; i++) {
+                doorList.push(perCategoryResult[i].doors);
+                baggageList.push(perCategoryResult[i].baggage);
+                capacityList.push(perCategoryResult[i].capacity);
+                isAutomatic = isAutomatic || perCategoryResult[i].transmission.toLowerCase() === 'automatic';
+                isManual = isManual || perCategoryResult[i].transmission.toLowerCase() === 'manual';
+                airConditioning = airConditioning || perCategoryResult[i].airConditioning.toLowerCase() === 'yes';
+            }
+
+            doorList = this._parseCount(this._getUniqueItems(doorList));
+            baggageList = this._getUniqueItems(baggageList);
+            capacityList = this._parseCount(this._convertCapacity(this._getUniqueItems(capacityList)));
+
+            var doorRange = this._getFeaureRange(doorList);
+            var baggageRange = this._getFeaureRange(baggageList);
+            var capacityRange = this._getFeaureRange(capacityList);
+            var gear = this._getGear(isAutomatic, isManual);
+            this._listSummary.push({
+                category: categoryName,
+                doorRange: doorRange,
+                baggageRange: baggageRange,
+                capacityRange: capacityRange,
+                url: url,
+                price: minPrice,
+                airConditioning: airConditioning,
+                gear: gear
+            });
+        },
+
+        /*
+         * <p>Get gear funciton</p>
+         */
+
+        _getGear: function(isAutomatic,isManual){
+                if(isAutomatic && isManual){
+                    return 'Manual/Auto'
+                }else if(isAutomatic){
+                    return 'Auto'
+                }
+                return 'Manual'
+        },
+        /*
+         * <p>Event handler method called when `t-car-search-api-error` event is fired</p>
+         */
+        _getFeaureRange: function(feature) {
+            if (!feature || !feature.length) {
+                return '';
+            }
+            var minValue = Math.min.apply(null, feature);
+            var maxValue = Math.max.apply(null, feature);
+            if (minValue === maxValue) {
+                return minValue;
+            } else {
+                return minValue + ' - ' + maxValue;
+            }
+        },
+
+        /*
+         * <p>Event handler method called when `t-car-search-api-error` event is fired</p>
+         */
+        _convertCapacity: function(capacityList) {
+            var list = [];
+            for (var i = 0; i < capacityList.length; i++) {
+                if (capacityList[i].indexOf('To') > -1) {
+                    var splitCapacity = capacityList[i].split('To');
+                    list.push(splitCapacity[0], splitCapacity[1]);
+                }
+            }
+            return this._getUniqueItems(list);
+        },
+
+        /*
+         * <p>Event handler method called when `t-car-search-api-error` event is fired</p>
+         */
+        _parseCount: function(array) {
+            var updatedArray = [];
+            for (var i = 0; i < array.length; i++) {
+                if (numberMapping[array[i]]) {
+                    updatedArray.push(numberMapping[array[i]]);
+                }
+            }
+            return updatedArray;
+        },
+
+        /*
+         * <p>Event handler method called when `t-car-search-api-error` event is fired</p>
+         */
+        _getUniqueItems: function(array) {
+            var u = {},
+                a = [];
+            for (var i = 0, l = array.length; i < l; ++i) {
+                if (u.hasOwnProperty(array[i])) {
+                    continue;
+                }
+                a.push(array[i]);
+                u[array[i]] = 1;
+            }
+            return a;
+        }
+    };
+
+})();
+</script>

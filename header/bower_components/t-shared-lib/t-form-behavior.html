@@ -1,0 +1,54 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<script>
+TravelNxt = window.TravelNxt || {};
+TravelNxt.Behaviors = TravelNxt.Behaviors || {};
+
+/**
+* <h3>Details:</h3>
+*
+*  `TravelNxt.Behaviors.FormBehavior` is the reusable form behavior which we are using in all of our search components.
+*    It contains function like validation and showProgress (state) of the form.
+* @polymerBehavior TravelNxt.Behaviors.FormBehavior
+**/
+TravelNxt.Behaviors.FormBehavior = {
+
+    properties: {
+      /**
+        * <p>Used to show button label when the searching is in progress</p>
+        */
+          productName: {    
+            type: String
+          }
+    },
+
+    /*
+     * <p>The validate function will call validate method of all the required fields</p>
+    */
+    validate: function() {
+        var check = true;
+        var requiredFields = this.querySelectorAll('[required]');
+        for (var i = 0; i < requiredFields.length; i++) {
+            if (!requiredFields[i].validate()) {
+                check = false;
+            }
+        }
+        return check;
+    },
+
+    /*
+     * <p>Pass true/false as parameter of the method to show the loading state of the button of the form</p>
+     * <p>It disables the button and chage the text of the button of the search page.</p>
+    */
+    showProgress: function(inProgress) {
+        if (inProgress) {
+            this.$.search.label = 'Searching ' + this.productName + 's...';
+            this.$.search.disabled = true;
+        } else {
+            this.$.search.label = 'Search ' + this.productName + 's';
+            this.$.search.disabled = false; 
+        }
+    }
+
+}
+</script>

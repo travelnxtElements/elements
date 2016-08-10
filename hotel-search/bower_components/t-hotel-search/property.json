@@ -1,0 +1,51 @@
+{
+    "name": "Hotel Search",
+    "properties": [
+        {
+            "name": "Properties",
+            "fields": {
+                "adultCount": {
+                    "name": "adultCount",
+                    "type": "number",
+                    "value": 1
+                },
+                "dataUrl": {
+                    "name": "dataUrl",
+                    "type": "String",
+                    "value": "http://www.mocky.io/v2/576ce59b1000002d025fdbfb/"
+                },
+                "queryParams": {
+                    "name": "queryParams",
+                    "type": "String"
+                },
+                "checkIn": {
+                    "name": "checkIn",
+                    "type": "string"
+                },
+                "checkOut": {
+                    "name": "checkOut",
+                    "type": "string"
+                },
+                "childAges": {
+                    "name": "childAges",
+                    "type": "object",
+                    "value": [{"age":10}]
+                },
+                "childCount": {
+                    "name": "childCount",
+                    "type": "number",
+                    "value": 1
+                },
+                "location": {
+                    "name": "location",
+                    "type": "object"
+                },
+                "productName": {
+                    "name": "productName",
+                    "type": "string",
+                    "value": "HOTEL"
+                }
+            }
+        }
+    ]
+}

@@ -1,0 +1,65 @@
+{
+  "name": "t-hotel-pages",
+  "version": "1.0.0",
+  "authors": [
+    "Sounak Pal <talk2sounak@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "keywords": [
+    "Polymer",
+    "Web",
+    "Components"
+  ],
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0",
+    "webcomponentsjs": "^0.7.21",
+    "t-notify": "atomelements/t-notify#^1.0.0",
+    "t-shared-components": "atomelements/t-shared-components#^1.0.0",
+    "t-hotel-search": "travelnxtElements/t-hotel-search#^1.0.0",
+    "t-sessionstorage": "travelnxtElements/t-sessionstorage#^1.0.0",
+    "t-loader": "atomelements/t-loader#^1.0.0",
+    "t-mystique-auth": "travelnxtelements/t-mystique-auth#^1.0.0",
+    "t-header": "travelnxtElements/t-header#^1.0.0",
+    "t-text-container": "travelnxtElements/t-text-container#^1.0.0",
+    "t-tabs-v2": "atomelements/t-tabs-v2#^1.0.0",
+    "t-list": "atomelements/t-list#^1.0.0",
+    "t-input": "atomelements/t-input#^1.0.0",
+    "t-image": "atomelements/t-image#^1.0.0",
+    "t-carousel": "atomelements/t-carousel#^1.0.0",
+    "t-button": "atomelements/t-button#^1.0.0",
+    "t-search-overlay": "travelnxtElements/t-search-overlay#^1.0.0",
+    "t-hotel-result-item": "travelnxtElements/t-hotel-result-item#^1.0.0",
+    "t-hotel-room-list": "travelnxtElements/t-hotel-room-list#^1.0.0",
+    "iron-pages": "PolymerElements/iron-pages#^1.0.4",
+    "paper-ripple": "PolymerElements/paper-ripple#^1.0.5"
+  },
+  "devDependencies": {
+    "web-component-tester": "*",
+    "webcomponentsjs": "~0.7.14",
+    "iron-component-page": "PolymerElements/iron-component-page#~1.0.6"
+  },
+  "resolutions": {
+    "t-shared-components": "^1.0.0",
+    "t-notify": "^1.0.0",
+    "t-loader": "^1.0.0",
+    "t-header": "^1.0.0",
+    "t-text-container": "^1.0.0",
+    "t-image": "^1.0.0",
+    "t-input": "^1.0.6",
+    "t-button": "^1.0.0",
+    "paper-ripple": "^1.0.5",
+    "paper-styles": "^1.1.4",
+    "t-calendar": "^1.0.0"
+  }
+}

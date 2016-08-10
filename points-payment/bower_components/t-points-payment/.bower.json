@@ -1,0 +1,46 @@
+{
+  "name": "t-points-payment",
+  "authors": [
+    "Manoj Chalode <chalodem@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "keywords": [
+    "Polymer",
+    "Web",
+    "Components"
+  ],
+  "homepage": "https://github.com/travelnxtelements/t-points-payment",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0",
+    "t-button": "atomelements/t-button#master",
+    "t-input": "atomelements/t-input#master",
+    "t-text-container": "travelnxtElements/t-text-container#master",
+    "t-shared-lib": "travelnxtelements/t-shared-lib",
+    "t-shared-components": "atomelements/t-shared-components#^1.0.5"
+  },
+  "devDependencies": {
+    "web-component-tester": "*",
+    "webcomponentsjs": "~0.7.14",
+    "iron-component-page": "PolymerElements/iron-component-page#~1.0.6"
+  },
+  "_release": "45e12be316",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "45e12be3161865e75292b02f5e02c09fd4dc3b37"
+  },
+  "_source": "git://github.com/travelnxtelements/t-points-payment.git",
+  "_target": "master",
+  "_originalSource": "travelnxtelements/t-points-payment",
+  "_direct": true
+}

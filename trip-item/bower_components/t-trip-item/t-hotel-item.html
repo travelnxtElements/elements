@@ -1,0 +1,58 @@
+<link rel="import" href="../polymer/polymer.html" />
+<link rel="import" href="dateBehavior.html">
+<link rel="import" href="t-trip-subitem-scaffold.html">
+<!--
+    `t-hotel-item` hotel product component.
+    This component shows information single hotel product.
+    -->
+<dom-module id="t-hotel-item">
+    <template>
+        <t-trip-subitem-scaffold icon="maps:hotel" status="[[model.bookingStatus]]">
+            <div class="inventory-detail layout horizontal">
+                [[model.inventory.name]]
+            </div>
+            <div class="inventory-description">
+                [[_getDisplayDate(model.inventory.stayDuration.start.date)]]
+                -
+                [[_getDisplayDate(model.inventory.stayDuration.end.date)]]
+            </div>
+        </t-trip-subitem-scaffold>
+    </template>
+</dom-module>
+<script>
+Polymer({
+    is: "t-hotel-item",
+    behaviors:[Polymer.TravelnxtDateBehaviour],
+    properties: {
+
+        /**
+         * hotel product model.
+         * This model is inventoriesInfo model of type 'Hotel' sent in mystique order api response
+         * This is required field.
+         */
+        model: {
+            type: Object,
+            value: null
+        }
+    },
+
+    attached: function() {
+        //this._populateModel();
+    },
+
+    _populateModel: function() {
+        if (!this.model || !this.model.inventory || this.model.inventory.type.toLowerCase() !== 'hotel') {
+            console.error("hotel inventory not found!");
+            return;
+        }
+
+        //this._setDates();
+       // this._setStayCount();
+    }
+    /*,
+
+    _setStayCount: function() {
+        this.stay = Math.round((new Date(this.checkOut) - new Date(this.checkIn)) / (1000 * 60 * 60 * 24));
+    }*/
+});
+</script>

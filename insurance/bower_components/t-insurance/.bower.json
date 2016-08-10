@@ -1,0 +1,50 @@
+{
+  "name": "t-insurance",
+  "authors": [
+    "Rahul Pilkhwal <rahul.pilkhwal@tavisca.com>",
+    "Shailesh Kumar Srivastava <ssrivastava@tavisca.com>",
+    "Sounak Pal <spal@tavisca.com>",
+    "Ajinkya Tejankar <tejankarajinkya@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "keywords": [
+    "Polymer",
+    "Web",
+    "Components"
+  ],
+  "homepage": "https://github.com/travelnxtelements/t-insurance",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "iron-ajax": "PolymerElements/iron-ajax#^1.0.0",
+    "t-radio-button": "atomelements/t-radio-button#^1.0.0",
+    "t-dropdown-menu": "atomelements/t-dropdown-menu#^1.0.0",
+    "t-notify": "atomelements/t-notify#^1.0.0",
+    "t-input": "atomelements/t-input#^1.0.0",
+    "polymer": "Polymer/polymer#^1.0.0"
+  },
+  "devDependencies": {
+    "t-shared-components": "atomelements/t-shared-components#^1.0.0",
+    "t-faredetails": "travelnxtElements/t-faredetails#^1.0.0",
+    "webcomponentsjs": "~0.7.14",
+    "iron-component-page": "PolymerElements/iron-component-page#~1.0.6"
+  },
+  "_release": "9e04d8682e",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "9e04d8682e148d928b24185386c911ca8d737267"
+  },
+  "_source": "git://github.com/travelnxtelements/t-insurance.git",
+  "_target": "master",
+  "_originalSource": "travelnxtelements/t-insurance",
+  "_direct": true
+}

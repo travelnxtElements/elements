@@ -1,0 +1,63 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../t-image/t-image.html">
+<link rel="import" href="../t-text-container/travel-element-styles.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../t-shared-lib/t-fare-behavior.html">
+<dom-module id="t-activity-result-item">
+    <template>
+        <style include="iron-flex"></style>
+        <style include="iron-flex-alignment"></style>
+        <style include="travel-element-styles">
+        :host {
+            display: block;
+        }
+        .imageArea {
+            width: 70px;
+            height: 70px;
+            position: relative;
+        }
+        
+        .imageArea t-image {
+            width: 100%;
+            height: 100%;
+        }
+        </style>
+
+        <div class="layout horizontal section primary-text" on-tap="_onItinerarySelect">
+            <div class="imageArea">
+                <t-image src="{{itinerary.heroImageUrl}}"></t-image>
+            </div>
+            <div class="section-small layout horizontal">
+                <div class="flex layout vertical">
+                    <div>[[itinerary.name]]</div>
+                    <div>[[itinerary.category.name]]</div>
+                </div>
+                <div class="flex layout vertical">
+                    <div>from</div>
+                    <div>[[itinerary.minFare.fare.currency]]&nbsp;[[itinerary.minFare.fare.amount]]</div>
+                </div>
+            </div>
+        </div>
+        
+    </template>
+    <script>
+    Polymer({
+
+        is: 't-activity-result-item',
+
+        properties: {
+
+            /**
+             * Itinerary is the API json object to pass in the component which will populate the data
+             * @type {Object}
+             */
+            itinerary : Object,
+        },
+
+        _onItinerarySelect: function () {
+            this.fire('book-activity-itinerary', this.itinerary);
+        }
+
+    });
+    </script>
+</dom-module>

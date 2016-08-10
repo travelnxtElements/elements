@@ -1,0 +1,332 @@
+<link rel="import" href="../polymer/polymer.html" />
+<link rel="import" href="../iron-pages/iron-pages.html">
+<link rel="import" href="../t-notify/t-notify.html" />
+<link rel="import" href="../t-loader/t-fullpage-loader.html" />
+<link rel="import" href="../t-header/t-header.html" />
+<link rel="import" href="../t-carousel/t-image-carousel.html" />
+<link rel="import" href="../t-header/t-hotel-search-recap.html" />
+<link rel="import" href="../t-sessionstorage/t-sessionstorage.html" />
+<link rel="import" href="../t-text-container/travel-element-styles.html" />
+<link rel="import" href="../t-hotel-room-list/t-hotel-room-list.html">
+<link rel="import" href="../t-hotel-room-list/t-hotel-room-list-provider.html">
+<link rel="import" href="../t-hotel-room-list/t-hotel-room-policy-provider.html">
+<link rel="import" href="../t-tabs-v2/t-tabs.html">
+<link rel="import" href="../t-tabs-v2/t-tab.html">
+<!--
+    `<t-hotel-home-page>` is a polymer component that generates page component handling all required resources of Hotel search home page
+
+
+    Basic usage
+    `<t-hotel-details-page 
+	        api-base-url="http://qa-mystiquecode.tavisca.com/" 
+	        auth-token="{{token.authenticationToken}}"
+	        on-search-success="demoSuccessFunction"
+        ></t-hotel-details-page>`
+-->
+<dom-module id="t-hotel-details-page">
+    <template>
+    <style include="travel-element-styles">
+        .list-item-half {
+            width:50%;
+            box-sizing:border-box;
+            -webkit-box-sizing:border-box;
+            -moz-box-sizing:border-box;
+        }
+        .list-item-half:nth-child(odd) {
+            padding-right:5px;
+        }
+    </style>
+        <t-header on-left-button-click="_headerLeftClick" right-icon="maps:place" on-right-button-click="_mapClick">
+            <t-hotel-search-recap 
+                hide-icon
+                hotel-name="{{selectedHotel.name}}"
+                check-in="{{parseDate(searchCriteria.checkInDate.date)}}"
+                check-out="{{parseDate(searchCriteria.checkOutDate.date)}}"
+                adult-count="{{searchCriteria.rooms.0.adults.quantity}}"
+                child-count="{{searchCriteria.rooms.0.children.quantity}}">
+            </t-hotel-search-recap>
+        </t-header>
+        <template is="dom-if" if="[[isSingleItemLoading]]">
+            <t-fullpage-loader active>
+                <div>Loading itinerary details...</div>
+            </t-fullpage-loader>
+        </template>
+     <template is="dom-if" if="[[imgzoomed]]">
+        <div style="height:200px;"></div>
+    </template>
+    <t-image-carousel
+        light-box
+        zoomed="{{imgzoomed}}"
+        data="{{carouselData}}" 
+        height="200">
+    </t-image-carousel>
+    <div class="section">
+        <div class="layout horizontal margin-bottom start justified">
+            <div class="font-16 primary-text">{{selectedHotel.name}}</div>
+            <div class="layout horizontal">
+                <template is="dom-repeat" items="{{selectedHotel.ratingArr}}" >
+                    <iron-icon icon="star"></iron-icon>
+                </template>
+            </div>
+        </div>
+        <div class="font-12 secondary-text">
+            <a class="layout horizontal start link-style" on-tap="_mapClick">
+                <iron-icon style="width:16px;height:17px" icon="maps:place"></iron-icon>
+                <span>{{selectedHotel.address}}</span>
+            </a>
+        </div>
+    </div>
+    <t-tabs selected="{{activeTab}}" noink inverted alignment="fullbleed" >
+        <t-tab>Rooms</t-tab>
+        <t-tab>Details</t-tab>    
+    </t-tabs>
+    <iron-pages selected="{{activeTab}}">
+        <div>
+            <t-hotel-room-list id="hotelRoomList" itinerary="{{selectedHotel}}" on-room-select="_onRoomSelect">    
+                <t-hotel-room-list-provider 
+                    id="roomProvider"
+                    api-base-url="[[apiBaseUrl]]"
+                    api-relative-url="[[roomProviderRelativeUrl]]"
+                    auth-token="[[authToken]]"
+                    search-id="[[searchId]]"
+                    inventory-id="[[hotelId]]">
+                </t-hotel-room-list-provider>
+                <t-hotel-room-policy-provider 
+                    id="policyProvider"
+                    api-base-url="[[apiBaseUrl]]"
+                    api-relative-url="[[policyProviderRelativeUrl]]"
+                    auth-token="[[authToken]]"
+                    search-id="[[searchId]]"
+                    inventory-id="[[hotelId]]">
+                </t-hotel-room-policy-provider>     
+            </t-hotel-room-list>    
+        </div>
+        <div>
+                <div class="section font-12">                    
+                    <template is="dom-repeat" items="{{selectedHotel.descriptions}}">
+                        <template is="dom-if" if="{{item.key}}">
+                            <div class="margin-bottom border-bottom font-semi">{{item.key}} </div>
+                        </template>
+                        <div class="margin-bottom">{{item.value}}</div>
+                    </template>                    
+                    <template is="dom-if" if="{{displayAmenities.length}}">
+                        <div class="margin-bottom border-bottom font-semi">Amenities</div>
+                        <div class="layout horizontal wrap">
+                            <template is="dom-repeat" items="{{displayAmenities}}" as="amenity">
+                                <div class="margin-bottom list-item-half">[[amenity.description]]</div>
+                            </template>
+                        </div>
+                        <template is="dom-if" if="{{showMoreAmenities}}">
+                            <a href="javascript:void(0);" class="link-style block margin-bottom" on-click="onShowAmenities">more</a>
+                        </template>
+                        <template is="dom-if" if="{{!showMoreAmenities}}">
+                            <a href="javascript:void(0);" class="link-style block margin-bottom" on-click="onShowAmenities">less</a>
+                        </template>
+                    </template>
+                    <template is="dom-if" if="{{displayPOI.length}}">
+                        <div class="margin-bottom border-bottom font-semi">Points of interest</div>
+                        <div class="layout horizontal wrap">
+                            <template is="dom-repeat" items="{{displayPOI}}" as="poi">
+                                <div class="margin-bottom list-item-half">[[poi]]</div>
+                            </template>
+                        </div>
+                        <template is="dom-if" if="{{showMorePointsOfInterest}}">
+                            <a href="javascript:void(0);" class="link-style block margin-bottom"  on-click="onShowPOI">more</a>
+                        </template>
+                        <template is="dom-if" if="{{!showMorePointsOfInterest}}">
+                            <a href="javascript:void(0);" class="link-style block margin-bottom"  on-click="onShowPOI">less</a>
+                        </template>
+                    </template>
+                </div>
+        </div>      
+    </iron-pages>
+        
+    <t-sessionstorage id="criteriaElem" key="Eva_Hotel_SearchCriteria" api-url-format="[[sessionApiUrlFormat]]" auto ></t-sessionstorage>
+
+    <t-sessionstorage id="itineraryInfoElem" key="Eva_Hotel_SeclectedItinerary" api-url-format="[[sessionApiUrlFormat]]" auto></t-sessionstorage>
+
+    <t-sessionstorage id="roomInfoElem" key="Eva_Hotel_SeclectedRoom" api-url-format="[[sessionApiUrlFormat]]" on-t-sessionstorage-save-success="onRoomInfoSaved"></t-sessionstorage>
+    </template>
+</dom-module>
+<script>
+Polymer({
+    is: "t-hotel-details-page",
+
+    /**
+     * Fired when succesfuly gets the response from search.
+     * Passing the search id with the event
+     *
+     * @event request
+     */
+
+
+    /**
+     * Fired when clicked on the header left click
+     *
+     * @event header-left-click
+     */
+
+
+    /**
+     * Fired when clicked on the header right click
+     *
+     * @event header-right-click
+     */
+
+    properties: {
+
+        /*The session api Url format to be provided*/
+        sessionApiUrlFormat: String,
+
+        /*The auth token to be provided*/
+        authToken: String,
+
+        /*The api Base Url*/
+        apiBaseUrl: String,
+
+        /*Pass the search Id of the component*/
+        searchId: String,
+
+
+        /*Pass the hotel ID*/
+        hotelId:String,
+
+        /*The room Provider api relative url*/
+        roomProviderRelativeUrl:{
+            type:String,
+            value:'api/hotel/results/single'
+        },
+
+        /*The policy Provider api relative url*/
+        policyProviderRelativeUrl:{
+            type:String,
+            value:'api/hotel/results/single/policies'
+        },
+
+        /*The default active tab in the room list section defaults to Room list*/
+        activeTab:{
+            type: Number,
+            value:0
+        }
+    },
+    observers: [
+        '_setUpPrerequisites(authToken,apiBaseUrl,searchId,hotelId)'
+    ],
+    attached: function() {
+        this._setUpPrerequisites();
+    },
+
+    _setUpPrerequisites: function(authToken,apiBaseUrl,searchId,hotelId) {
+            if(!authToken || !apiBaseUrl || !searchId || !hotelId){
+                return;
+            }
+
+        //success event handler to udate full hotel model with room in session
+      
+        Polymer.dom(this.$.roomProvider.root).querySelector('iron-ajax').addEventListener('response', this._singleAvailSuccess.bind(this));
+        this.$.hotelRoomList.showRooms();
+        this._bindTemplate();
+
+    },
+
+
+    _onRoomSelect:function (event) {
+        //code to put overlay
+        this.isSingleItemLoading = true;
+
+        this.$.roomInfoElem.value = event.detail;
+        this.$.roomInfoElem.save();             
+    },
+
+
+
+    _singleAvailSuccess: function (event) {
+        
+        if (event.detail.response && event.detail.response.status && event.detail.response.status.isSuccessful) {
+            var inventory = event.detail.response.inventory;
+            //update session
+            this.$.itineraryInfoElem.value = inventory;
+            this.$.itineraryInfoElem.save();
+
+            //update only required properties in local model
+            //update descriptions only if not present at all or single avail returns more number of items than in results call
+            if (inventory.descriptions && (!this.selectedHotel.descriptions || inventory.descriptions.length > this.selectedHotel.descriptions.length)) {
+                this.set('selectedHotel.descriptions', inventory.descriptions);
+            }
+        }
+    },
+
+
+    parseDate: function (dateString) {
+        if (dateString) {
+            return new Date(dateString);
+        }
+        return dateString;
+    },
+
+    onShowAmenities: function () {
+        this.displayAmenities = this.showMoreAmenities ? this.selectedHotel.amenities : this.selectedHotel.amenities.slice(0, 10);
+        this.showMoreAmenities = !this.showMoreAmenities;
+        //_templateComponent.showLessAmenities = true;
+    },
+
+    onShowPOI: function () {
+        this.displayPOI = this.showMorePointsOfInterest ? this.selectedHotel.pointsOfInterest : this.selectedHotel.pointsOfInterest.slice(0, 10);
+        this.showMorePointsOfInterest = !this.showMorePointsOfInterest;
+        // this.showLessPointsOfInterest = true;
+    },
+
+    _mapClick: function() {
+        this.fire('header-right-click',  {bubbles: false});
+    },
+
+    _headerLeftClick: function(){
+        this.fire('header-left-click',  {bubbles: false});
+    },
+
+    _bindTemplate: function() {
+        if(!this.$.criteriaElem.loaded || !this.$.itineraryInfoElem.loaded){
+            var component = this;
+            setTimeout(component._bindTemplate.bind(this), 200);
+            return;
+        }
+
+        //do data binding
+        if(this.$.itineraryInfoElem.value && this.$.criteriaElem.value){
+            //data for header
+            this.searchCriteria = JSON.parse(this.$.criteriaElem.value.criteria);
+            //data for details
+            var selectedHotel = this.$.itineraryInfoElem.value;
+
+            this.selectedHotel = selectedHotel;
+            this.carouselData = selectedHotel.photoUrls;
+
+            selectedHotel.ratingArr = [];
+            if (selectedHotel.rating) {
+                var _rating = parseInt(selectedHotel.rating);
+                for (var i = 1; i <= _rating; i++) {
+                    selectedHotel.ratingArr.push(i);
+                }
+            }
+
+            this.displayAmenities = selectedHotel.amenities;
+            if (selectedHotel.amenities && selectedHotel.amenities.length > 15) {
+                this.displayAmenities = selectedHotel.amenities.slice(0, 10);
+                this.showMoreAmenities = true;
+            }
+
+            this.displayPOI = selectedHotel.pointsOfInterest;
+            if (selectedHotel.pointsOfInterest && selectedHotel.pointsOfInterest.length > 15) {
+                this.displayPOI = selectedHotel.pointsOfInterest.slice(0, 10);
+                this.showMorePointsOfInterest = true;
+            }
+        }
+    },
+
+    onRoomInfoSaved: function () {
+        this.fire('details-select-success', this.$.roomInfoElem.value.id , {bubbles: false});
+    }
+
+
+});
+</script>

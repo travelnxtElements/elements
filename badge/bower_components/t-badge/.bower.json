@@ -1,0 +1,44 @@
+{
+  "name": "t-badge",
+  "authors": [
+    "Rahul Pilkhwal <rahul.pilkhwal@tavisca.com>",
+    "Shailesh Kumar Srivastava <ssrivastava@tavisca.com>",
+    "Sounak <talk2sounak@gmail.com>",
+    "Ajinkya Tejankar <tejankarajinkya@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "keywords": [
+    "Polymer",
+    "Web",
+    "Components"
+  ],
+  "homepage": "https://github.com/travelnxtelements/t-badge",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0"
+  },
+  "devDependencies": {
+    "web-component-tester": "*",
+    "webcomponentsjs": "~0.7.14",
+    "iron-component-page": "PolymerElements/iron-component-page#~1.0.6"
+  },
+  "_release": "5b476f91b4",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "5b476f91b48615b358fd8097e99eab9fb5a55983"
+  },
+  "_source": "git://github.com/travelnxtelements/t-badge.git",
+  "_target": "master",
+  "_originalSource": "travelnxtelements/t-badge",
+  "_direct": true
+}

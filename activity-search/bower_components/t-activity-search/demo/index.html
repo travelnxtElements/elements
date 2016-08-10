@@ -1,0 +1,40 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1"> 
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  
+    <link rel="import" href="../t-activity-search-page.html">
+    <link rel="import" href="../../t-shared-components/theme.html">
+    <link rel="import" href="../../t-mystique-auth/t-mystique-auth.html"> 
+</head>
+
+<body>
+<template is="dom-bind" id="domBindTemplate">
+        <t-mystique-auth
+            name="mystique"
+            url="http://qa-mystiquecode.tavisca.com/api/authentication/authenticate/context"
+            token-response="{{tokenResponse}}"
+            auto>
+        </t-mystique-auth>
+
+        <t-activity-search-page
+            id="searchPage"
+            api-base-url="http://qa-mystiquecode.tavisca.com/"
+            auth-token="{{tokenResponse.authenticationToken}}"
+            api-url-format="/api/Session/SESSIONKEY">
+        </t-activity-search-page>
+</template>
+</body>
+<script type="text/javascript">
+window.addEventListener('WebComponentsReady', function(e) {
+    var template = document.getElementById('domBindTemplate');
+    template.$.searchPage.addEventListener('t-car-search-success', function() {
+        console.log('search successful do post handling..');
+    });    
+});
+</script>
+</html>

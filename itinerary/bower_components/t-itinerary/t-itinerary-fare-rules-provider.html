@@ -1,0 +1,95 @@
+<link rel="import" href="../polymer/polymer.html" />
+<link rel="import" href="../iron-ajax/iron-ajax.html">
+<link rel="import" href="../t-shared-lib/t-provider-behavior.html" />
+<!--
+    `<t-itinerary-fare-rules-provider>` is a polymer component that makes the call to fetch all fare rules for selected flight.
+-->
+
+<dom-module id="t-itinerary-fare-rules-provider">
+    <template>
+        <iron-ajax id="ajaxCall" 
+            method="POST"            
+            content-type="application/json"
+            handle-as="json"
+            verbose>
+        </iron-ajax>
+    </template>
+</dom-module>
+<script>
+    Polymer({
+        is: 't-itinerary-fare-rules-provider',
+
+        properties: {
+            /**
+             * Search results id returned in listing response
+             */
+            searchId: String,
+
+            /**
+             * Selected flight id returned in itinerary level
+             */
+            inventoryId: String,
+
+
+
+            /**
+             * The ajax request object
+             */
+            ajaxCall: {
+                type: Object,
+                notify: true,
+                readOnly: true
+            }
+        },
+
+        behaviors: [TravelNxt.Behaviors.ProviderBehavior],
+
+        listeners: {
+            'ajaxCall.response': '_successCallback',
+            'ajaxCall.error': '_errorCallback',
+            'ajaxCall.request': '_requestCallback'
+        },
+
+        getFareRules: function () {
+            var provider = this;
+
+            var buildReq = function (provider) {
+                var serviceModel = {
+                    "searchId": provider.searchId,
+                    "inventoryId": provider.inventoryId
+                };
+                return serviceModel;
+            }
+
+            //validate api data before initiating call
+            if (this._validateApiMeta()) {
+                this.$.ajaxCall.url = this._getUrl();
+                this.$.ajaxCall.body = JSON.stringify(buildReq(this));
+                this.$.ajaxCall.generateRequest();
+            }
+        },
+
+        _requestCallback: function () {
+            this.fire('request', this.$.ajaxCall.toRequestOptions(), { bubbles: false });
+        },
+
+        _successCallback: function (event) {
+            if (!event.detail.response || !event.detail.response.status)
+                this.fire('fare-rules-error', 'Operation error occured, please try again.', { bubbles: false });
+            else if (!event.detail.response.status.isSuccessful || !event.detail.response.rules) {
+                this.fire('fare-rules-error', event.detail.response.status.message, { bubbles: false });
+            }
+            else {
+                this.fire('fare-rules-success', this._getUIFareRules(event.detail.response.rules), { bubbles: false });
+            }
+        },
+
+        _errorCallback: function (event) {
+            this.fire('fare-rules-error', 'Connection error occured, please try again.', { bubbles: false })
+        },
+
+        _getUIFareRules: function (rules) {
+            return rules;
+        }
+    })
+</script>

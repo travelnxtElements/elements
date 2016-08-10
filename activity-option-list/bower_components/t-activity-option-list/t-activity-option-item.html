@@ -1,0 +1,277 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../t-text-container/travel-element-styles.html">
+<link rel="import" href="../t-shared-lib/t-date-behavior.html">
+<link rel="import" href="../t-button/t-button.html">
+<link rel="import" href="../t-policy/t-policy.html">
+<link rel="import" href="../t-shared-lib/t-date-behavior.html">
+<link rel="import" href="../t-stepper/t-stepper.html">
+<link rel="import" href="../t-dropdown/t-dropdown.html">
+<link rel="import" href="../iron-collapse/iron-collapse.html">
+<link rel="import" href="../iron-icons/iron-icons.html">
+<!--
+	A comment describing this element
+
+	Example:
+
+	    <my-elem></my-elem>
+
+	Example:
+
+	    <my-elem>
+	      <h2>Hello my-elem</h2>
+	    </my-elem>
+
+	@demo demo/index.html
+-->
+<dom-module id="t-activity-option-item">
+    <template>
+        <style include="iron-flex"></style>
+        <style include="iron-flex-alignment"></style>
+        <style include="travel-element-styles">
+	        :host {
+	            display: block;
+	            font-family: var(--header-font-family, --primary-font-family);
+	            font-size: var(--font-14, 14px);
+		        --t-button: {
+		        	padding: 7.5px 10px;
+		        }
+	        }
+	        .total {
+	            font-size: var(--font-18, 18px);
+	        }
+	        .min-width {
+	        	min-width: 10px;
+	        }
+        </style>
+    
+    	<div class="section-small">
+			
+			<div on-tap="_toggle">
+		        <div class="layout horizontal">
+		        	<div class="font-semi self-center">
+		        		[[option.name]]
+		        	</div>
+		        	<div class="flex min-width"></div>
+			    	<div class="total">
+			        	<div class="secondary-text text-right">
+			        		<iron-icon id="collapseIcon" icon="[[collapseIcon.expand]]"></iron-icon>
+			        	</div>
+			    		<div class="font-semi primary-text">[[_currency]]&nbsp;[[_totalPrice]]</div>
+			    	</div>
+		        </div>
+			</div>
+
+	        <iron-collapse id="collapse" opened={{opened}}>
+
+        		<div class="margin-bottom-medium"></div>
+
+                <t-dropdown
+                	id="date"
+                	required
+                	label="Date"
+                	class="margin-bottom-large"
+                	error-message="Select date" 
+                	selected-item="{{_selectedDate}}"
+                	dropdown-array="[[_dates]]" 
+                	required>
+                </t-dropdown>
+
+	        	<template is="dom-repeat" items="[[option.passengerTypesInfo]]">
+	        		<t-stepper 
+	        			class="flex margin-bottom-medium"
+	        			min="[[item.minQuantity]]"
+	        			max="[[item.maxQuantity]]"
+	        			plural-label="[[item.multiplePassengerType]]"
+	        			singular-label="[[item.passengerType]]"
+	        			secondary-label="{{_getSecondaryLabel(item)}}"
+	        			count="{{item.quantity}}"
+	        			id="[[item.passengerType]]Count"
+	        			on-count-changed="_onPaxCountChange">
+	    			</t-stepper>
+	        	</template>
+
+	        	<div class="border-bottom margin-bottom-medium"></div>
+
+		    	<div class="layout horizontal total margin-bottom-medium">
+		    		<div class="secondary-text">Total with Taxes</div>
+		    		<div class="secondary-text flex"></div>
+		    		<div class="font-semi primary-text">[[_currency]]&nbsp;[[_totalPrice]]</div>
+		    	</div>
+
+		    	<div class="layout horizontal end">
+	    			<label id="policy-label" class="link-style font-12" on-tap="_policyClick">Policy</label>
+		    		<div class="flex"></div>
+	    			<t-button id="book" label="book" class="primary" on-tap="_onOptionSelect"></t-button>
+		    	</div>
+	        </iron-collapse>
+		</div>
+
+    </template>
+    <script>
+    	(function () {
+
+    		'use strict'
+
+    		var _paxCount = 0;
+
+		    Polymer({
+
+		        is: 't-activity-option-item',
+
+		        properties: {
+
+                    /*
+                     * <p>This property holds value of activity option</p>
+                     */
+		        	option: {
+		        		type: Object,
+		        		observer:'_pageLoad'
+		        	},
+
+					/*
+                     * <p>This property sotres the value of available dates in the option</p>
+                     */
+		        	_dates: { 
+		        		type: Array
+		        	},
+
+					/*
+                     * <p>This property sotres the value of currency</p>
+                     */
+		        	_currency: { 
+		        		type: String
+		        	},
+
+					/*
+                     * <p>This property sotres the value of total price of selected option</p>
+                     */
+		        	_totalPrice: { 
+		        		type: String
+		        	},
+
+					/*
+                     * <p>This property sotres the value of selected date of current option</p>
+                     */
+		        	_selectedDate: { 
+		        		type: String,
+		        		observer:'_selectedDateChanged'
+		        	},
+
+			        /**
+			         * Stores possible values of collapse icons.
+			         */
+			        collapseIcon: {
+			            type: Object,
+			            value: function() {
+			                return {
+			                    expand: 'icons:expand-more',
+			                    collapse: 'icons:expand-less'
+			                };
+			            }
+			        },
+		        },
+
+		        observers: [
+                    '_updateSelectedDate(option.selectedDateTime.date)'
+		        ],
+
+		        _pageLoad: function () {
+		        	this._getDates();
+		        	this._getTotalPrice();
+		        },
+
+		        _getDates: function () {
+		        	
+		        	if (!this.option || !this.option.availableOn || !this.option.availableOn.length) {
+		        		return;
+		        	}
+
+					this._dates = this.option.availableOn.map(function (item) {
+						return item.date;
+					});
+		        },
+
+		        _getTotalPrice: function () {
+		        	
+		        	if (!this.option || !this.option.passengerTypesInfo || !this.option.passengerTypesInfo.length) {
+		        		return;
+		        	}
+
+		        	_paxCount = 0
+		        	var totalPrice = 0;
+
+		        	var paxInfo = this.option.passengerTypesInfo;
+
+		        	for (var i = 0; i < paxInfo.length; i++) {
+
+	        			var price = paxInfo[i].fare.components.find(function (item) {
+	        				return item.type.toLowerCase() === 'totalfare';
+	        			});
+
+	        			_paxCount += paxInfo[i].quantity;
+	        			totalPrice += (price.money.amount * paxInfo[i].quantity);
+		        	}
+
+		        	this._currency = price.money.type;
+		        	this._totalPrice =  this._roundOff(totalPrice);		        	
+		        },
+
+		        _onPaxCountChange: function (e) {
+		        	this._getTotalPrice();
+	        		this.$.book.disabled = parseFloat(this._totalPrice) === 0;
+		        },
+
+		        _onOptionSelect: function () {
+		        	if (!this.validate()) {
+		        		return;
+		        	}
+
+		        	this.fire('option-selected', {
+		        		id: this.option.id,
+		        		selectedDate: this._selectedDate,
+		        		paxCount: _paxCount
+		        	});
+		        },
+
+		        _selectedDateChanged: function () {
+		        	if (!this._selectedDate) {
+		        		return;
+		        	}
+		        	this.option.selectedDateTime = this.option.availableOn.find(function (item) {
+		        		return item.date.toLowerCase() === this._selectedDate.toLowerCase();
+		        	}, this);
+		        },
+
+		        _updateSelectedDate: function (date) {
+		            if (date) {
+		                this._selectedDate = date;
+		            }
+		        },
+
+			    _toggle: function() {
+			        this.$.collapse.toggle();
+			        var collapseIcon = this.$.collapseIcon;
+			        collapseIcon.icon 	= collapseIcon.icon === 'icons:expand-more'
+										? 'icons:expand-less'
+										: 'icons:expand-more'
+			    },
+
+			    _getSecondaryLabel: function (item) {
+			    	if (item.minAge && item.maxAge) {
+			    		return '(' + item.minAge + '-' + item.maxAge + ' yrs)';
+			    	}
+			    },
+
+			    _roundOff:function (value) {
+			        return value.toFixed(2);
+			    },
+
+			    validate: function () {
+			    	return this.$.date.validate() && !this.$.book.disabled;
+			    }
+		    });
+
+    	})();
+    </script>
+</dom-module>

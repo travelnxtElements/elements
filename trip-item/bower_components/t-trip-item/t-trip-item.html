@@ -1,0 +1,177 @@
+    <link rel="import" href="../polymer/polymer.html" />
+<link rel="import" href="../paper-menu-button/paper-menu-button.html" />
+<link rel="import" href="./t-air-item.html">
+<link rel="import" href="./t-hotel-item.html">
+<link rel="import" href="./t-activity-item.html">
+<link rel="import" href="./t-car-item.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html" />
+<!--
+    `t-trip-item` is trip listing item component.
+    This component shows information of a single trip.
+    It may contain one or more product depending upon booked itineraries.
+    
+    
+Example:
+        without event handlers
+        <t-trip-api></t-trip-api>
+
+        with data
+        <t-list id="list" data-api="result.json" as="item" token-param="bookings" auto>
+            <template>
+                <t-trip-item trip="{{item}}"></t-trip-item>
+            </template>
+        </t-list>-->
+<dom-module id="t-trip-item">
+    <template>
+    <style include="iron-flex"></style>
+    <style include="travel-element-styles">
+    :host{
+        display: block;
+    }
+    .block{
+        display: block;
+        margin: 15px 0;
+    }
+    .block:last-of-type{
+        margin: 15px 0 0;
+    }
+    .purchased{
+        color: var(--success-color,green);
+    }
+    .cancelled{
+        color: var(--error-color,red);
+    }
+    .planned{
+        color: var(--notify-color, #e3b255);
+    }
+    .icon{
+        width: 12px;
+        position: absolute;
+        right: -10px;
+        top: 0;
+        padding: 0 10px;
+        z-index: 1;
+    }
+    iron-icon{
+        width: 20px;
+        height: 20px;
+    }
+    #detailMenu{
+        padding: 0; 
+    }
+    .header-icon-holder{
+        position: relative;
+        padding-right: 20px;
+    }
+    paper-item{
+        font-size: var(--font-12,12px);
+        -ms-flex-pack: center;
+        -webkit-justify-content: center;
+        justify-content: center;
+        color: var(--grey-three,#bbbbbb);
+        font-weight: normal!important;
+    }
+    #detailMenu ::content > #dropdown{    
+        left: calc(100% - 80px)!important;
+        margin: 0!important;
+        top: 13px!important;
+        width: 70px;
+    }
+    #detailMenu ::content paper-material{
+        width: 70px;
+        box-shadow: 0px 0px 8px 2px rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+    }
+    .dropdown-content{
+        outline: none;
+        padding: 0; 
+    }
+    .trip-item-body{
+        margin: 0 10px;
+        padding: 15px 0 ;
+    }
+    </style>
+        <div class="trip-item-body border-bottom">
+            <div class="layout horizontal secondary-text font-12 header-icon-holder">
+                <div class="flex layout vertical">
+                    <div class="inventory-detail layout horizontal">
+                        <div class="flex primary-text font-16 margin-bottom">
+                            [[model.name]]
+                        </div>
+                        <div class$="{{_getStatusClass(model.bookingStatus)}} font-14" on-tap="toggleDetails">[[model.bookingStatus]]</div>
+                    </div>
+                    <div class="inventory-description">
+                        Trip ID: [[model.confirmationNumber]]
+                    </div>
+                </div>
+                <div class="icon"  on-tap="toggleDetails">
+                    <iron-icon icon="more-vert"  on-tap="toggleDetails"></iron-icon>
+                    <paper-menu-button id="detailMenu" horizontal-offset="-20" horizontal-align="right">
+                      <paper-menu class="dropdown-content">
+                        <paper-item on-tap="_detailClick">Details</paper-item>
+                        <!-- <paper-item>Delete</paper-item> -->
+                      </paper-menu>
+                    </paper-menu-button>
+                </div>
+            </div>
+            <div class="trip-items-area">
+                <template is="dom-repeat" items="{{model.inventoriesInfo}}">
+                    <template is="dom-if" if="{{_isType(item,'flight')}}">
+                        <t-air-item class="block" model="{{item}}"></t-air-item>
+                    </template>
+                    <template is="dom-if" if="{{_isType(item,'hotel')}}">
+                        <t-hotel-item class="block" model="{{item}}"></t-hotel-item>
+                    </template>
+                    <template is="dom-if" if="{{_isType(item,'car')}}">
+                        <t-car-item class="block" model="{{item}}"></t-car-item>
+                    </template>
+                    <template is="dom-if" if="{{_isType(item,'activity')}}">
+                        <t-activity-item class="block" model="{{item}}"></t-activity-item>
+                    </template>
+                </template>
+            </div>
+        </div>
+    </template>
+</dom-module>
+<script>
+Polymer({
+    is: "t-trip-item",
+
+    properties: {
+
+        /**
+         * trip item.
+         * This is required field.
+         */
+        model: {
+            type: Object,
+            value: null
+        }
+    },
+
+    attached: function() {
+    },
+
+    _getStatusClass: function(status){
+        if(!status){
+            return;
+        }
+        return status.toLowerCase();
+    },
+
+    _detailClick: function(){
+        this.fire('detail-click',this.model.confirmationNumber);
+    },
+
+    _isType: function(product,type){
+        if (!product || !product.inventory)
+            console.error("inventory not found!");
+
+        return product.inventory.type.toLowerCase() === type;
+    },
+
+    //toggle the details button
+    toggleDetails: function(){
+        this.$.detailMenu.open();
+    }
+});
+</script>

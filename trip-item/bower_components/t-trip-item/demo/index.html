@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+    <title>t-trip-item demo</title>
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="../../t-list/t-list.html" />
+    <link rel="import" href="../../iron-icons/iron-icons.html" />
+    <link rel="import" href="../../iron-icons/maps-icons.html" />
+    <link rel="import" href="../../iron-icons/places-icons.html" />
+    <link rel="import" href="../../t-shared-components/theme.html" />
+    <link rel="import" href="../../t-header/t-header.html" />
+    <link rel="import" href="../t-trip-item.html">
+    <style>
+        body{
+            margin: 0;
+        }
+
+    </style>
+</head>
+
+<body>
+    <t-header 
+        label= "My Trips" 
+        normal-heading>
+    </t-header>
+    <t-list
+
+        filter-api-response="result"
+        id="list"
+        data-api="result.json"
+        data-call-method="GET"
+        filter-call-method="POST"        
+        filter-response-param="result"
+        filter-api="filter.json"
+        filter-results-api="result.json"
+        as="item"
+        token-param="bookings"
+        filter-search-label = "search traveller name"
+        auto
+        include-filters='["Status","DateRange","Traveller"]'
+        with-filter>
+        <template>
+            <t-trip-item model="{{item}}"></t-trip-item>
+        </template>
+    </t-list>
+</body>
+
+</html>

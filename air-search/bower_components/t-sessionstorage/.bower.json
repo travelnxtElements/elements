@@ -1,0 +1,42 @@
+{
+  "name": "t-sessionstorage",
+  "version": "1.0.2",
+  "authors": [
+    "C Venkata Suresh <chindanuruvenkatasuresh@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "keywords": [
+    "Polymer",
+    "Web",
+    "Components"
+  ],
+  "homepage": "https://github.com/travelnxtElements/t-sessionstorage",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0",
+    "iron-ajax": "PolymerElements/iron-ajax#^1.0.0"
+  },
+  "devDependencies": {
+    "web-component-tester": "*",
+    "webcomponentsjs": "~0.7.14",
+    "iron-component-page": "PolymerElements/iron-component-page#~1.0.6"
+  },
+  "_release": "1.0.2",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.0.2",
+    "commit": "6044e77149d6fbb28799d6ecbcc8163e0787e707"
+  },
+  "_source": "git://github.com/travelnxtElements/t-sessionstorage.git",
+  "_target": "^1.0.1",
+  "_originalSource": "travelnxtElements/t-sessionstorage"
+}

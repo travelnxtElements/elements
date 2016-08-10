@@ -1,0 +1,82 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../t-text-container/travel-element-styles.html" />
+<link rel="import" href="../juicy-html/juicy-html.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html" />
+<!--
+    `<t-itinerary>` is a polymer component that generates a list of legs in a flight.
+
+    Basic usage
+    `
+    <t-itinerary-fare-rules-list>
+	    <content select="#policyProvider"></content>     
+    </t-itinerary-fare-rules-list>   
+    `
+-->
+
+<dom-module id="t-itinerary-fare-rules-list">    
+    <template>
+    <style include="iron-flex"></style>
+    <style include="travel-element-styles">
+    </style>
+        <template is="dom-if" if="{{_fareRulesLoading}}">
+            <div class="section font-14 text-center">
+                Please wait, we are fetching fare rules for your selected itinerary.
+            </div>
+            <div class="horizontal layout flex center-justified">
+                <t-loader active></t-loader>
+            </div>           
+        </template>
+        <template is="dom-if" if="{{_fareRulesFailed}}">
+            <t-notify active message="Sorry we are having difficulties fetching fare rules of your selected itinerary."></t-notify>
+        </template>
+        <div class="section">
+            <template is="dom-repeat" items="{{fareRules}}">
+                <template is="dom-if" if="[[item.rules.length]]">
+                    <template is="dom-repeat" items="{{item.rules}}" as="rule">
+                        <div class="font-12 font-semi">[[rule.key]]</div>
+                        <div class="font-12 margin-bottom">
+                            <template is="juicy-html" content$="[[rule.value]]" ></template>                        
+                        </div>
+                    </template>             
+                </template>    
+            </template>
+        </div>
+    </template>
+</dom-module>
+<script>
+    Polymer({
+        is: 't-itinerary-fare-rules-list',
+
+        properties: {
+            /**
+             * Provides array of all flight fare rules in an itinerary. Object in an array includes airline, airport details and its Fare Rules
+             */
+            fareRules: Array
+        },
+
+        _fareRulesLoading: false,
+
+        _fareRulesFailed: false,
+        
+        /**
+         * This method will initiate a call to show fare rules
+         */
+        showFareRules: function(){
+            this._fareRulesLoading = true;
+            this._fareRulesFailed = false;
+            this.policies = null;
+        },
+        
+        onFareRuleSuccess: function (event) {
+            this._fareRulesLoading = false;      
+            this._fareRulesFailed = false;
+            this.fareRules = event.detail;      
+        },
+
+        onFareRuleError: function (event) {
+            this._fareRulesLoading = false;
+            this._fareRulesFailed = true;
+            
+        }
+    })
+</script>

@@ -1,0 +1,94 @@
+<link rel="import" href="../polymer/polymer.html" />
+<link rel="import" href="../t-shared-lib/t-date-behavior.html">
+<!--
+    `<t-car-search-api-decorator>` is a polymer component that generates the  msytique request for car.
+    Basic usage
+    
+        `<t-car-search-api-decorator 
+            input="[[something]]"
+            output="{{searchCriteria}}">
+        </t-car-search-api-decorator>`
+-->
+<dom-module id="t-car-search-api-decorator">
+</dom-module>
+<script>
+    Polymer({
+        is: 't-car-search-api-decorator',
+        
+        behaviors: [
+            TravelNxt.Behaviors.DateBehavior
+        ],
+        
+        observers:[
+            '_buildData(input)'
+        ],
+
+        properties: {
+
+            //the data object to bind to populate data
+            input: {
+                type: Object
+            },
+
+            /**
+             * Stores output of the decorator
+             * @type {Object}
+             */
+            output: {
+                type: Object,
+                notify: true
+            }
+        },
+        _buildData: function(data) {
+            var query = {
+                productType: "car",
+                pickupLocation: {
+                    name: data.pickupLocation.name,
+                    geoCode: data.pickupLocation.geoCode,
+                    type: data.pickupLocation.type,
+                    code: data.pickupLocation.code,
+                    formattedAddress: data.pickupLocation.formattedAddress,
+                    cityName: data.pickupLocation.cityName,
+                    countryCode: data.pickupLocation.countryCode,
+                    countryName: data.pickupLocation.countryName,
+                    stateCode: data.pickupLocation.stateCode,
+                    stateName: data.pickupLocation.stateName
+                },
+                pickupDate: {
+                    date: this._getFormattedDate(data.pickupDate),
+                    time: data.pickupTime,
+                },
+                dropoffDate: {
+                    date: this._getFormattedDate(data.dropoffDate),
+                    time: data.dropoffTime,
+                },
+                dropoffLocation: {
+                    name: data.dropoffLocation.name,
+                    geoCode: data.dropoffLocation.geoCode,
+                    type: data.dropoffLocation.type,
+                    code: data.dropoffLocation.code,
+                    formattedAddress: data.dropoffLocation.formattedAddress,
+                    cityName: data.dropoffLocation.cityName,
+                    countryCode: data.dropoffLocation.countryCode,
+                    countryName: data.dropoffLocation.countryName,
+                    stateCode: data.dropoffLocation.stateCode,
+                    stateName: data.dropoffLocation.stateName
+                }
+            };
+            this.output = query;
+        },
+     /*
+         * <p>Translates dates to make them compatible with t-calendar</p>
+        */
+        _getFormattedDate: function (dateString) {
+
+            //changed the date format to match the format added templar site
+            //need to find a solution to get the format from templar to create date objects.
+            var dateComponents = this._getDateComponents(dateString);
+            return  dateComponents.day + ', ' + 
+                    dateComponents.monthIndex + '/' + 
+                    dateComponents.date + '/' +
+                    dateComponents.year
+        }
+    });
+</script>

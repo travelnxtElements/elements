@@ -1,0 +1,69 @@
+<link rel="import" href="../polymer/polymer.html" />
+<link rel="import" href="../t-text-container/travel-element-styles.html" />
+<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html" />
+<dom-module id="t-trip-subitem-scaffold">
+    <template>
+        <style include="iron-flex"></style>
+    	<style include="travel-element-styles">
+    		:host{
+    			display: block;
+    		}
+			.icon{
+				margin-right: 10px;
+			}
+			.invertory-detail{
+				line-height: 18px;
+			}
+			.inventory-detail ::content iron-icon{
+				width: 18px;
+				height: 18px;
+				margin: 0 5px;
+				color: var(--grey-three,#bbbbbb);
+			}
+    	</style>
+    	<div class="layout horizontal center secondary-text font-12">
+    		<div class="icon">
+    			<iron-icon icon="[[icon]]"></iron-icon>
+    		</div>
+    		<div class="flex layout vertical">
+    			<div class="inventory-detail layout horizontal">
+	    			<div class="flex primary-light-text font-14">
+	    				<content select=".inventory-detail"></content>
+	    			</div>
+    				<div id="status">[[status]]</div>
+    			</div>
+    			<div class="inventory-description">
+    				<content select=".inventory-description"></content>
+    			</div>
+    		</div>
+    	</div>
+    </template>
+</dom-module>
+<script>
+Polymer({
+    is: "t-trip-subitem-scaffold",
+
+    properties:{
+    	
+
+    	/**
+         * Pass the status of the trip. The colors will be handled by itself.
+         * This is required field.
+         */
+    	status:{
+    		type:String,
+    		value:''
+    	},
+    	
+
+    	/**
+         * Pass the status of the trip. The colors will be handled by itself.
+         * This is required field.
+         */
+    	icon:{
+    		type:String,
+    		value:''
+       	}
+    }
+})
+</script>

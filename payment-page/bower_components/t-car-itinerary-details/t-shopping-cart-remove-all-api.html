@@ -1,0 +1,79 @@
+<link rel="import" href="../polymer/polymer.html" />
+<link rel="import" href="../iron-ajax/iron-ajax.html">
+<link rel="import" href="../t-shared-lib/t-provider-behavior.html">
+<!--
+    <h3>Details:</h3>
+
+        `t-shopping-cart-remove-all-api` components removes all selected itineraries from shopping cart.
+
+    <h3>Events:</h3>
+
+        following events are fired by this component
+
+            1. 't-shopping-cart-remove-all-api-success' - fired upon successful search call
+            2. 't-shopping-cart-remove-all-api-error' - fired if search call is failed
+
+    <h3>Example:</h3>
+
+        <t-shopping-cart-remove-all-api
+            id="removeCartItemApi" 
+            loading={{loading}} 
+            api-base-url="[[apiBaseUrl]]" 
+            api-relative-url="api/ShoppingCart/remove/all" 
+            auth-token="[[authToken]]"
+            on-t-shopping-cart-remove-all-api-success="onRemoveCartSuccess"
+            on-t-shopping-cart-remove-all-api-error="onRemoveCartError">
+        </t-shopping-cart-remove-all-api>
+
+    @demo demo/index.html
+-->
+<dom-module id="t-shopping-cart-remove-all-api">
+    <template>
+        <iron-ajax id="ajaxCall" method="DELETE" content-type="application/json" handle-as="json" verbose>
+        </iron-ajax>
+    </template>
+</dom-module>
+<script>
+(function() {
+
+    Polymer({
+        is: 't-shopping-cart-remove-all-api',
+
+        /*
+         * <p>Behaviour to validate ajax parameters and handle error codes.</p>
+         */
+        behaviors: [TravelNxt.Behaviors.ProviderBehavior],
+
+        listeners: {
+            'ajaxCall.response': '_successCallback',
+            'ajaxCall.error': '_errorCallback'
+        },
+
+        /*
+         * <p>Method to remove all itineraries from shopping cart</p>
+         */
+        remove: function() {
+
+            if (this._validateApiMeta()) {
+                this.$.ajaxCall.url = this._getUrl();
+                this.$.ajaxCall.generateRequest();
+            }
+        },
+        /*
+         * <p>Success callback</p>
+         */
+        _successCallback: function(event) {
+            this._successHandler(event);
+        },
+
+
+        /*
+         * <p>error callback</p>
+         */
+        _errorCallback: function(event) {
+            this._errorHandler(event);
+        }
+
+    });
+})();
+</script>

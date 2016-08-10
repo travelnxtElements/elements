@@ -1,0 +1,417 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../t-notify/t-notify.html">
+<link rel="import" href="../t-address/t-address.html">
+<link rel="import" href="../t-creditcard/t-creditcard.html">
+<link rel="import" href="../t-checkbox/t-checkbox.html">
+<link rel="import" href="../t-button/t-button.html">
+<link rel="import" href="../t-activity-itinerary-details/t-activity-itinerary-details.html">
+<link rel="import" href="../t-section-header/t-section-header.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html" />
+<link rel="import" href="t-car-book-api.html"/>
+<link rel="import" href="../t-sessionstorage/t-sessionstorage.html">
+<link rel="import" href="../t-text-container/travel-element-styles.html">
+<link rel="import" href="../t-shared-lib/t-page-load-behavior.html">
+<link rel="import" href="../t-shared-lib/t-payment-behavior.html">
+<link rel="import" href="../t-shared-lib/t-date-behavior.html">
+<link rel="import" href="../t-loader/t-fullpage-loader.html">
+<link rel="import" href="../t-policy/t-policy.html">
+<link rel="import" href="../t-behavior/t-page-behavior.html">
+<link rel="import" href="../t-behavior/t-activity-page-behavior.html">
+
+<!--
+    <h3>Details:</h3>
+
+        `t-activity-payment-page` is a car payment page component which displays payment information.
+
+        It uses following child components in it -
+            1.  `t-notify`
+            2.  `t-header`
+            3.  `t-policy`
+            4.  `t-activity-itinerary-details`
+            5.  `t-faredetails`
+            7.  `t-sessionstorage`
+            8.  `t-address`
+            9.  `t-credit-card`
+            10. `t-checkbox`
+            11. `t-button`
+            12. `t-seaction-header`
+            13. `t-fullpage-loader`
+
+    <h3>Events:</h3>
+
+        following events are fired by this component
+
+            1. 'book-success' - fired when booking is successful.
+            2. 'book-error' - fired when booking fails.
+            3. `go-to-search` - fired when page is loaded without required page data.
+
+    <h3>Example:</h3>
+
+        <t-activity-payment-page
+            id="payment"
+            name="payment"
+            search-criteria="[[searchCriteria]]"
+            api-base-url="[[apiBaseUrl]]"
+            auth-token="[[authToken]]"
+            payment-timer="[[paymentTimer]]"
+            itinerary="[[selectedItinerary]]"
+            booked-itinerary="{{bookedItinerary}}"
+            passenger-info="[[passengerInfo]]"
+            api-url-format="[[apiUrlFormat]]"
+            stay-on-page
+            on-book-success="_goToConfirmationPage"
+            on-book-error="_goToFailurePage">
+            <t-header
+                icon="bgv:arrow-left"
+                 url="[[siteUrl]]car/paxInfo"
+                label="Make Payment"
+                normal-heading>
+            </t-header>
+        </t-activity-payment-page>
+
+    @demo demo/index.html
+-->
+
+<dom-module id="t-activity-payment-page">
+    <template>
+        <style include="iron-flex"></style>
+        <style include="travel-element-styles">
+            :host {
+                font-family: var(--header-font-family, --primary-font-family);
+                font-size: var(--font-14, 14px);
+            }
+            :host, t-button {
+                display: block;                
+            }
+            .payable {
+                font-size: var(--font-18, 18px);
+            }
+            #acceptance {
+                margin-right: 10px;
+            }
+        </style>
+
+        <content select="t-header"></content>
+
+        <t-notify id="notify"></t-notify>
+
+        <t-section-header
+            id="paymentHeader"
+            class="margin-bottom"
+            label="Trip Summary">              
+        </t-section-header>
+        
+        <t-policy id="policy" 
+            label="Booking Policies"
+            external-link
+            api-relative-url="api/ShoppingCart/add" 
+            api-base-url="[[apiBaseUrl]]"
+            auth-token="[[authToken]]"
+            search-id="[[searchId]]"
+            inventory-id="[[itinerary.id]]"
+            policies="[[itinerary.generalPolicies]]"
+            is-data-provided-by-view>
+        </t-policy>
+
+        <t-activity-itinerary-details
+            id="itineraryDetails"
+            is-collapsible>
+        </t-activity-itinerary-details>
+
+        <t-faredetails 
+            id="fareDetails"
+            is-collapsible
+            itinerary-fare-label="Car Rental">
+            <div class="passenger-fare-components">
+                <template is="dom-repeat" items="[[_passengerFares]]">
+                    <div class="layout horizontal item border-bottom baseFare">
+                        <span class="secondary-text">[[item.label]]</span>
+                        <span class="flex"></span>
+                        <span>[[item.currency]] [[item.fare]]</span>
+                    </div>                    
+                </template>
+            </div>
+        </t-faredetails>
+
+        <template is="dom-if" if="[[_showFullPageLoader]]">
+            <t-fullpage-loader active>
+                <div hidden="[[_processingMsg]]">
+                    Please do not refresh the page, we are confirming your booking...
+                </div> 
+                <div hidden="[[_longProcessingMsg]]">
+                    Please wait, this is taking longer than expected...
+                </div>     
+            </t-fullpage-loader>
+        </template>
+
+	    <t-section-header
+	        class="margin-bottom"
+	        id="paymentHeader"
+	        label="Payment Information">              
+	    </t-section-header>
+
+	    <t-creditcard 
+	        id="creditCard">
+	    </t-creditcard>
+
+	    <t-address 
+	        id="address"
+	        prevent-auto-populate
+	        country-api="[[apiBaseUrl]]api/content/countries"
+	        base-geo-api="[[apiBaseUrl]]api/content"
+	        query-params="?token=[[authToken]]">
+	    </t-address>
+
+        <div class="layout horizontal start section-small">
+            <t-checkbox id="acceptance" checked="{{checked}}"><div hidden>something</div></t-checkbox>
+            <div class="flex font-12 secondary-text" on-tap="_checkBoxCheck">
+                I have read and accept the <a class="link-style" on-click="_showPolicies">Booking Policies</a>, <a href="http://www.bluegreenvacations.com/terms-of-use" class="link-style" target="_blank">Terms &amp; Conditions</a> and <a href="http://www.bluegreenvacations.com/privacy-policy" class="link-style" target="_blank">Privacy Policy</a>.
+            </div>
+        </div>
+
+        <div class="layout horizontal section-small">
+            <t-button 
+                label="Pay now" 
+                id="submit" 
+                class="primary flex" 
+                disabled="[[!checked]]" 
+                on-click="bookNow">              
+            </t-button>
+        </div>
+
+        <t-car-book-api
+            id="bookApi" 
+            loading={{loading}} 
+            api-base-url="[[apiBaseUrl]]" 
+            api-relative-url="api/ShoppingCart/book" 
+            auth-token="[[authToken]]"
+            on-t-car-book-api-success="_onBookSuccess"
+            on-t-car-book-api-error="_onBookError">
+        </t-car-book-api>
+
+        <t-sessionstorage
+            id="sessionStore"
+            key="Activity_Booked_Itinerary"
+            api-url-format="[[apiUrlFormat]]"
+            on-t-sessionstorage-save-success="_onSessionSave">
+        </t-sessionstorage>
+    </template>
+
+    <script>
+
+        (function () {
+
+            'use strict'
+
+            Polymer({
+
+                is: 't-activity-payment-page',
+
+                behaviors: [
+                    TravelNxt.Behaviors.PageLoadBehavior,
+                    TravelNxt.Behaviors.PaymentBehavior,
+                    TravelNxt.Behaviors.DateBehavior,
+                    TravelNxt.Behaviors.PageBehavior,
+                    TravelNxt.Behaviors.ActivityPageBehavior
+                ],
+
+                properties: {
+
+                    /*
+                     * <p>This property holds the value of passenger count selected against the selected option</p>
+                     */
+                    paxCountMap: {
+                        type: Array,
+                        notify: true
+                    }
+                },
+
+                /*
+                 * <p>This method validated payment page information</p>
+                */
+                validate: function () {
+                    if (this.$.submit.disabled) {
+                      return false;
+                    }
+                    if (this.itinerary.isPostPaid) {
+                      return true;
+                    }
+                    var isValid = true;
+                    isValid = this.$$('#address').validate() && isValid;
+                    return this.$$('#creditCard').validate() && isValid;
+                },
+            
+                /*
+                 * <p>This is the event handler for payment button click</p>
+                */
+                bookNow: function () {
+
+                    this._bindTimer();
+
+                    this.$.notify.active = false;
+                    this.stayOnPage = true;
+
+                    if (this.validate()) {
+                        this.$.submit.disabled = true;
+                        this._showFullPageLoader = true;
+                        var data = this._getBookingData();
+                        this.$.bookApi.book(data);
+                    }
+                },
+
+                /*
+                 * <p>This is booking api success handler</p>
+                */
+                _onBookSuccess: function (e) {
+                    this._showFullPageLoader = false;
+                    this.$.submit.disabled = false;
+                    this.stayOnPage = false;
+                    
+                    if (!e.detail) {
+                      return;
+                    }
+
+                    this.$.sessionStore.value = this._translateItinerary(e.detail);
+                    this.$.sessionStore.save();
+                },
+
+                /*
+                 * <p>This is booking api error handler</p>
+                */
+                _onBookError: function (e) {
+                    this._showFullPageLoader = false;
+                    this.$.submit.disabled = false;
+                    this.$.notify.active = true;
+                    this.stayOnPage = false;
+                    this.$.notify.message = event.detail.message;
+                    this.fire('book-error');
+                },
+
+                /*
+                 * <p>observer function for page `authToken`, `passengerInfo` properties</p>
+                */
+                _pageLoad: function (authToken, passengerInfo) {
+
+                    if (!this.itinerary || !passengerInfo || !this.searchCriteria || !authToken){
+                        return;
+                    }
+
+                    this._setViewDetails();
+                },
+
+                /*
+                 * <p>Sets all the view data</p>
+                */
+                _setViewDetails: function () {
+
+                    if (this.$$('#address')) {
+                        this._countryCall();
+                    }
+
+                    this.$.itineraryDetails.setDetails(this.itinerary, this.searchCriteria);
+
+                    this._setFareDetails();                    
+                },
+
+                /*
+                * <p>translator method to set view components data</p>
+                * <p>This method overrides behavior implementation</p>
+                */
+                _setFareDetails: function () {
+                    if (!this.itinerary || !this.searchCriteria) {
+                        return;
+                    }
+
+                    if (this.itinerary.fare && this.itinerary.fare.components) {
+                        this.$.fareDetails.data = this.itinerary.fare.components.filter(function (item) {
+                            return item.type.toLowerCase() !== 'basefare';
+                        });
+
+                        this._buildFareComponents();
+                    }
+                },
+
+                /*
+                 * <p>Builds fare components to include passenger-wise prices as per passenger counts provided while pricing</p>
+                */
+                _buildFareComponents: function () {
+                    if (!this.itinerary.options || !this.itinerary.options.length) {
+                        return;
+                    }
+
+                    var paxInfo = this.itinerary.options[0].passengerTypesInfo;
+
+                    var passengerFares = [];
+
+                    for (var i = 0; i < paxInfo.length; i++) {
+
+                        if (paxInfo[i].passengerType.toLowerCase() === 'youth') {
+                            continue;
+                        }
+
+                        var baseFare = paxInfo[i].fare.components.find(function (item) {
+                            return item.type.toLowerCase() === 'basefare';
+                        });
+
+                        if (!baseFare || !this.paxCountMap || !this.paxCountMap.length) {
+                            continue;
+                        }
+
+                        var passenger = this.paxCountMap.find(function (item) {
+                            return item.type.toLowerCase() === paxInfo[i].passengerType.toLowerCase();
+                        });
+
+                        if (passenger && passenger.quantity) {
+                            passenger = parseInt(passenger.quantity);
+                        }
+
+                        if (passenger) {
+                            passengerFares.push({
+                                label: paxInfo[i].passengerType + ' x ' + passenger,
+                                fare: (baseFare.money.amount * passenger).toFixed(2),
+                                currency: baseFare.money.currency
+                            });
+                        }
+                    }
+
+                    this._passengerFares = passengerFares;
+                },
+
+                /*
+                 * <p>This is session success handler</p>
+                */
+                _getBookingData: function () {
+
+                    return {
+                        itinerary: this.itinerary,
+                        passengerInfo: this.passengerInfo,
+                        payment: this._getCreditCardInfo()
+                    }        
+                },
+
+                /*
+                 * <p>This is a translator to translate book api response into confirmation page compatible data.</p>
+                */
+                _translateItinerary: function (bookedItinerary) {
+
+                    bookedItinerary.inventoriesInfo[0].searchCriteria.pickupTime = bookedItinerary.inventoriesInfo[0].searchCriteria.pickupDate.time;
+                    bookedItinerary.inventoriesInfo[0].searchCriteria.pickupDate = bookedItinerary.inventoriesInfo[0].searchCriteria.pickupDate.date;
+
+                    bookedItinerary.inventoriesInfo[0].searchCriteria.dropoffTime = bookedItinerary.inventoriesInfo[0].searchCriteria.dropoffDate.time;
+                    bookedItinerary.inventoriesInfo[0].searchCriteria.dropoffDate = bookedItinerary.inventoriesInfo[0].searchCriteria.dropoffDate.date;
+
+                    return {                            
+                        confirmationNumber: bookedItinerary.confirmationNumber,
+                        bookingStatus: bookedItinerary.bookingStatus,
+                        name: bookedItinerary.name,
+                        itinerary: bookedItinerary.inventoriesInfo[0].inventory,
+                        paymentBreakup: bookedItinerary.inventoriesInfo[0].paymentBreakups[0],
+                        searchCriteria: bookedItinerary.inventoriesInfo[0].searchCriteria,
+                        passengers: bookedItinerary.passengers,
+                        passengerSegment: bookedItinerary.inventoriesInfo[0].passengerSegments[0]
+                    };
+                }
+            });
+        })();
+    </script>
+</dom-module>

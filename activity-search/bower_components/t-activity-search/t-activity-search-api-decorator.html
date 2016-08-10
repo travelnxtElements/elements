@@ -1,0 +1,145 @@
+<link rel="import" href="../polymer/polymer.html" />
+<!--
+    <h3>Details:</h3>
+
+        `t-activity-search-api-decorator` is a activity search api component integrated with mystique apis.
+
+        It fires mystique search call and returns `searchId` upon successful opearion
+
+    <h3>Object Structure:</h3>
+
+        1. This component uses following request format to search activitys -
+
+            var request = {
+                productType": "Flight",
+                "Passengers": [
+                    {
+                        "quantity": data.adult,
+                        "type": "Adult",
+                        "ages": []
+                    },
+                    {
+                        "quantity": data.child,
+                        "type": "Child",
+                        "ages": []
+                    },
+                    {
+                        "quantity": 0,
+                        "type": "Senior",
+                        "ages": []
+                    },
+                    {
+                        "quantity": data.infant,
+                        "type": "Infant",
+                        "ages": []
+                    }
+                ],
+                "legs": [
+                    {
+                        "departureLocation": data.Departureactivityport,
+                        "includeNearByactivityportsForDeparture": true,
+                        "arrivalLocation": data.Arrivalactivityport,
+                        "includeNearByactivityportsForArrival": true,
+                        "travelDate": {
+                            "date":  this._getFormattedDate(data.departureDate)
+                        }
+                    }
+                ],
+                "preferences": { "nonStopOnly": false, "cabinType": data.cabinType }
+            };
+            if (data.itineraryType === 'RoundTrip') {
+                request.legs[1] = {
+                    "departureLocation": data.Arrivalactivityport,
+                    "includeNearByactivityportsForDeparture": true,
+                    "arrivalLocation": data.Departureactivityport,
+                    "includeNearByactivityportsForArrival": true,
+                    "travelDate": {
+                        "date":  this._getFormattedDate(data.arrivalDate)
+                    }
+
+                };
+            }
+
+    <h3>Events:</h3>
+
+        following events are fired by this component
+
+            1. 't-search-api-success' - fired upon successful search call
+            2. 't-search-api-error' - fired if search call is failed
+
+    <h3>Example:</h3>
+
+        <t-search-api
+            id="searchApi" 
+            api-base-url="{{apiBaseUrl}}" 
+            api-relative-url="api/activity/search" 
+            auth-token="{{authToken}}"
+            on-t-search-api-success="onSearchSuccess"
+            on-t-search-api-error="onSearchError">
+        </t-search-api>
+
+    @demo demo/index.html
+-->
+<dom-module id="t-activity-search-api-decorator">
+</dom-module>
+<script>
+(function() {
+
+    Polymer({
+        is: 't-activity-search-api-decorator',
+        
+        observers:[
+            '_buildData(input)'
+        ],
+
+        properties: {
+
+            //the data object to bind to populate data
+            input: {
+                type: Object
+            },
+
+            /**
+             * Stores output of the decorator
+             * @type {Object}
+             */
+            output: {
+                type: Object,
+                notify: true
+            }
+        },
+
+        _buildData: function(data) {
+            var query = {
+                "location":{
+                    "name": data.location.name,
+                    "geoCode": data.location.geoCode,
+                    "type": data.location.type,
+                    "code": data.location.code,
+                    "cityName": data.location.cityName,
+                    "countryCode": data.location.countryCode,
+                    "stateCode": data.location.stateCode,
+                    "formattedAddress": data.location.formattedAddress
+                },
+                "fromDate": {
+                    "date": this._getFormattedDate(data.fromDate),
+                    "time": "12:00 AM"
+                },
+                "toDate": {
+                    "date": this._getFormattedDate(data.toDate),
+                    "time": "12:00 AM"
+                },
+                "type": "Activity"
+            };
+            this.output = query;
+        },
+        /*
+         * <p>Translates dates to make them compatible with t-calendar</p>
+        */
+        _getFormattedDate: function (dateString) {
+            dateString = new Date(dateString);
+            return dateString;
+        }
+    });
+})();
+</script>

@@ -1,0 +1,202 @@
+<link rel="import" href="../polymer/polymer.html" />
+<link rel="import" href="../iron-ajax/iron-ajax.html">
+<link rel="import" href="../t-shared-lib/t-provider-behavior.html">
+<!--
+    <h3>Details:</h3>
+
+        `t-car-book-api` is a car book api component integrated with mystique apis.
+
+        It fires mystique book call and returns `bookId` upon successful opearion
+
+    <h3>Object Structure:</h3>
+
+        1. This component uses following request format to book cars -
+
+            {
+                itinerary: itinerary,
+                passengerInfo: passengerInfo,
+                payment: payment
+            }
+
+    <h3>Events:</h3>
+
+        following events are fired by this component
+
+            1. 't-car-book-api-success' - fired upon successful book call
+            2. 't-car-book-api-error' - fired if book call is failed
+
+    <h3>Example:</h3>
+
+        <t-car-book-api
+            id="bookApi" 
+            loading={{loading}} 
+            api-base-url="[[apiBaseUrl]]" 
+            api-relative-url="api/ShoppingCart/book" 
+            auth-token="[[authToken]]"
+            on-t-car-book-api-success="_onBookSuccess"
+            on-t-car-book-api-error="_onBookError">
+        </t-car-book-api>
+
+    @demo demo/index.html
+-->
+<dom-module id="t-car-book-api">
+    <template>
+        <iron-ajax id="ajaxCall" method="POST" content-type="application/json" handle-as="json" verbose>
+        </iron-ajax>
+    </template>
+</dom-module>
+<script>
+    (function() {
+
+        'use strict'
+
+        Polymer({
+            is: 't-car-book-api',
+
+            /*
+             * <p>Behaviour to validate ajax parameters and handle error codes.</p>
+             */
+            behaviors: [TravelNxt.Behaviors.ProviderBehavior],
+
+            listeners: {
+                'ajaxCall.response': '_successCallback',
+                'ajaxCall.error': '_errorCallback'
+            },
+
+            properties: {
+
+                /*
+                 * <p>Mystique API resuest object</p>
+                 */
+                request : {
+                    type: Object
+                }
+            },
+
+            /*
+             * <p>Method to book cars</p>
+             */
+            book: function(data) {
+
+                if (!data) {
+                    throw Error("book request is mandetory");
+                }
+
+                this.request = {
+                    inventoriesInfo: [{
+                        id: 0,
+                        passengerIds: [],
+                        paymentIds: [],
+                        leadPassengerId: 0,
+                        paymentBreakups: []
+                    }],
+                    passengers: [],
+                    payments: [],
+                    insuranceInfo: []
+                };
+
+                if (this._validateApiMeta()) {                
+                    this.$.ajaxCall.url = this._getUrl();
+                    this._buildBookingRequest(data)
+                    this.$.ajaxCall.body = JSON.stringify(this.request);
+                    this.$.ajaxCall.generateRequest();
+                }
+            },
+
+            /*
+             * <p>Translator</p>
+             */
+            _buildBookingRequest: function(data) {
+
+                this._getPassengers(data.passengerInfo);
+
+                this._getPaymentInfo(data.payment, data.itinerary.isPostPaid);
+
+                this._getPaymentBreakup(data.itinerary.fare.components, data.itinerary.isPostPaid);
+            },
+
+            /*
+             * <p>Build passenger data</p>
+             */
+            _getPassengers: function (passengerInfo) {
+
+                if (!passengerInfo || !passengerInfo.passengerList) {
+                    return;    
+                }
+
+                for (var i = 0; i < passengerInfo.passengerList.length; i++) {
+                    this.request.inventoriesInfo[0].passengerIds.push(i);
+
+                    passengerInfo.passengerList[i].gender = passengerInfo.passengerList[i].genderString;                
+                    passengerInfo.passengerList[i].emailAddress = passengerInfo.email;
+                    passengerInfo.passengerList[i].phoneNumber = passengerInfo.phone;
+                    passengerInfo.passengerList[i].id= i;
+                    
+                    //temporary date specifying user's age apprx equal to 25 years.
+                    passengerInfo.passengerList[i].dateOfBirth = { 
+                        date: "Tue, 04 Sep,1990",
+                        time: "12:46 PM"
+                    }
+
+
+                    delete passengerInfo.passengerList[i]['genderString'];
+
+                    this.request.passengers.push(passengerInfo.passengerList[i]);
+                }      
+            },
+
+            /*
+             * <p>Build payment data</p>
+             */
+            _getPaymentInfo: function (payment, isPostPaid) {
+
+                this.request.inventoriesInfo[0].paymentIds.push(0);
+
+                if (isPostPaid) {
+                    this.request.payments.push({
+                        type: "PostPaid",
+                        id: 0
+                    });
+                } else{                    
+                    this.request.payments.push(payment);
+                    payment.id = 0;
+                }
+
+            },
+
+            /*
+             * <p>Build payment breakup data</p>
+             */
+            _getPaymentBreakup: function (components, isPostPaid) {
+              var totalFare = components.find(function (component, index, array) {
+                        return component.type.toLowerCase() == 'totalfare';
+                    });
+
+              if (totalFare) {
+                  this.request.inventoriesInfo[0].paymentBreakups.push({
+                      "amount": totalFare.money,
+                      "paymentId": 0,
+                      "paymentType": isPostPaid ? 'PostPaid' : "creditCard",
+                      "passengerId": null
+                  });
+              }
+            },
+
+            /*
+             * <p>Success callback</p>
+             */
+            _successCallback: function(event) {
+                this._successHandler(event);
+            },
+
+
+            /*
+             * <p>error callback</p>
+             */
+            _errorCallback: function(event) {
+                this._errorHandler(event);
+            }
+
+        });
+    })();
+</script>

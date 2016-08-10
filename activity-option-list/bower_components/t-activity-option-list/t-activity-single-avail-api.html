@@ -1,0 +1,113 @@
+<link rel="import" href="../polymer/polymer.html" />
+<link rel="import" href="../iron-ajax/iron-ajax.html">
+<link rel="import" href="../t-shared-lib/t-provider-behavior.html">
+<!--
+    <h3>Details:</h3>
+
+        `t-activity-single-avail-api` is a activity single avail api component integrated with mystique apis.
+
+        It fires mystique activity single avail call and returns activity itinerary with all options upon successful opearion
+
+    <h3>Object Structure:</h3>
+
+        1. This component uses following request format to book cars -
+
+            {
+                itineraryId: itineraryId,
+                searchId: searchId
+            }
+
+    <h3>Events:</h3>
+
+        following events are fired by this component
+
+            1. 't-activity-single-avail-api-success' - fired upon successful book call
+            2. 't-activity-single-avail-api-error' - fired if book call is failed
+
+    <h3>Example:</h3>
+
+        <t-activity-single-avail-api
+            id="singleAvailApi"
+            loading={{loading}}
+            api-base-url="[[apiBaseUrl]]"
+            api-relative-url="api/activity/results/single"
+            auth-token="[[authToken]]"
+            on-t-activity-single-avail-api-success="_onSingleAvailSuccess"
+            on-t-activity-single-avail-api-error="_onSingleAvailError">
+        </t-activity-single-avail-api>
+
+    @demo demo/index.html
+-->
+<dom-module id="t-activity-single-avail-api">
+    <template>
+        <iron-ajax id="ajaxCall" method="POST" content-type="application/json" handle-as="json" verbose>
+        </iron-ajax>
+    </template>
+</dom-module>
+<script>
+    (function() {
+
+        'use strict'
+
+        Polymer({
+            is: 't-activity-single-avail-api',
+
+            /*
+             * <p>Behaviour to validate ajax parameters and handle error codes.</p>
+             */
+            behaviors: [TravelNxt.Behaviors.ProviderBehavior],
+
+            listeners: {
+                'ajaxCall.response': '_successCallback',
+                'ajaxCall.error': '_errorCallback'
+            },
+
+            properties: {
+
+                /*
+                 * <p>Mystique API resuest object</p>
+                 */
+                request : {
+                    type: Object
+                }
+            },
+
+            /*
+             * <p>Method to book cars</p>
+             */
+            getActivity: function(data) {
+
+                if (!data) {
+                    throw Error("book request is mandetory");
+                }
+
+                var request = {
+                	searchId: data.searchId,
+                	inventoryId: data.itineraryId
+                };
+
+                if (this._validateApiMeta()) {                
+                    this.$.ajaxCall.url = this._getUrl();
+                    this.$.ajaxCall.body = JSON.stringify(request);
+                    this.$.ajaxCall.generateRequest();
+                }
+            },
+
+            /*
+             * <p>Success callback</p>
+             */
+            _successCallback: function(event) {
+                this._successHandler(event);
+            },
+
+
+            /*
+             * <p>error callback</p>
+             */
+            _errorCallback: function(event) {
+                this._errorHandler(event);
+            }
+
+        });
+    })();
+</script>

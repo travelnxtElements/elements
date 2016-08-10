@@ -1,0 +1,150 @@
+
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+
+  <title>t-hotel-room-list demo</title>
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../t-hotel-result-item.html">
+  <link rel="import" href="../../t-shared-components/theme.html">
+  <style>
+    html,
+    body {
+        font-family: 'Open sans';
+        margin: 5px;
+        margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <t-hotel-result-item></t-hotel-result-item>
+</body>
+<script type="text/javascript">
+	var item = document.querySelector('t-hotel-result-item');
+	item.checkIn = '11/01/2015';
+	item.checkOut = '11/03/2015';
+	item.itinerary = {
+   "fare": {
+       "type": "Negotiated",
+       "code": null,
+       "isRefundable": false,
+       "components": [{
+           "money": {
+               "amount": 602.80,
+               "currency": "USD",
+               "displayAmount": "$602.80",
+               "type": "USD"
+           },
+           "components": [
+
+           ],
+           "type": "BaseFare",
+           "properties": [
+
+           ]
+       }, {
+           "money": {
+               "amount": 72.35,
+               "currency": "USD",
+               "displayAmount": "$72.35",
+               "type": "USD"
+           },
+           "components": [
+
+           ],
+           "type": "Tax",
+           "properties": [{
+               "key": "Type",
+               "value": null
+           }, {
+               "key": "Code",
+               "value": null
+           }, {
+               "key": "Description",
+               "value": "TotalTaxes"
+           }]
+       }, {
+           "money": {
+               "amount": 675.15,
+               "currency": "USD",
+               "displayAmount": "$675.15",
+               "type": "USD"
+           },
+           "components": [
+
+           ],
+           "type": "TotalFare",
+           "properties": [
+
+           ]
+       }, {
+           "money": {
+               "amount": 0.0,
+               "currency": "USD",
+               "displayAmount": "$0.00",
+               "type": "USD"
+           },
+           "components": [
+
+           ],
+           "type": "TotalFee",
+           "properties": [
+
+           ]
+       }, {
+           "money": {
+               "amount": 72.35,
+               "currency": "USD",
+               "displayAmount": "$72.35",
+               "type": "USD"
+           },
+           "components": [
+
+           ],
+           "type": "TotalTax",
+           "properties": [
+
+           ]
+       }, {
+           "money": {
+               "amount": 0.0,
+               "currency": "USD",
+               "displayAmount": "$0.00",
+               "type": "USD"
+           },
+           "components": [
+
+           ],
+           "type": "TotalDiscount",
+           "properties": [
+
+           ]
+       }],
+       "equivalents": null
+   },
+   "deal": null,
+   "id": "55475",
+   "isPostPaid": false,
+   "stayDuration": {
+       "start": {
+           "date": "Thursday, 10/13/2016",
+           "time": "3:00 PM",
+           "systemDateTime": "2016-10-13T15:00:00"
+       },
+       "end": {
+           "date": "Tuesday, 10/18/2016",
+           "time": "11:00 AM",
+           "systemDateTime": "2016-10-18T11:00:00"
+       }
+   },
+   "heroImageUrl": "https://d3mj096p5q0e20.cloudfront.net/ti/TRC/55475/1935344060_200x200.jpg",
+   "address": "2000 Fashion Show Drive, Las Vegas",
+   "rating": 5.0,
+   "name": "Trump Hotel Las Vegas"
+};
+</script>
+</html>

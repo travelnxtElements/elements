@@ -1,0 +1,58 @@
+/**
+ * A comment describing this behavior...
+ * @polymerBehavior ActivityPageBehavior
+ */
+<script>
+
+    (function(window, undefined) {
+
+        'use strict'
+
+        window.TravelNxt = window.TravelNxt || {};
+        window.TravelNxt.Behaviors = window.TravelNxt.Behaviors || {};
+        window.TravelNxt.Behaviors.ActivityPageBehavior = {
+
+            properties: {
+
+                /*
+                 * <p>This holds the value of default activity icon</p>
+                 */
+                activityIcon: {
+                    type: String,
+                    value: 'places:pool'
+                },
+
+                /*
+                 * <p>This property holds the value of selected activity option id</p>
+                 */
+                optionId: {
+                    type: Object,
+                    notify: true
+                },
+
+                /*
+                 * <p>This property holds the value of selected date of selected option</p>
+                 */
+                selectedDate: {
+                    type: String
+                },
+
+                /*
+                 * <p>This property holds the value of passenger count selected against the selected option</p>
+                 */
+                paxCount: {
+                    type: Number
+                },
+
+                /*
+                 * <p>This property holds the value of passenger count selected against the selected option</p>
+                 */
+                paxCountMap: {
+                    type: Array,
+                    notify: true
+                }
+            },
+        };
+    })(window);
+
+</script>

@@ -1,0 +1,142 @@
+<link rel="import" href="../polymer/polymer.html" />
+<link rel="import" href="../t-sessionstorage/t-sessionstorage.html">
+<link rel="import" href="../t-notify/t-notify.html">
+<link rel="import" href="../t-shared-lib/t-search-page-behaviour.html">
+<link rel="import" href="../t-shared-lib/t-search-api.html">
+
+<link rel="import" href="t-air-search.html">
+<link rel="import" href="t-air-search-api-decorator.html">
+
+<!--
+    <h3>Details:</h3>
+
+        `t-car-search-page` is a car search page component integrated with mystique apis.
+
+        It uses following child components in it -
+            1. `t-car-search`
+            2. `t-car-search-api`
+            3. `t-sessionstorage`
+            4. `t-notify`
+
+    <h3>Object Structure:</h3>
+
+        1. The component resets iteself if search request in following format is provided 
+           in `resetView` method -
+
+            var request = {
+                "productType": "car",
+                "pickupLocation": {
+                    "name": "McCarran International Airport",
+                    "geoCode": "36.0854,-115.15",
+                    "type": "Airport",
+                    "code": "LAS",
+                    "formattedAddress": "Las Vegas, NV, United States - McCarran International Airport (LAS)"
+                },
+                "pickupDate": {
+                    "date": "06/23/2016",
+                    "time": "11 AM"
+                },
+                "dropoffDate": {
+                    "date": "06/25/2016",
+                    "time": "12 AM"
+                },
+                "dropoffLocation": {
+                    "name": "McCarran International Airport",
+                    "geoCode": "36.0854,-115.15",
+                    "type": "Airport",
+                    "code": "LAS",
+                    "formattedAddress": "Las Vegas, NV, United States - McCarran International Airport (LAS)"
+                }
+            };
+
+        2.  `pickupLocation` & `dropoffLocation` properties have following object structure -
+
+            var location = {
+                name: this.pickupLocation.name,
+                geoCode: this.pickupLocation.geoCode,
+                type: this.pickupLocation.type,
+                code: this.pickupLocation.code,
+                formattedAddress: this.pickupLocation.formattedAddress
+            }
+
+    <h3>Events:</h3>
+
+        following events are fired by this component
+
+            1. 't-car-search-success' - fired upon successful search call
+            2. 't-car-search-error' - fired if search call is failed
+
+    <h3>Example:</h3>
+
+        <t-air-search-page
+            id="searchPage"
+            api-base-url="http://qa-mystiquecode.tavisca.com/"
+            auth-token="{{tokenResponse.authenticationToken}}"
+            api-url-format="/api/Session/SESSIONKEY">
+        </t-air-search-page>
+
+    @demo demo/index.html
+-->
+
+
+<dom-module id="t-air-search-page">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+        </style>
+
+        <t-notify id="notify" message="" type="error"></t-notify>
+        
+        <t-air-search 
+            id="searchView"
+            autosuggest-api="{{apiBaseUrl}}api/content/autosuggest/"
+            auth-token="{{authToken}}"
+            on-t-air-search-validate="onSearch">
+        </t-air-search>
+        <t-air-search-api-decorator
+            input="[[searchedData]]"
+            output="{{searchRequest}}">
+        </t-air-search-api-decorator>
+        <t-search-api 
+            id="searchApi" 
+            data="[[searchRequest]]" 
+            api-base-url="{{apiBaseUrl}}" 
+            api-relative-url="api/Flight/search" 
+            auth-token="{{authToken}}"
+            on-t-search-api-success="onSearchSuccess"
+            on-t-search-api-error="onSearchError">
+        </t-search-api>
+
+        <t-sessionstorage
+            id="sessionStore"
+            api-url-format="{{apiUrlFormat}}"
+            on-t-sessionstorage-save-success="onSessionSave"
+            on-t-sessionstorage-load-success="onSessionLoad">
+        </t-sessionstorage>
+
+    </template>    
+    <script>
+        (function () {
+            Polymer({
+                is: 't-air-search-page',
+                
+                
+                properties: {
+                  productName: {
+                    type:String,
+                    value:'Flight'
+                  },
+
+                  queryParams: {
+                    type: Object,
+                    notify: true
+                  }
+                },
+
+                behaviors:[Polymer.SearchPageBehaviour]
+            });        
+        })();
+    </script>
+</dom-module>

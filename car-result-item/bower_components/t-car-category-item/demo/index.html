@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+  <head>
+    <title>t-car-category-item demo</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+
+    <link rel="import" href="../t-car-category-item.html">
+    <link rel="import" href="../t-car-category-page.html">
+    <link rel="import" href="../../t-mystique-auth/t-mystique-auth.html">
+
+    <style is="custom-style" include="demo-pages-shared-styles">
+    </style>
+  </head>
+  <body>
+
+    <template is="dom-bind" id="domBindTemplate">
+
+      <t-car-search-api 
+          id="searchApi" 
+          loading={{loading}} 
+          api-base-url="http://qa-mystiquecode.tavisca.com/"
+          api-relative-url="api/Car/search"
+          on-t-car-search-api-success="onSearchSuccess"
+          on-t-car-search-api-error="onSearchError">
+      </t-car-search-api>
+
+      <t-car-category-page
+        id="carCategoryPage"
+        api-base-url="http://qa-mystiquecode.tavisca.com/"
+        auth-token="32lfaerut5d3wn0jmsowpoio"
+        search-id="c752db10-12d3-4057-9c8f-4ff3e8a64d7e"
+        api-url-format="/api/Session/SESSIONKEY">
+      </t-car-category-page>
+    </template>
+
+  </body>
+
+</html>

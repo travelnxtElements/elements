@@ -1,0 +1,25 @@
+{
+    "name": "Home Header",
+    "properties": [
+        {
+            "name": "Properties",
+            "fields": {
+                "label": {
+                    "name": "label",
+                    "type": "string",
+                    "value": "Flight Search"
+                },
+                "logoUrl": {
+                    "name": "logoUrl",
+                    "type": "string",
+                    "value": "/"
+                },
+                "src": {
+                    "name": "src",
+                    "type": "string",
+                    "value": "http://dev-capi.tavisca.com/NewUI/eva/Air/images/main-logo.png"
+                }
+            }
+        }
+    ]
+}

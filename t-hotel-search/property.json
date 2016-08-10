@@ -9,23 +9,32 @@
                     "type": "number",
                     "value": 1
                 },
+                "dataUrl": {
+                    "name": "dataUrl",
+                    "type": "String",
+                    "value": "http://www.mocky.io/v2/576ce59b1000002d025fdbfb/"
+                },
+                "queryParams": {
+                    "name": "queryParams",
+                    "type": "String"
+                },
                 "checkIn": {
                     "name": "checkIn",
-                    "type": "string",
-                    "value": ""
+                    "type": "string"
                 },
                 "checkOut": {
                     "name": "checkOut",
-                    "type": "string",
-                    "value": ""
+                    "type": "string"
                 },
                 "childAges": {
                     "name": "childAges",
-                    "type": "object"
+                    "type": "object",
+                    "value": [{"age":10}]
                 },
                 "childCount": {
                     "name": "childCount",
-                    "type": "number"
+                    "type": "number",
+                    "value": 1
                 },
                 "location": {
                     "name": "location",
